@@ -1,0 +1,43 @@
+\section{Proofs}
+\label{app:proofs}
+
+Throughout, $a$ is an arm, $d$ a dependency, $\Omega_\pi = (W, \mu_\pi)$ an environment with finite support $S = \supp\mu_\pi$, and $[w]_a = \{ w' \in S : w' \sim_a w \}$ the observation class of $w$. For a judge $j$, write $j(w,d)$ for its judgment about $d$ on $\obs_a(w)$, and $\mathrm{Det}_a(d) = \{ w \in S : \truth_a(\cdot, d) \text{ is constant on } [w]_a \}$, so that $\dm_\pi(a,d) = \mu_\pi(\mathrm{Det}_a(d))$.
+
+\begin{lemma}
+\label{lem:classconst}
+For every judge $j$ over $a$'s observations, $j(\cdot, d)$ is constant on each observation class.
+\end{lemma}
+
+\begin{proof}
+$j(w, d)$ is a function of $\obs_a(w)$, which is constant on $[w]_a$ by definition.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:p1}]
+By \cref{lem:classconst}, $j(w_1, d) = j(w_2, d) = v$. If $v = \Ind$, $j$ abstains at both. Otherwise $v \in \{\Ful, \Vio, \Pen\}$, and since $\truth_a(w_1, d) \neq \truth_a(w_2, d)$, $v$ differs from at least one of them, so $j$ makes a false definitive claim at that world.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:ceiling}]
+(1) Let $j$ be sound and let $w \in S$ with $j(w, d) \neq \Ind$. Since every judgment in a run is made after every deadline, $j(w,d) \in \{\Ful,\Vio\}$; if a model admits $\Pen$, soundness treats it as a definitive claim and the argument is unchanged. By \cref{lem:classconst}, $j(w', d) = j(w, d)$ for every $w' \in [w]_a$, and soundness gives $j(w', d) = \truth_a(w', d)$. Hence $\truth_a(\cdot, d)$ is constant on $[w]_a$, that is $w \in \mathrm{Det}_a(d)$. So $\{ w \in S : j(w,d) \neq \Ind \} \subseteq \mathrm{Det}_a(d)$, and $\cov_\pi(j, d) \leq \dm_\pi(a,d)$ by monotonicity of $\mu_\pi$.
+
+(2) Define $j^\star_a$ on a delivery sequence $x$ in the image $\obs_a(S)$ by: if $\truth_a(\cdot, d)$ takes a single value $v$ on $\obs_a^{-1}(x) \cap S$, return $v$; otherwise return $\Ind$; outside the image return $\Ind$. The definition depends only on $x$, so $j^\star_a$ is a judge over $a$'s observations. It is definitive at $w$ exactly when $w \in \mathrm{Det}_a(d)$, and then returns $\truth_a(w,d)$; so it is sound and $\cov_\pi(j^\star_a, d) = \mu_\pi(\mathrm{Det}_a(d)) = \dm_\pi(a, d)$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:interface}]
+If $\dm_\pi(a,d) = 1$, $j^\star_a$ is sound with coverage 1. Conversely, a sound judge with coverage 1 has $\dm_\pi(a,d) \geq 1$ by \cref{thm:ceiling}(1). For the shortfall: a sound $j$ is definitive only on $\mathrm{Det}_a(d)$, so $\dm_\pi(a,d) - \cov_\pi(j,d) = \mu_\pi\{ w \in \mathrm{Det}_a(d) : j(w,d) = \Ind \}$, which is the abstained-miss mass.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:monotone}]
+If $\obs_a = h \circ \obs_b$ then $w \sim_b w'$ implies $w \sim_a w'$, so $[w]_b \subseteq [w]_a$. A function constant on $[w]_a$ is constant on $[w]_b$; with $\truth_a = \truth_b$, $\mathrm{Det}_a(d) \subseteq \mathrm{Det}_b(d)$, and the inequality follows.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:support}]
+Let $S \subseteq S'$ be the two supports. Soundness under $\mu'$ is a condition on every $w \in S'$, hence on every $w \in S$. Observation classes under $\mu$ are the classes under $\mu'$ intersected with $S$, so a function constant on the larger class is constant on the smaller. For the failure of the converses, \cref{sec:example} exhibits a world, its observations and a dependency that is determined under \texttt{stale-read} and not under \texttt{adversarial}, whose support contains the world and admits a late acceptance with the same observations; the canonical judge $j^\star_a$ of the first support claims $\Ful$ there, is sound under the first support, and is unsound under the second.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:p2}]
+The composite is an environment whose worlds are the reachable composite states, with $H$'s observation $\obs$ and truth $t$. Compliance-decidability is $\dm = 1$, which holds if and only if every observation class is truth-constant, that is, if and only if $\obs(s) = \obs(s')$ implies $t(s) = t(s')$ for all reachable $s, s'$. For the second part, $\sigma(s) = \sigma(s')$ and $v(s) = v(s')$ give $\obs(s) = \kappa(\sigma(s), v(s)) = \kappa(\sigma(s'), v(s')) = \obs(s')$ while $t(s) \neq t(s')$, so the first part fails for every choice of $\kappa$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:p3}]
+(1) Equal protocol features give $\truth_{a'} = \truth_a$; equal interfaces with equal protocol features give $\obs_{a'} = \obs_a$. Determinable mass depends only on $\truth$, $\obs$ and $\mu_\pi$, so it is equal; by \cref{cor:interface} epistemic adequacy then depends only on the judge. (2) is \cref{prop:monotone} with $b = a'$. (3) Existence of strict loss: take two worlds $w_1, w_2$ with $\obs_a(w_1) \neq \obs_a(w_2)$, $h(\obs_a(w_1)) = h(\obs_a(w_2))$ and different truth; both are determined for $a$ if their classes are otherwise truth-constant, and neither is determined for $a'$. \Cref{tab:p2} gives instances, from the staged to the coarse model of the composition. (4) Changing protocol features changes the execution; in \family{reservation} the regrant-on-release rule makes \texttt{sharing} hold where expiry without fencing violates it, and expiry makes \texttt{temporal} hold where regrant-on-release violates it, so a change of protocol features can move truth in either direction. A judge that is sound for $a$ is a function of observations only, and when truth changes on a fixed observation class its definitive claims can become false; the reservation ablation's safety loss in \cref{tab:p3} is an instance.
+\end{proof}

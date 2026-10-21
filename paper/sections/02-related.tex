@@ -1,0 +1,53 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Coordination as the management of dependencies}
+\begin{table}[t]
+\centering
+\caption{What each tradition verifies, and what DMAT adds.}
+\label{tab:traditions}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{18mm} p{30mm} p{34mm}@{}}
+\toprule
+Tradition & Verifies & Leaves open \\
+\midrule
+Session types, choreographies & communication conforms to a global type; deadlock freedom & whether a conforming trace establishes that the dependency held \\
+State machines, automata & transitions preserve invariants; refinement & whether a participant's view of state is current or complete \\
+Commitments & obligations created, detached, discharged & whether the creditor's evidence of discharge is sound \\
+Runtime verification & which verdicts a trace determines & weighting by an environment of faults; comparison of mechanisms \\
+DMAT & adequacy for a dependency, under an environment, with an evidence model & (\cref{sec:agenda}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\Cref{tab:traditions} summarizes the traditions this section reviews. Malone and Crowston define coordination as managing dependencies among activities and classify dependencies into flow, sharing and fit, with temporal relations among them~\cite{malone1994interdisciplinary}; Thompson's pooled, sequential and reciprocal interdependence is the organizational antecedent~\cite{thompson1967organizations}. The Process Handbook catalogued coordination mechanisms for each dependency type~\cite{malone1999tools}, and Crowston used the framework to redesign processes by substituting mechanisms for a fixed dependency~\cite{crowston1997coordination}. DMAT takes the dependency instance as its unit of analysis from this tradition. What the tradition lacks, and what DMAT adds, is a formal account of when a mechanism is adequate for a dependency under failure, and of what an observer can establish about it.
+
+\subsection{Choreographies and multiparty session types}
+
+Session types type structured communication~\cite{honda1998language}; multiparty session types project a global type onto local types so that well-typed participants conform to the global protocol~\cite{honda2008mpst,honda2016mpst}. Subsequent work characterized projectability and synthesis through communicating automata~\cite{denielou2013multiparty,li2023complete}, revisited the role of global types~\cite{scalas2019less,hou2026less}, added time~\cite{bocchi2014timed}, and obtained deadlock freedom by construction in choreographic programming~\cite{carbone2013deadlock}. These results guarantee conformance of communication. They do not address whether a conforming trace establishes that a business dependency held, which is the gap the \arm{Chor} arm exposes when a delivered acceptance is lost or arrives after a timed branch fires.
+
+\subsection{State machines and communicating automata}
+
+Communicating finite-state machines~\cite{brand1983communicating}, statecharts~\cite{harel1987statecharts}, input/output automata~\cite{lynch1989ioa} and timed automata~\cite{alur1994timed} model protocols as transition systems with guards and clocks, with process algebras~\cite{hoare1985csp} as their algebraic counterpart. Safety and liveness~\cite{alpern1985liveness} and refinement mappings~\cite{abadi1991refinement} give the vocabulary for preservation under refinement. DMAT's refinement result (\cref{thm:p3}) adds an epistemic condition that behavioural refinement does not carry: a refinement that removes all bad executions can still remove the observations a participant needs to judge compliance.
+
+\subsection{Social commitments, protocols and accountability}
+
+Commitments $C(\mathit{debtor},\mathit{creditor},$ $\mathit{antecedent},\mathit{consequent})$ give protocols a normative semantics independent of message order~\cite{singh1999ontology,yolum2002flexible,fornara2002operational}. Later work addressed alignment of commitments between parties~\cite{chopra2009alignment}, information protocols that constrain causality rather than order~\cite{singh2011bspl}, and sociotechnical systems as networks of accountability relationships~\cite{chopra2016social,chopra2014accountability}. Baldoni and colleagues showed that composing commitment-based protocols can compromise independent verification of compliance~\cite{baldoni2015composing}; DMAT's composition result generalizes that observation to any observation model, and the composition family measures it. Work on governing autonomous agents distinguishes regimentation from retrospective compliance checking~\cite{kampik2022governance}; DMAT is a theory of the latter.
+
+\subsection{Knowledge, monitorability and selective judgment}
+
+What a participant can know from its local view is the subject of epistemic logic for distributed systems~\cite{halpern1990knowledge,fagin1995reasoning}. Runtime verification separates verdicts that a finite trace determines from those it does not, with three-valued semantics that return an inconclusive verdict~\cite{bauer2011runtime,leucker2009brief}, and studies which properties are monitorable at all~\cite{francalanza2017monitorability}. DMAT's judgment set $\{\Ful,\Vio,\Pen,\Ind\}$ and its determinacy relation are in this line; the ceiling theorem (\cref{thm:ceiling}) is the finite-environment, probability-weighted form of the observation that a sound monitor can only report what its observations determine. Classification with a reject option~\cite{chow1970optimum} and selective classification~\cite{elyaniv2010foundations} supply the coverage--risk vocabulary DMBench reports.
+
+\subsection{Distributed-systems faults}
+
+The faults DMBench injects are the standard ones: lost and duplicated messages, which make idempotence a protocol obligation~\cite{helland2012idempotence}; unbounded delay and the impossibility of distinguishing a slow participant from a failed one~\cite{fischer1985impossibility,chandra1996unreliable}; clocks that disagree~\cite{lamport1978time}; stale reads; and leases whose holders outlive them, which fencing tokens make safe~\cite{gray1989leases,kleppmann2017designing}.
+
+\subsection{Executable semantics and independent implementation}
+
+Lightweight mechanization of semantics finds errors that paper semantics miss~\cite{klein2012run}; PLT Redex~\cite{felleisen2009redex} and the K framework~\cite{rosu2010overview} make semantics executable and testable. Property-based~\cite{claessen2000quickcheck} and differential testing~\cite{mckeeman1998differential} compare implementations to find disagreements. N-version programming relies on independently written versions~\cite{avizienis1985nversion}, and Knight and Leveson showed that independently written versions fail together more often than independence predicts~\cite{knight1986experimental}; that result bounds what DMBench's independent arms can show (\cref{sec:limitations}). Rigorous benchmarking requires reporting variation and controlling for it~\cite{kalibera2013rigorous}; DMBench avoids sampling variation in its primary results by computing exact expectations, and uses resampling~\cite{efron1979bootstrap} only to check its sampled runs.
+
+\subsection{Provenance}
+
+W3C PROV-O~\cite{w3c2013provo} represents entities, activities and agents for provenance. DMAT's evidence model distinguishes a participant's report from independent evidence; PROV-O can represent that distinction but does not decide it, which is why DMAT places evidence judgments in an operational judge rather than in an ontology (\cref{sec:agenda}).

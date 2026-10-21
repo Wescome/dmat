@@ -1,0 +1,78 @@
+\section{DMBench}
+\label{sec:dmbench}
+
+DMBench asks four questions of each protocol: can it represent the coordination obligation; can it preserve required behaviour under failure; can participants recover without losing safety or accountability; and can an independent observer determine what happened. It separates a failure of a protocol family from a failure of a particular implementation by giving every arm the same scenario, the same faults on the same abstract interactions, and the same judge.
+
+\subsection{Scenario families}
+
+\Cref{tab:families} lists the eight families. Each is specified by its dependencies' success conditions, its timeline, the conduct its participants may exhibit and its faults; \cref{app:families} gives the full specifications. In four families the arms' protocol features decide conduct, so truth depends on the arm.
+
+\begin{table*}[t]
+\centering
+\caption{DMBench scenario families. Kinds: Fl flow, Sh sharing, Fi fit, Te temporal. Worlds counts the canonical worlds summed over the family's profiles.}
+\label{tab:families}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}l p{52mm} p{40mm} p{42mm} r r@{}}
+\toprule
+Family & Scenario & Dependencies & Conduct-affecting protocol feature & Prof. & Worlds \\
+\midrule
+\family{handoff} & Hospital $H$ refers a patient to provider $V$; $V$ may accept late or not at all, crash, or report a start prematurely & \texttt{flow} (Fl): accepted by the deadline; \texttt{temporal} (Te): care initiated & --- & 7 & 694 \\
+\family{reservation} & Allocator grants one resource to $h_1$ under a lease; $h_2$ requests it; $h_1$ releases, overruns or dies & \texttt{sharing} (Sh): never two effective users; \texttt{temporal} (Te): $h_2$ granted by $D_2$ & regrant on release; on expiry; on expiry with fencing tokens & 4 & 32 \\
+\family{agreement} & Buyer $B$ and seller $S$; $S$ may alter terms or revoke concurrently with $B$'s confirmation & \texttt{fit} (Fi): nobody bound to unfitting terms; \texttt{mutual} (Fl): both bound or neither & whether $B$ checks fit; when $B$ is bound (on send, on acknowledgement, or reconciled) & 5 & 100 \\
+\family{delegation} & $V$ without capacity delegates to $S$, which accepts or declines & \texttt{continuity} (Fl): never unowned; \texttt{temporal} (Te) & delegating releases $V$, or $V$ retains until $S$ accepts & 4 & 182 \\
+\family{deadline} & $V$ owes a service by a deadline and reports completion stamped by its own clock & \texttt{temporal} (Te) in true time; \texttt{completion} (Fl) & --- & 4 & 65 \\
+\family{external} & $V$ performs part A and dispatches part B to an executor $X$ outside the protocol & \texttt{internal} (Fl): A performed; \texttt{external} (Fl): B performed in full & --- & 4 & 62 \\
+\family{composition} & $H \leftarrow V \leftarrow S$ across three organizations; $H$ has no protocol with $S$ & \texttt{temporal} (Te): $S$ started by the deadline; \texttt{delivery} (Fl) & --- (observation model of $V$'s case varies) & 4 & 76 \\
+\family{replacement} & $V$ may withdraw; $V_2$ accepts or declines; a withdrawn $V$ may emit a stale START & \texttt{continuity} (Fl); \texttt{temporal} (Te) & withdrawal releases $V$, or $V$ retains until $V_2$ accepts & 4 & 172 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Faults}
+
+The framework's fault matrix lists nine faults. \Cref{tab:faults} records where each is modelled. Timing varies per run: late conduct, slow replies that arrive after later messages, transit delay, clock skew, stale queued messages and interleavings of concurrent events are all world choices. Time is discrete and each variation is enumerated.
+
+\begin{table}[t]
+\centering
+\caption{The framework's fault matrix as modelled.}
+\label{tab:faults}
+\small
+\begin{tabular}{@{}p{24mm} p{56mm}@{}}
+\toprule
+Fault & Where modelled \\
+\midrule
+Lost reply & every family: acceptances, notices, attestations, receipts, confirmations, acknowledgements, releases \\
+Duplicate command & duplicated acceptance (\family{handoff}) \\
+Stale observation & stale reads (five families); record lag with a watermark (\family{handoff}, \family{external}); a stale queued message (\family{replacement}) \\
+Concurrent updates & revocation and confirmation crossing in both orders (\family{agreement}); two users of one resource (\family{reservation}) \\
+Resource exhaustion & $V$ without capacity (\family{delegation}) \\
+Conflicting acceptance & altered terms; crossing confirmation and revocation (\family{agreement}) \\
+Deadline expiry & care, service and stage deadlines; lease expiry \\
+Actor disappears & crash after acceptance; a holder dying with its lease; withdrawal; a subcontractor declining \\
+Evidence contradiction & premature start report; premature completion report; a subcontractor's premature self-report; clock skew; the stale queued message \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Arms}
+
+Each family has five arms, each written as a faithful practitioner of its paradigm would write it.
+
+\paragraph{\arm{Chor}} A global type projected to the observer. The observer's knowledge is its session: the messages of its projection, and where defined a read-back of the counterpart's session log. Timed branches fire on arrival, and when the branch for a missing or late message fires the session records the partner's failure. Messages are checked by type, not payload value. Facts outside the projection are $\Ind$.
+
+\paragraph{\arm{Fsm}} Communicating state machines with guards and timeouts on each participant's own clock. A received message that moves the counterpart to a final state takes precedence over a record; otherwise the counterpart's state record is authoritative and taken as current.
+
+\paragraph{\arm{Comm}} Commitments with the lifecycle conditional, detached, discharged, violated, released, delegated and pending. Judgments are the commitment's state as the creditor holds it; a commitment the creditor has not seen discharged by its deadline is violated.
+
+\paragraph{\arm{Hybrid}} Commitments in which responsibility is retained or assigned but never dropped, state-machine guards and records, and an evidentiary discipline of three rules:
+\begin{enumerate}
+\item[E1] A participant's report of its own performance, in a message or a record entry, is not evidence of that performance; a $\Ful$ claim needs an attestation from another party, a third party's record or a trusted clock. A participant's report of not having performed can establish a negative.
+\item[E2] A record is authoritative for an event only if its completeness watermark covers the instant by which the event would have been recorded.
+\item[E3] Otherwise the judgment is $\Ind$.
+\end{enumerate}
+Responsibility continuity is judged from the commitment structure, not from reports of performance. Guarantees checked by an independent party, such as fencing tokens checked by a resource~\cite{kleppmann2017designing}, are evidence.
+
+\paragraph{\arm{Hybrid-noE}} The ablation, abbreviated \arm{Hyb-noE} in tables: the hybrid with E1--E3 removed. Reports count as evidence; every successful read is authoritative, including over messages; where the hybrid would abstain, the commitment rule applies. In \family{reservation} the ablation also drops the fencing tokens.
+
+The arms' interfaces differ only where the paradigm defines different observables: the hybrid's protocols define an independent attestation or receipt and a full record view with a watermark; the others define the messages and record views their paradigm has. Every arm receives the same faults on the interactions it shares with the others.

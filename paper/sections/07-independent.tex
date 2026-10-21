@@ -1,0 +1,68 @@
+\section{Independent Authorship and Differential Adjudication}
+\label{sec:independent}
+
+A benchmark whose arms are written by one author measures that author's reading of each paradigm. The framework's validity design asks for protocol authors separate from evaluator authors~\cite{avizienis1985nversion}. DMBench meets that requirement with a differential protocol (\cref{fig:diff}).
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize, >=Stealth,
+  b/.style={draw, rounded corners=2pt, align=center, minimum height=8mm, inner sep=2pt, text width=19mm}]
+\node[b, fill=black!6] (spec) {specifications\\[-1pt]\scriptsize paradigms + family};
+\node[b, below=7mm of spec] (ind) {independent arms\\[-1pt]\scriptsize 8 isolated authors};
+\node[b, right=7mm of spec] (ref) {reference arms};
+\node[b, below=7mm of ref] (diff) {differential check\\[-1pt]\scriptsize 1,309 sequences};
+\node[b, below=7mm of diff] (adj) {adjudication\\[-1pt]\scriptsize by the specification};
+\node[b, left=7mm of adj, fill=black!6] (res) {33 residual\\[-1pt]\scriptsize 8 open readings};
+\draw[->] (spec) -- node[left]{\scriptsize only input} (ind);
+\draw[->] (ind) -- (diff);
+\draw[->] (ref) -- (diff);
+\draw[->] (diff) -- node[right]{\scriptsize 310} (adj);
+\draw[->] (adj) -- (res);
+\draw[->, densely dashed] (adj.east) -- ++(4mm,0) |- node[pos=0.25, right]{\scriptsize 12 corrections} (ref.east);
+\draw[->, densely dashed] (res.west) -- ++(-4mm,0) |- node[pos=0.25, left]{\scriptsize clarifications} (spec.west);
+\end{tikzpicture}
+\caption{The differential protocol. Independent authors write arms from the specifications alone. Every reachable observation sequence is judged by both sets of arms; each disagreement is traced to a cause and decided by the written specification. Reference departures are corrected in the reference; open questions are clarified in a dated addition to the specification and reported as residue. Independent arms are never edited.}
+\label{fig:diff}
+\end{figure}
+
+\subsection{Protocol}
+
+A specification of the arm contract and the five paradigms, and one specification per family stating its scenario, dependencies, constants, conduct, faults, delivery rules, record views and each arm's fixed protocol features and interface, were written before the comparison. For each family a separate author received only these specifications, the core arm and observe modules and the family's terms module, in a workspace without the reference arms, the world modules or any earlier version, with instructions to read nothing else. Each author wrote five judges and a domain comment for each, and verified totality with a checker built by hand from the specification's fault model.
+
+The comparison runs both sets of judges on every distinct delivery sequence that any profile of any family produces: 1,309 sequences over the forty family--arm pairs. Because protocol features and interfaces are fixed by the specification, both arms of a name receive the same deliveries in every world, so any difference is a difference of judgment, and agreement on a sequence is agreement on every world that produces it.
+
+\subsection{Adjudication}
+
+The first comparison disagreed on 310 sequences. Each disagreement was traced to a cause and decided by one rule: the written specification is the contract. Twelve causes were departures of the reference arms from the specification and were corrected in the reference; among them, choreography timeouts treated as violations, arrival-based bounds, E1 applied to a participant's records as well as its messages, continuity judged from the commitment structure, the ablation retaining the commitment rule, and responsibility evaluated at each message's instant so that a withdrawn participant's stale message is not credited. Eight causes were readings the specification left open and both of which are defensible paradigm practice; for these the reference reading was kept, the specification received a dated clarification, and the residue is reported (\cref{tab:diff}; \cref{app:adjudication} lists every cause).
+
+\begin{table}[t]
+\centering
+\caption{Differential check. Sequences: distinct delivery sequences over the family's five arms. Initial and residual: sequences judged differently before and after adjudication.}
+\label{tab:diff}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Family & Sequences & Initial & Residual \\
+\midrule
+\family{handoff} & 514 & 56 & 0 \\
+\family{reservation} & 38 & 9 & 0 \\
+\family{agreement} & 78 & 24 & 9 \\
+\family{delegation} & 167 & 64 & 8 \\
+\family{deadline} & 178 & 3 & 1 \\
+\family{external} & 75 & 34 & 7 \\
+\family{composition} & 61 & 26 & 8 \\
+\family{replacement} & 198 & 94 & 0 \\
+\midrule
+Total & 1,309 & 310 & 33 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{What the independent arms confirm}
+
+Three results hold for the independent arms as written, before any change to the reference: the independent hybrid makes no false claim in any family under any profile; the independent ablation is unsafe in every family; and every independent single-paradigm arm is unsafe in some family. The cross-family conclusions of \cref{sec:results} therefore do not depend on the reference author's reading. Per-cell figures for single-paradigm arms do: under the independent reading of \family{agreement}, \arm{Chor} checks the payload of the seller's acceptance and is safe under reliable delivery, while under the reference reading it checks types only and has SFR 0.25. Both are reported.
+
+\subsection{What the protocol does not establish}
+
+The independent authors were separate agent instances of the same model family as the reference author. They did not see the reference arms or the world, so the check catches judgment errors and specification-to-code slips, and it found twelve. Agreement after adjudication shows that the specification determines the arms up to eight documented choices. It does not provide the diversity of separate human teams, and Knight and Leveson's finding that independently written versions share failures more often than independence predicts~\cite{knight1986experimental} applies with more force to authors trained alike.

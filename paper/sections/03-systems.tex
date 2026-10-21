@@ -1,0 +1,77 @@
+\section{Coordination Systems, Dependencies and Protocols}
+\label{sec:systems}
+
+\subsection{Coordination systems}
+
+\begin{definition}[Coordination system]
+\label{def:system}
+A \emph{coordination system} is a tuple
+\[
+\mathcal{S} = \langle A, T, R, D, M, P, E, G, \Omega \rangle
+\]
+of actors $A$, activities $T$, resources and artifacts $R$, dependencies $D$ among activities, available coordination mechanisms $M$, protocol specifications $P$, evidence and observations $E$, goals and invariants $G$, and operating assumptions $\Omega$ covering failures, communication, authority and time.
+\end{definition}
+
+$\Omega$ is part of the system, not its background. A protocol adequate under reliable messaging can be inadequate under lost, delayed or reordered messages, and an observer's ability to judge depends on which faults the environment admits (\cref{ax:assumption}).
+
+\begin{definition}[Dependency]
+\label{def:dependency}
+A \emph{dependency} is a tuple $d = \langle X, Y, k, \phi, \gamma \rangle$ where $X$ and $Y$ are the involved activities or actor groups, $k \in \{\mathit{Flow}, \mathit{Sharing}, \mathit{Fit}, \mathit{Temporal}\}$ is its kind, $\phi$ is the condition under which the dependency exists, and $\gamma$ is the condition of its successful management, evaluated at an evaluation instant after every deadline the dependency carries.
+\end{definition}
+
+The four kinds are a comparison taxonomy, not a claim of exhaustiveness or mutual exclusion~\cite{malone1994interdisciplinary}. A care transition carries all four at once: discharge information must flow, home-care capacity must be shared, the service must fit the patient's needs, and initiation must meet a deadline. The unit of analysis is therefore the dependency instance, not the workflow or the message.
+
+\subsection{Protocols}
+
+\begin{definition}[Protocol]
+\label{def:protocol}
+A \emph{protocol} is a tuple $P = \langle Q, \Sigma, \longrightarrow, \mathcal{R}, I, N, V \rangle$ of configurations $Q$, actions, messages, events and observations $\Sigma$, a transition relation ${\longrightarrow} \subseteq Q \times \Sigma \times Q$, participant roles $\mathcal{R}$, invariants and constraints $I$, normative semantics $N$ (possibly empty) and observation and verification semantics $V$.
+\end{definition}
+
+The model is a general transition system, but it does not reduce a protocol's meaning to its operational state. A choreography's primary interpretation is the set of traces and permitted interactions; a state machine's is its states, guards and transitions; a commitment protocol's is the social facts it establishes and their lifecycle. A commitment can be represented as a labelled state, but owing a performance to another party is not the same fact as a state label (\cref{ax:nonequivalence}).
+
+Two components of a protocol bear on adequacy and are separated throughout. The \emph{protocol features} $\rho$ are the parts of $\longrightarrow$ and $N$ that decide how participants act: when an allocator regrants a resource, when a buyer considers itself bound, whether delegating releases the delegator. The \emph{interface} $\iota$ is the part of $V$ that decides what a participant observes: which messages exist, and what a read-back of another participant's record returns. Changing $\rho$ can change whether a dependency holds; changing $\iota$ can change only whether it can be known.
+
+\subsection{Three records}
+
+Judging adequacy requires three records that a protocol's own execution conflates~\cite{w3c2013provo}:
+
+\begin{itemize}
+\item \emph{Oracle truth}: what happened in the world, including whether each dependency's condition $\gamma$ held.
+\item \emph{Participant observations}: what a participant could legitimately receive, in order: messages with their arrival and asserted instants, and read-backs of other participants' records.
+\item \emph{Protocol claims}: what the participant's mechanism concludes about each dependency, with the observations it relies on.
+\end{itemize}
+
+An evaluator compares the three without passing oracle truth to any participant (\cref{fig:records}). A protocol is not credited for asserting an outcome; it is credited for obtaining evidence of it or for preserving the uncertainty.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  box/.style={draw, rounded corners=2pt, align=center, minimum height=8mm, inner sep=3pt},
+  lane/.style={draw, dashed, rounded corners=3pt, inner sep=5pt},
+  >=Stealth]
+\node[box, fill=black!6, minimum width=24mm] (world) {World $w \in \supp\mu_\pi$\\[-1pt]\scriptsize faults drawn from $\Omega_\pi$};
+\node[box, below left=9mm and -2mm of world, minimum width=19mm] (truth) {Oracle truth\\$\truth_a(w,d)$};
+\node[box, below right=9mm and -2mm of world, minimum width=19mm] (deliv) {Observations\\$\obs_a(w)$};
+\node[box, below=9mm of deliv, minimum width=19mm] (judge) {Arm's judge\\$j_a(\obs_a(w))$};
+\node[box, below=9mm of truth, minimum width=19mm, fill=black!6] (eval) {Evaluator\\[-1pt]\scriptsize determinacy, class};
+\draw[->] (world) -- node[left, pos=.45]{\scriptsize execute $\rho_a$} (truth);
+\draw[->] (world) -- node[right, pos=.45]{\scriptsize deliver by $\iota_a$} (deliv);
+\draw[->] (deliv) -- (judge);
+\draw[->] (truth) -- (eval);
+\draw[->] (judge) -- node[below]{\scriptsize claims} (eval);
+\draw[->, densely dotted] (deliv.south west) to[bend left=10] node[below, sloped, pos=.55]{\scriptsize search $\supp\mu_\pi$} (eval.north east);
+\node[lane, fit=(deliv)(judge), label={[font=\scriptsize]right:\rotatebox{90}{arm boundary}}] {};
+\end{tikzpicture}
+\caption{The three records. The world executes the arm's protocol features $\rho_a$ to produce truth and delivers observations by the arm's interface $\iota_a$. The arm's judge sees only its observations. The evaluator holds truth, observations and claims apart and decides determinacy by searching the environment's support for worlds that give the arm the same observations.}
+\label{fig:records}
+\end{figure}
+
+\subsection{Judgments}
+
+A participant's claim about a dependency takes a value in
+\[
+\J = \{\Ful, \Vio, \Pen, \Ind\}.
+\]
+$\Ful$, $\Vio$ and $\Pen$ are \emph{definitive}; $\Ind$ is an abstention. $\Pen$ is the definitive claim that a dependency's deadline has not yet passed; every judgment in DMBench is made after every deadline, so $\Pen$ does not occur there. A judgment is never scored by accuracy alone: a judge that abstains on every difficult case is accurate on what it claims. Coverage, false definitive claims and correct abstention are reported separately~\cite{chow1970optimum,elyaniv2010foundations}.

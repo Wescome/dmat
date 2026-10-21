@@ -1,0 +1,214 @@
+\section{The Adequacy Calculus}
+\label{sec:calculus}
+
+\subsection{Environments, arms and runs}
+
+\begin{definition}[Environment]
+\label{def:environment}
+An \emph{environment} for a scenario is a pair $\Omega_\pi = (W, \mu_\pi)$ of a set $W$ of worlds and a probability distribution $\mu_\pi$ on $W$ called a \emph{fault profile}. A world fixes every exogenous choice of a run: each participant's conduct, each message's fate and transit, each clock's skew, each read's freshness. Its \emph{support} $\supp\mu_\pi = \{ w \in W : \mu_\pi(w) > 0 \}$ is the set of admissible worlds.
+\end{definition}
+
+In DMBench every support is finite, and a world is a tuple of slot values; a profile assigns weights to each slot's values independently and a canonical map identifies worlds that differ only in slots that cannot matter (\cref{sec:method}).
+
+\begin{definition}[Arm]
+\label{def:arm}
+An \emph{arm} for a scenario with dependencies $D$ is a triple $a = (\rho_a, \iota_a, j_a)$ of protocol features, an interface and a judge. Executing $a$ in world $w$ yields
+\begin{itemize}
+\item a truth assignment $\truth_a(w, \cdot) : D \to \{\Ful, \Vio\}$, whether each dependency's condition $\gamma$ held at evaluation; and
+\item a delivery sequence $\obs_a(w) \in \Delta^*$, the observations the arm's participant receives, in arrival order.
+\end{itemize}
+The judge maps a delivery sequence to a claim per dependency, $j_a : \Delta^* \to (D \to \J \times 2^{\mathbb{N}})$, where the second component cites the indices of the deliveries the claim relies on.
+\end{definition}
+
+Truth depends on $\rho_a$; observations depend on $\rho_a$ and $\iota_a$; the judge sees only observations. Two arms in the same world can therefore differ in truth, in observations, or only in judgment, and each difference is a different kind of inadequacy (\cref{fig:factor}).
+
+\subsection{Operational and epistemic adequacy}
+
+\begin{definition}[Operational adequacy]
+\label{def:opadeq}
+Arm $a$ is \emph{operationally adequate} for $d$ under $\Omega_\pi$ when $\truth_a(w, d) = \Ful$ for every $w \in \supp\mu_\pi$. A world $w$ exhibits a \emph{protocol-induced violation} of $d$ for $a$ when $\truth_a(w,d) = \Vio$ and $\truth_b(w,d) = \Ful$ for some arm $b$ of the same scenario.
+\end{definition}
+
+Operational adequacy is rare when participants' conduct is exogenous: a provider that never accepts violates the handoff under every protocol. Protocol-induced violations isolate what the mechanism is responsible for.
+
+\begin{definition}[Observation equivalence, determinacy]
+\label{def:det}
+Worlds $w, w' \in \supp\mu_\pi$ are \emph{observation-equivalent for $a$}, written $w \sim_a w'$, when $\obs_a(w) = \obs_a(w')$. Dependency $d$ is \emph{determined for $a$ at $w$} when $\truth_a(w', d) = \truth_a(w, d)$ for every $w' \sim_a w$. The \emph{determinable mass} of $a$ for $d$ under $\Omega_\pi$ is
+\[
+\dm_\pi(a, d) = \mu_\pi\{ w : d \text{ is determined for } a \text{ at } w \}.
+\]
+\end{definition}
+
+\begin{definition}[Soundness, coverage]
+\label{def:sound}
+Write $j_a(w,d)$ for the judgment component of $j_a(\obs_a(w))(d)$. Judge $j_a$ is \emph{sound} for $d$ under $\Omega_\pi$ when, for every $w \in \supp\mu_\pi$, $j_a(w,d) \in \{\Ful, \Vio\}$ implies $j_a(w,d) = \truth_a(w,d)$. Its \emph{coverage} is $\cov_\pi(j_a, d) = \mu_\pi\{ w : j_a(w,d) \neq \Ind \}$.
+\end{definition}
+
+\begin{definition}[Epistemic and strong adequacy]
+\label{def:epadeq}
+Arm $a$ is \emph{epistemically adequate} for $d$ under $\Omega_\pi$ when $j_a$ is sound and $\cov_\pi(j_a, d) = 1$. It is \emph{strongly adequate} when it is both operationally and epistemically adequate.
+\end{definition}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\footnotesize, >=Stealth,
+  b/.style={draw, rounded corners=2pt, align=center, minimum height=7mm, inner sep=2pt, text width=17mm},
+  q/.style={align=center, font=\scriptsize, text width=21mm}]
+\node[b, fill=black!6] (rho) {protocol\\features $\rho$};
+\node[b, right=5mm of rho] (tau) {truth\\$\truth_a(w,d)$};
+\node[q, right=4mm of tau] (qa) {\textbf{conduct}\\does $d$ hold?\\(operational)};
+\node[b, fill=black!6, below=5mm of rho] (iota) {interface $\iota$};
+\node[b, right=5mm of iota] (del) {observations\\$\obs_a(w)$};
+\node[q, right=4mm of del] (qb) {\textbf{observability}\\is $d$ determined?\\($\dm$, the ceiling)};
+\node[b, fill=black!6, below=5mm of iota] (j) {judge $j$};
+\node[b, right=5mm of j] (cl) {claim\\$j(w,d)$};
+\node[q, right=4mm of cl] (qc) {\textbf{interpretation}\\is $j$ sound?\\(coverage $\le \dm$)};
+\draw[->] (rho) -- (tau);
+\draw[->] (iota) -- (del);
+\draw[->] (rho.south east) -- (del.north west);
+\draw[->] (j) -- (cl);
+\draw[->] (del) -- (cl);
+\end{tikzpicture}
+\caption{Adequacy factors into three separately measurable parts. Protocol features decide conduct and so truth; features and interface together decide observations and so the ceiling on sound judgment; the judge decides only whether that ceiling is approached soundly.}
+\label{fig:factor}
+\end{figure}
+
+Strong adequacy is the framework's original definition, $\forall r \in \mathrm{Runs}(P, \Omega) : \mathrm{Safe}(r, G) \wedge \mathrm{Resolve}(r, d) \wedge \mathrm{Observable}(r, d, E)$, read in a finite model: every run terminates in a judgment instant after every deadline (resolution), the dependency holds (operational safety), and the observer can establish it (observability with a sound judgment). It is deliberately demanding; DMBench measures distance from it rather than its attainment.
+
+\subsection{Axioms}
+
+The theory's commitments are stated as six axioms. Each has a formal reading in the calculus and a measurable consequence in DMBench.
+
+\begin{axiom}[Dependency specificity]
+\label{ax:specificity}
+Adequacy is defined relative to a dependency. In the calculus every adequacy predicate takes $d$ as an argument; a protocol has no adequacy simpliciter.
+\end{axiom}
+
+\begin{axiom}[Assumption relativity]
+\label{ax:assumption}
+Changing the admissible environment can change adequacy. Determinacy quantifies over $\supp\mu_\pi$: enlarging the support can only shrink the set of worlds at which a dependency is determined, and a judge sound under one support need not be sound under a larger one (\cref{prop:support}).
+\end{axiom}
+
+\begin{axiom}[Semantic non-equivalence]
+\label{ax:nonequivalence}
+Evidence of a valid message exchange, a valid state transition and a discharged obligation are not interchangeable without an explicit, sound mapping. In the calculus, a message, a record entry and a truth value are different objects, and a judge's mapping from the first two to the third is what soundness constrains.
+\end{axiom}
+
+\begin{axiom}[Responsibility continuity]
+\label{ax:continuity}
+For every dependency requiring accountable ownership, a discharge, transfer or termination of responsibility must be evidenced; delegation does not extinguish the original obligation. DMBench measures the time responsibility is unowned as the accountability gap rate.
+\end{axiom}
+
+\begin{axiom}[Evidence soundness]
+\label{ax:evidence}
+An observer may assert a definitive outcome only when its evidence supports it under the declared observation semantics; otherwise the judgment is $\Ind$. In the calculus this is \cref{def:sound}.
+\end{axiom}
+
+\begin{axiom}[Nontrivial composition]
+\label{ax:composition}
+Adequacy of two protocols separately does not imply adequacy of their composition without interface, responsibility and observability conditions. \Cref{thm:p2} states the observability condition.
+\end{axiom}
+
+\subsection{Indistinguishability and the ceiling on sound judgment}
+
+\begin{theorem}[Indistinguishability]
+\label{thm:p1}
+If $w_1 \sim_a w_2$ and $\truth_a(w_1, d) \neq \truth_a(w_2, d)$, then for every judge $j$ over $a$'s observations, either $j$ abstains on $d$ at both $w_1$ and $w_2$, or $j$ makes a false definitive claim about $d$ at one of them.
+\end{theorem}
+
+\begin{proof}
+$j$ is a function of $\obs_a(w)$, and $\obs_a(w_1) = \obs_a(w_2)$, so $j(w_1, d) = j(w_2, d)$. If this value is definitive it equals at most one of the two distinct truth values.
+\end{proof}
+
+The theorem is the framework's proposition P1 (\cref{fig:ceiling}). Its content is not the proof, which is immediate, but its consequence: a message saying ``completed'' cannot establish completion unless the observation model separates the worlds in which it is sent truthfully from those in which it is not. DMBench finds witness pairs in seven of the eight families (\cref{tab:p1}).
+
+\begin{theorem}[Ceiling on sound judgment]
+\label{thm:ceiling}
+For every arm $a$, dependency $d$ and environment $\Omega_\pi$:
+\begin{enumerate}
+\item every judge $j$ sound for $d$ satisfies $\cov_\pi(j, d) \leq \dm_\pi(a, d)$; and
+\item the canonical judge $j^\star_a$, which returns the common truth value of $d$ over the observation class of its input when that value is unique and $\Ind$ otherwise, is sound and satisfies $\cov_\pi(j^\star_a, d) = \dm_\pi(a, d)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+If a sound $j$ is definitive at $w$, it returns the same value at every $w' \sim_a w$, and soundness forces that value to equal $\truth_a(w', d)$ for each; so $d$ is determined at $w$. Integrating over $\mu_\pi$ gives (1). $j^\star_a$ is well defined because its input determines the class, sound by construction, and definitive exactly where $d$ is determined, giving (2). The full proof is in \cref{app:proofs}.
+\end{proof}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\scriptsize, >=Stealth]
+\tikzset{f/.style={circle, fill=black, inner sep=1.6pt}, v/.style={circle, draw, fill=white, inner sep=1.6pt}}
+\foreach \x/\lab/\kind in {0/{$o_1$}/a, 1.55/{$o_2$}/b, 3.1/{$o_3$}/c, 4.65/{$o_4$}/d}{
+  \draw[rounded corners=3pt] (\x,0) rectangle ++(1.3,1.25);
+  \node[anchor=south] at (\x+0.65,1.25) {\lab};
+}
+\node[f] at (0.35,0.85) {}; \node[f] at (0.9,0.4) {}; \node[f] at (0.4,0.3) {};
+\node[v] at (1.9,0.85) {}; \node[v] at (2.45,0.35) {};
+\node[f] at (3.4,0.85) {}; \node[v] at (3.95,0.85) {}; \node[f] at (3.6,0.3) {};
+\node[v] at (4.95,0.4) {}; \node[f] at (5.5,0.85) {}; \node[v] at (5.45,0.3) {};
+\node at (0.65,-0.3) {$j^\star{:}\ \mathsf{F}$};
+\node at (2.2,-0.3) {$j^\star{:}\ \mathsf{V}$};
+\node at (3.75,-0.3) {$j^\star{:}\ \mathsf{I}$};
+\node at (5.3,-0.3) {$j^\star{:}\ \mathsf{I}$};
+\draw (0,-0.6) -- (2.85,-0.6) node[midway, below]{determined: in $\dm$};
+\draw (3.1,-0.6) -- (5.95,-0.6) node[midway, below]{ambiguous: P1 witnesses};
+\node[f, label=right:{$\truth = \mathsf{F}$ ($\Ful$)}] at (0.1,-1.35) {};
+\node[v, label=right:{$\truth = \mathsf{V}$ ($\Vio$); $\mathsf{I}$: $\Ind$}] at (2.4,-1.35) {};
+\end{tikzpicture}
+\caption{Worlds of a support grouped by the observations an arm receives. A sound judge can be definitive only on truth-constant classes ($o_1$, $o_2$); on mixed classes ($o_3$, $o_4$) every definitive claim is false somewhere (\cref{thm:p1}). The canonical judge $j^\star$ is definitive exactly on the truth-constant classes, so its coverage is the determinable mass (\cref{thm:ceiling}).}
+\label{fig:ceiling}
+\end{figure}
+
+\begin{corollary}[Epistemic adequacy is a property of the interface]
+\label{cor:interface}
+Arm $a$ admits an epistemically adequate judge for $d$ under $\Omega_\pi$ if and only if $\dm_\pi(a, d) = 1$. For a sound judge $j$, the shortfall $\dm_\pi(a,d) - \cov_\pi(j,d) \geq 0$ is exactly the mass of its abstentions on determined outcomes.
+\end{corollary}
+
+DMBench reports that shortfall as the class \emph{abstained-miss}. A sound judge with no abstained-miss is optimal for its observations; a protocol whose determinable mass is below one cannot be made epistemically adequate by a better judge, only by a richer interface.
+
+\begin{proposition}[Monotonicity]
+\label{prop:monotone}
+If two arms share protocol features, so that $\truth_a = \truth_b$, and $\obs_a = h \circ \obs_b$ for some function $h$ (arm $b$ observes at least what $a$ observes), then $d$ determined for $a$ at $w$ implies $d$ determined for $b$ at $w$, and $\dm_\pi(b, d) \geq \dm_\pi(a, d)$.
+\end{proposition}
+
+\begin{proposition}[Support relativity]
+\label{prop:support}
+Let $\supp\mu \subseteq \supp\mu'$. A judge sound under $\mu'$ is sound under $\mu$, and if $d$ is determined for $a$ at $w$ under $\mu'$ then it is determined at $w$ under $\mu$. The converses fail.
+\end{proposition}
+
+\Cref{prop:support} is the formal content of \cref{ax:assumption} and a caution for benchmark design: determinacy, and so the class abstained-miss, is relative to the modelled support. An abstention can be a miss in a narrow model and correct in the world the paradigm assumes (\cref{sec:limitations}).
+
+\subsection{Composition}
+
+Consider a composition in which an observer $H$ depends on a party $S$ that it does not observe directly, through a relay $V$ that does: $H \leftarrow V \leftarrow S$. Let $s$ range over the reachable composite states, $t(s)$ be the truth of $H$'s dependency, $\sigma(s)$ be what $V$ records about $S$, and $H$'s observation be $\obs(s) = \kappa(\sigma(s), v(s))$, where $v(s)$ is the rest of what $H$ observes and $\kappa$ combines them.
+
+\begin{definition}[Compliance-decidability]
+A composition is \emph{compliance-decidable} for $H$ when $\dm = 1$ for $H$'s dependency, equivalently (\cref{cor:interface}) when $H$ admits a sound judge with full coverage.
+\end{definition}
+
+\begin{theorem}[Composition requires distinguishability]
+\label{thm:p2}
+A composition is compliance-decidable for $H$ if and only if $\obs$ separates every pair of reachable states with different truth. In particular, if there are reachable $s, s'$ with $t(s) \neq t(s')$, $\sigma(s) = \sigma(s')$ and $v(s) = v(s')$, the composition is not compliance-decidable for $H$, however fine $H$'s observation of $V$ is.
+\end{theorem}
+
+The first part is \cref{thm:ceiling} applied to the composite; the second follows because $\kappa$ cannot separate what its arguments do not. The design consequence is the framework's proposition P2: either the observation model distinguishes all compliance-relevant reachable states, or the judgment set must include $\Ind$. The second part sharpens it. Refining $H$'s view of $V$ from a coarse case status to $V$'s full record of $S$'s stage does not suffice when $\sigma$ is $S$'s own report, because a premature report and an on-time start produce the same record; DMBench measures determinable mass rising from 0 to 1 with honest reporting, falling to 0.25 when reports can be premature, and returning to 1 with an attestation of $S$'s start (\cref{tab:p2}).
+
+\subsection{Refinement}
+
+\begin{theorem}[Conditional preservation under refinement]
+\label{thm:p3}
+Let $a'$ be a variant of arm $a$ for dependency $d$ under $\Omega_\pi$.
+\begin{enumerate}
+\item If $\rho_{a'} = \rho_a$ and $\iota_{a'} = \iota_a$, then $\dm_\pi(a', d) = \dm_\pi(a, d)$ and $a'$ is epistemically adequate exactly when its judge is sound with full coverage: adequacy can change only through interpretation.
+\item If $\rho_{a'} = \rho_a$ and $\obs_a = h \circ \obs_{a'}$, then $\dm_\pi(a', d) \geq \dm_\pi(a, d)$: a refinement that keeps every observation cannot lose determinacy.
+\item If $\rho_{a'} = \rho_a$ and $\obs_{a'} = h \circ \obs_a$ with $h$ not injective on the range of $\obs_a$, then $\dm_\pi(a', d)$ can be strictly smaller: a refinement that drops observations can lose determinacy even when it removes every bad execution.
+\item If $\rho_{a'} \neq \rho_a$, then $\truth_{a'}$ can differ from $\truth_a$ in either direction, and soundness of $j_a$ implies nothing about soundness of the same judge for $a'$.
+\end{enumerate}
+\end{theorem}
+
+Each clause is witnessed in DMBench, so none of the four conditions the framework lists for preservation (safety invariants, resolution behaviour, observations, normative interpretation) can be dropped. Clause (1): the hybrid's ablation shares the hybrid's protocol and interface in seven families and loses safety in all seven with no loss of observation. Clauses (2) and (3): the composition family's observation models satisfy the precondition exactly, since the coarse case status is a projection of the staged record and the staged record a projection of the staged record with attestation; determinable mass for the stage dependency moves monotonically between 0 and 1 across them (\cref{tab:p2}). The single-paradigm arms that share the hybrid's protocol features but have smaller interfaces lose determinacy on between 34 and 251 world--dependency pairs per family. Clause (4): in the reservation family the ablation also drops the hybrid's fencing tokens, which changes conduct, and it loses both safety and observation (\cref{tab:p3}).
+
+\subsection{The hybrid's correctness condition}
+
+The framework states the hybrid's correctness as a conjunction $\mathrm{Correct}_H = C_I \wedge C_B \wedge C_N \wedge C_E$ of communication conformance, behavioural safety and progress, normative consistency, and evidence soundness and observability, and notes that the conjunction requires cross-layer consistency. The calculus makes $C_E$ precise: it is soundness of $j_H$ together with high determinable mass of $\iota_H$. DMBench's hybrid implements $C_E$ by three rules (\cref{sec:dmbench}): a participant's report of its own performance is not evidence of that performance; a record is authoritative only up to the instant through which it is complete; otherwise the judgment is $\Ind$. The ablation removes exactly these rules.

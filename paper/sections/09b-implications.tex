@@ -1,0 +1,20 @@
+\section{Implications for Protocol Design}
+\label{sec:implications}
+
+The calculus and the results support design rules that hold across the paradigms. Each is stated with the result that warrants it.
+
+\paragraph{Compute the ceiling before writing the judge} Determinable mass is a function of a protocol's features, its interface and the environment, and is computable by enumeration before any judge exists (\cref{thm:ceiling}). A dependency whose determinable mass is below one under the environment the protocol must survive cannot be judged completely and soundly by any mechanism over that interface. The remedy is to change the interface, by adding a message, an attestation or a record field, not to refine the judge. In \family{handoff}, no judge over the single-paradigm interfaces can be sound with coverage above 0.31 under the adversarial profile; the hybrid's interface raises the ceiling to 0.56.
+
+\paragraph{Separate reports from evidence} A message or record in which a participant asserts its own performance is a report. Treated as evidence, it is the single largest source of false completion in DMBench, across every paradigm (\cref{sec:results}). Protocols that need $\Ful$ judgments about performance should define a channel through which a party other than the performer can attest it: a receipt from the executor, a stamp from a trusted clock, an access log kept by the resource.
+
+\paragraph{Give every record a watermark} A record's silence about an event is evidence that the event did not happen only if the record is known to be complete through the instant the event would have been recorded. Records that do not state that instant force a sound judge to abstain on every negative they could otherwise establish, as the composition family's case record shows (\cref{tab:ceiling}). A completeness watermark is cheap to define and is what makes stale and lagging reads safe to use.
+
+\paragraph{Retain responsibility until it is accepted} Every arm that keeps the delegating party responsible until its successor accepts has no accountability gap; the arm that releases on delegation leaves a quarter of the required time unowned. Retention is a protocol feature, available to state machines through guards and to commitments through pending and reactivated commitments (\cref{ax:continuity}).
+
+\paragraph{Make remote stages distinguishable at every relay} In a composition, an observer can determine a remote party's conduct only if every relay on its path separates the truth-relevant states (\cref{thm:p2}). Forwarding a remote party's self-report does not do so when the report can be premature; an independent attestation of the remote stage does.
+
+\paragraph{Judge by asserted instants with trusted clocks, not by arrival} Deadlines are properties of when events happen, not of when news of them arrives. Arms that judge by arrival fail under transit delay; arms that judge by a party's own clock fail under skew. A protocol with temporal dependencies should carry an instant asserted by a clock both parties trust.
+
+\paragraph{Fence what expires} A lease whose holder can outlive it violates sharing whenever the holder overruns; regranting only on release violates the requester's deadline whenever the holder fails. Fencing tokens checked by the resource make expiry safe, and they are evidence an observer can use (\cref{fig:opep}).
+
+\paragraph{Make $\Ind$ a first-class outcome} Every sound mechanism abstains wherever its observations do not determine the outcome. A protocol whose judgment set lacks $\Ind$ forces its participants to guess there, and \cref{thm:p1} guarantees that some of the guesses are false. Reporting abstentions, and separating abstentions on undetermined outcomes from abstentions on determined ones, is what lets a designer distinguish an interface problem from a judgment problem.

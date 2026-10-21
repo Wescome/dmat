@@ -1,0 +1,34 @@
+\section{Family Specifications}
+\label{app:families}
+
+Each family's success conditions are evaluated at an evaluation instant after every deadline. Constants are instants on one global time line unless a family admits clock skew. \Cref{tab:profiles} lists each family's profiles with the number of canonical worlds in each support.
+
+\paragraph{\family{handoff}} $V$ accepts at 1 (on time), at 4 (late) or never; acceptance deadline 3. An accepted $V$ may initiate care at 5, may crash after accepting, or may report a start prematurely. The acceptance reply may be delivered, dropped or duplicated, with transit 1 or 4. The start notice (arrives 6) and the attestation (arrives 7) may be dropped. The read at 11 is fresh, stale (as of 0) or fails; under record lag the reported start is never recorded and the watermark is 3. Views: last message, state, ledger of the acceptance and care commitments, and a full view with watermark. \texttt{flow}: accepted by 3. \texttt{temporal}: care initiated by 10.
+
+\paragraph{\family{reservation}} Grant to $h_1$ at 1 with lease until 5; $h_2$ requests at 2; deadline $D_2 = 7$. $h_1$ releases at 3, overruns to 8, or dies at 2. A release may be lost. The auditor reads $V$'s log at 11 (fresh, stale as of 4, or failed), containing the event kinds the protocol records: grants, releases and expiries from $V$, and uses and rejections from the resource's access log. Regrant rule per arm as in \cref{tab:families}; $h_2$ uses the resource for 2 once granted. \texttt{sharing}: no instant with two effective users. \texttt{temporal}: $h_2$ granted by 7.
+
+\paragraph{\family{agreement}} $S$ accepts at 1 (arrives 2) with proposed or altered terms. $B$ confirms or rejects at 2 according to its fit-check feature. $S$ may revoke; with a revocation, $S$ processes $B$'s confirmation or its revocation first, at 3. The confirmation and the acknowledgement (arrives 4) may be lost. The read of $S$'s record at 11 is fresh, stale (as of 1) or fails. \texttt{fit}: nobody bound to altered terms. \texttt{mutual}: $B$ bound if and only if $S$ bound, with $B$'s binding decided by its binding rule.
+
+\paragraph{\family{delegation}} $V$ accepts at 1; without capacity it delegates at 2; $S$ responds at 3. Care starts at 5 (by $V$ or $S$) or, under retention after $S$ declines, at 8; it may fail to start. DELEGATED (arrives 3), the start notice (start $+1$) and the attestation (start $+2$) may be lost. Read at 11: fresh, stale (as of 2) or failed. \texttt{continuity}: no interval between acceptance and care (or evaluation) owned by nobody. \texttt{temporal}: care by 10.
+
+\paragraph{\family{deadline}} $V$ completes at 8, at 12 or never; deadline 10. DONE carries $V$'s stamp (true instant $\pm 3$ under skew) and arrives after transit 1 or 5. The attestation carries the true instant and arrives 2 later; it may be lost. Read at 19 of $V$'s completion record (stamp or none) may fail. \texttt{temporal}: completed by 10 in true time. \texttt{completion}: completed.
+
+\paragraph{\family{external}} $V$ performs part A at 4 or not, dispatches part B at 5; $X$ completes B, completes it partially or does nothing at 7. DONE (arrives 6) is sent when A is done or prematurely. $X$'s receipt (arrives 8) may be lost. Read at 11: fresh, lagging (complete through 6) or failed. \texttt{internal}: A performed. \texttt{external}: B performed in full.
+
+\paragraph{\family{composition}} $S$ commits at 2 and starts at 6, at 12, never, or declines; deadline 10. $S$ reports honestly or prematurely claims a start at 6. $V$ delivers at 14 if $S$ started and $V$ assembles. DELIVERED (arrives 15) and the attestation (start $+2$) may be lost; the read at 16 may fail. Observation models: coarse (case open or closed) and staged (case status, $S$'s reported stage and start). \texttt{temporal}: $S$ started by 10 in true time. \texttt{delivery}: $V$ delivered.
+
+\paragraph{\family{replacement}} $V$ accepts at 1 and may withdraw at 3; $V_2$ accepts or declines at 5. Care starts at 6 (by $V$, no withdrawal), at 8 (by $V_2$) or, under retention after $V_2$ declines, at 11; deadline 10; it may fail to start. A withdrawn $V$ may emit a stale START asserting 6. Start notices and the attestation name their sender and may be lost. Registry read at 12: fresh, stale (as of 4) or failed. \texttt{continuity}: never owned by nobody. \texttt{temporal}: care by the responsible party by 10.
+
+\begin{table*}[t]
+\centering
+\caption{Fault profiles and the number of canonical worlds in each support.}
+\label{tab:profiles}
+\small
+\begin{tabular}{@{}l p{140mm} r@{}}
+\toprule
+Family & Profiles (support size) & Total \\
+\midrule
+\tabinput{tables/families}
+\bottomrule
+\end{tabular}
+\end{table*}

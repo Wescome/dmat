@@ -1,0 +1,87 @@
+\section{Executable Semantics}
+\label{sec:method}
+
+The calculus is built as executable semantics in Racket with PLT Redex~\cite{felleisen2009redex}, following the practice of mechanizing a semantics before trusting it~\cite{klein2012run}. Each object of \cref{sec:calculus} has one executable counterpart, and every number reported in \cref{sec:results} is computed by the code, not transcribed.
+
+\subsection{Languages}
+
+A base language $\mathrm{DMAT_0}$ fixes what every scenario shares: instants as natural numbers, the judgment set $\J$, claims $(\mathtt{claim}\ d\ J\ (i\ldots))$ and the three forms of delivery:
+\[
+\begin{array}{rcl}
+\delta & ::= & (\mathtt{msg}\ M\ t_{\mathit{arr}}\ t_{\mathit{asr}}\ \mathit{payload}\ldots) \\
+       & \mid & (\mathtt{read\text{-}ok}\ t\ \mathit{view}) \;\mid\; (\mathtt{read\text{-}failed}\ t)
+\end{array}
+\]
+A message carries its arrival instant and the instant its sender asserts for it, which is the event it reports or the sender's clock; the two differ under transit delay and clock skew, and arms that confuse them are the arms that fail under those faults. Each scenario family extends $\mathrm{DMAT_0}$ with its own worlds, record views and message kinds, so that each family's terms form a closed language and every world, delivery sequence and claim is checked against it (\cref{fig:arch}).
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize, >=Stealth,
+  m/.style={draw, rounded corners=2pt, align=center, minimum width=17mm, minimum height=7mm, inner sep=2pt},
+  core/.style={m, fill=black!6}]
+\node[core] (g) {$\mathrm{DMAT_0}$\\[-1pt]\scriptsize grammar};
+\node[core, right=4mm of g] (arm) {arm,\\[-1pt]observe};
+\node[core, right=4mm of arm] (judge) {judge};
+\node[m, below=8mm of g] (terms) {terms\\[-1pt]\scriptsize $\mathcal{L}_f \supseteq \mathrm{DMAT_0}$};
+\node[m, below=8mm of arm] (arms) {arms\\[-1pt]\scriptsize $(\rho,\iota,j)\times 5$};
+\node[m, below=8mm of judge] (world) {world\\[-1pt]\scriptsize $\Omega_\pi$, $\truth$, $\obs$};
+\draw[->] (terms) -- node[left]{\scriptsize extends} (g);
+\draw[->] (arms) -- (terms);
+\draw[->] (arms) -- (arm);
+\draw[->] (world) -- (terms);
+\draw[->] (judge) -- (world.north);
+\node[draw, dashed, rounded corners=3pt, fit=(arms)(arm), inner sep=3pt, label={[font=\scriptsize, align=center]below:arm import closure}] (iso) {};
+\node[draw, dotted, rounded corners=3pt, fit=(terms)(arms)(world), inner sep=7pt, label={[font=\scriptsize]left:\rotatebox{90}{family $f$}}] {};
+\node[m, below=12mm of arms, minimum width=50mm] (bench) {bench, propositions, differential check, tests};
+\draw[->] (bench) -- (iso.south);
+\end{tikzpicture}
+\caption{Module structure of the executable models. Each family extends the base grammar with its own closed language. An arm module may import only the core arm and observe modules and its family's terms; the world and the judge are outside its import closure, which a test checks for every arm, including a planted leak the check must catch.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{Families as data}
+
+A family is a record of its dependencies with their kinds; its world slots; base weights for each slot's values; its fault profiles as overrides of those weights; a canonical map that identifies worlds differing only in slots that cannot matter (a reply delay is irrelevant when no reply is sent); and two functions, \emph{execute}, which runs an arm's protocol features in a world and returns truth, unowned-responsibility time and required-responsibility time, and \emph{deliver}, which returns the arm's delivery sequence. Only world modules construct families.
+
+\subsection{Oracle isolation}
+
+An arm is a record $(\rho, \iota, j)$. The world reads $\rho$ and $\iota$; the judge $j$ receives only the delivery sequence. Isolation is enforced structurally: a test computes the transitive closure of every arm module's imports and fails if it reaches anything beyond the core arm, observe and grammar modules and the family's own terms. The test is itself tested by planting an arm that imports a world module.
+
+\subsection{Determinacy by exhaustive search}
+
+The judge enumerates each profile's support, computes every arm's delivery sequence in every world, and groups worlds by delivery sequence. A dependency is determined for an arm at a world when every world in its group has the same truth (\cref{def:det}). Each claim is then classified:
+
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Class & Condition \\
+\midrule
+supported & definitive, true, determined, citing a delivery \\
+lucky & definitive and true, but not determined or uncited \\
+false & definitive and not true \\
+abstained-ok & $\Ind$, and not determined \\
+abstained-miss & $\Ind$, though determined \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Metrics}
+
+For arm $a$ under profile $\pi$, with expectations taken exactly over $\mu_\pi$:
+\begin{itemize}
+\item the \emph{safety failure rate} $\mathrm{SFR}$ is the probability that a run contains a false claim about any dependency;
+\item the \emph{false-completion rate} $\mathrm{FCR}$ is the expected number of $\Ful$ claims that are false or lucky, divided by the expected number of $\Ful$ claims;
+\item the \emph{accountability gap rate} $\mathrm{AGR}$ is the expected time responsibility is owned by nobody, divided by the expected time responsibility is required, both computed by the world's execution;
+\item \emph{coverage} is the share of claims that are definitive, and each class's share is reported, with \emph{determinable} the share of claims whose outcome the observations determine.
+\end{itemize}
+FCR counts lucky claims as well as false ones: a completion claim that happens to be true without evidence is an unsupported claim of completion.
+
+\subsection{Exact expectation and seeded sampling}
+
+Because supports are finite, every metric is computed as an exact rational expectation. Sampled runs exist to check the exact computation and to produce per-run records. A world is drawn per slot by a keyed hash, $\mathrm{SHA\text{-}256}(\text{family}, \text{seed}, \text{profile}, \text{slot})$, so a seed fixes the same world for every arm (common random numbers), and a draw for one slot never shifts another. With 100 seeds per family and profile (18,000 runs), the worst deviation of sampled SFR from its exact value is 2.7 standard errors over 180 cells, none beyond 3; every run is written with its world, deliveries, claims and classification, and repeated runs produce byte-identical output.
+
+\subsection{Tests}
+
+Twenty-nine tests cover: well-formedness of every world, delivery sequence and claim against its family's language; totality of execution, delivery and every judge on worlds generated from each grammar; idempotence of the canonical maps; oracle isolation with a planted leak; determinism and common random numbers; a brute-force recomputation of every classification; the family-specific properties the benchmark is built to exhibit; propositions P1--P3; and the independent-authorship results of \cref{sec:independent}.

@@ -1,0 +1,52 @@
+\section{Adjudication Record}
+\label{app:adjudication}
+
+\Cref{tab:amend} lists the twelve causes decided against the reference arms, which were corrected. \Cref{tab:keep} lists the eight causes the specification left open; the reference reading was kept and the specification clarified.
+
+\begin{table*}[t]
+\centering
+\caption{Causes decided against the reference arms (corrected in the reference).}
+\label{tab:amend}
+\small
+\begin{tabular}{@{}l p{40mm} p{58mm} p{58mm}@{}}
+\toprule
+\# & Families / arms & Reference before & Corrected to \\
+\midrule
+A1 & seven families / \arm{Chor} & absence never evidence; never $\Vio$; asserted instants & a timed branch fires on arrival and records the partner's failure \\
+A2 & \family{handoff} / \arm{Fsm} & flow $\Ful$ from state \texttt{accepted}, false on late acceptance & flow from the observer's own timeout on arrival \\
+A3 & all / \arm{Hybrid-noE} & abstained where the hybrid abstains & the commitment rule applies; a successful read is authoritative over messages \\
+A4 & \family{agreement} / all & a stale record read over a received acknowledgement; guessed no-read cases & the seller's binding from ACK, REVOKE or the buyer's REJECT first, then the record \\
+A5 & \family{delegation}, \family{replacement} / \arm{Comm}, hybrids & abstained without an authoritative record & continuity from the commitment structure unless a record shows release or vacancy \\
+A6 & \family{replacement} / \arm{Chor} & abstained on continuity & a withdrawal under release opens a vacancy until the successor accepts \\
+A7 & \family{replacement} / \arm{Chor}, \arm{Comm}, hybrids & any START credited, including the stale queued one & a START counts only from the party responsible at its instant \\
+A8 & \family{replacement} / \arm{Fsm}, \arm{Hybrid} & care by $V$ after withdrawal read as on time or abstained & the resume transition fires after the deadline: $\Vio$ \\
+A9 & \family{external}, \family{composition}, \family{reservation} / \arm{Hybrid} & a participant's own record accepted as evidence of its performance & E1 applies to records: positive claims need an independent receipt or record \\
+A10 & \family{composition} / \arm{Hybrid} & a record without watermark read as a negative & abstain; a party's own report of a late start or a refusal is an admitted negative \\
+A11 & \family{reservation} / \arm{Hybrid} & abstained on stale logs & fencing tokens checked by the resource: sharing $\Ful$ unless uses overlap \\
+A12 & \family{reservation} / \arm{Hybrid-noE} & $\Ful$ despite a release recorded after the successor's grant & $\Vio$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{Admissible alternative readings (reference kept; residual disagreement in sequences).}
+\label{tab:keep}
+\small
+\begin{tabular}{@{}l p{30mm} r p{55mm} p{55mm}@{}}
+\toprule
+\# & Family / arm & Seq. & Reference reading & Independent reading \\
+\midrule
+K1 & \family{agreement} / \arm{Chor} & 9 & messages checked by type, not payload: a conforming trace is fit & the acceptance's terms are in the session: confirming altered terms violates fit \\
+K2 & \family{composition} / \arm{Fsm} & 3 & a closed case implies the stage completed within its guard & the coarse record holds nothing about the stage \\
+K3 & \family{composition} / \arm{Comm} & 5 & the creditor rule: not seen discharged by the deadline & no ledger entry for the stage: $\Ind$ \\
+K4 & \family{delegation} / \arm{Chor} & 2 & no DELEGATED and no read: $\Ind$ & no delegation in the session: $V$ held the role \\
+K5 & \family{delegation} / \arm{Fsm} & 6 & the retaining guard keeps $V$ responsible in \texttt{delegated} & no cross-party obligations in an FSM: $\Ind$ \\
+K6 & \family{external} / \arm{Chor}, \arm{Comm}, \arm{Hybrid-noE} & 7 & DONE reports the whole order complete & DONE is about part A only \\
+K7 & \family{external} / \arm{Comm} & --- & one conjunctive commitment for both parts & one commitment per part (counted under K6) \\
+K8 & \family{deadline} / \arm{Chor} & 1 & no DONE and no log: the wait timed out & completion outside the projection: $\Ind$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{Reproducibility} The models, the independent arms, the specifications and their dated clarifications, and every output are published with the paper. \texttt{raco test tests.rkt} runs the twenty-nine tests; \texttt{racket bench.rkt exact} reproduces \cref{app:results}; \texttt{racket bench.rkt sampled 100 results.jsonl} reproduces the sampled runs byte for byte; \texttt{racket bench.rkt propositions} reproduces \cref{tab:p1,tab:p2,tab:p3}; \texttt{racket diff.rkt} reproduces \cref{tab:diff}.

@@ -1,0 +1,14 @@
+\section{Research Agenda}
+\label{sec:agenda}
+
+\paragraph{A unified ontology} The framework proposes a metamodel $\mathcal{U} = \langle C, I, B, N, A, E, L \rangle$ of coordination, interaction, behavioural, normative, authority and epistemic models with linkage rules, realized as modular OWL and SHACL with PROV-O-aligned evidence~\cite{w3c2013provo}. The calculus clarifies its division of labour: an ontology can carry the vocabulary and structural conformance of messages, acts, transitions, commitments and claims, and the distinctions of \cref{ax:nonequivalence} (a message is not an act, an act is not a commitment, a record is not truth). It cannot decide determinacy or soundness, which quantify over an environment's support. A linkage rule of the form $\mathrm{Occurs}(m) \wedge \mathrm{ValidAct}(m, a) \wedge \mathrm{Authorized}(a) \Rightarrow \mathrm{Establishes}(a, c)$ belongs in an operational judge, not in an unconditional ontology implication. The open problem is a release whose competency questions are answered against DMBench's run records.
+
+\paragraph{Protocol selection} The framework states selection as constrained optimization: $P^\ast = \arg\max_{P} U(P, d, \Omega)$ subject to safety, required compliance, evidence adequacy above a threshold $\tau_E$ and cost within a budget. \Cref{thm:ceiling} gives the evidence constraint an exact form: evidence adequacy is determinable mass, computable from a protocol's interface and an environment before any judge is written. A selection method needs utility and cost models validated on held-out scenarios; neither exists yet.
+
+\paragraph{Unauthorized and malformed actions} Testing hypotheses H2 and H3 requires fault classes in which participants attempt transitions they are not authorized for or send messages their type forbids, and a metric for admitted violations distinct from judgment errors.
+
+\paragraph{Continuous time and unbounded environments} Replacing enumerated delays with timed-automaton semantics~\cite{alur1994timed} would make determinacy a symbolic rather than enumerative question, and would connect the ceiling theorem with monitorability results for timed properties~\cite{bauer2011runtime,francalanza2017monitorability}.
+
+\paragraph{Implementations under the same judge} The executable models fix what each arm should conclude; implementations of the same arms over real transports can be judged by the same evaluator, with the models as their reference, and their divergences reported as implementation failures rather than paradigm failures.
+
+\paragraph{Human independent teams} Repeating the differential protocol with separate human teams would test whether the eight open readings are the full set and whether correlated failures between similar authors hide others.

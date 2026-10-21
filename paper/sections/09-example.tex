@@ -1,0 +1,47 @@
+\section{Worked Example}
+\label{sec:example}
+
+The episode of \cref{sec:intro} is one world of the \family{handoff} family under the \texttt{stale-read} profile, which admits a lost acceptance reply, a lost start notice and a read-back that is fresh, stale or unavailable. In this world, of probability $1/20$ under the profile, the provider $V$ accepts at instant 1 (before the acceptance deadline at 3) and initiates care at 5 (before the care deadline at 10). Its acceptance reply and its start notice are both dropped. The independent attester's confirmation of care initiation is delivered at 7. The hospital's read of $V$'s record at 11 is served as of instant 0. Both dependencies hold: $\truth(w, \texttt{flow}) = \truth(w, \texttt{temporal}) = \Ful$, for every arm, since no \family{handoff} protocol feature changes conduct.
+
+\subsection{Observations}
+
+Each arm's participant receives what its protocol defines:
+\begingroup\raggedright
+\begin{itemize}
+\item \arm{Chor}: \texttt{((read-ok 11 (last-message none)))}. The protocol defines a start notice, which was dropped; the session log as of instant 0 holds nothing.
+\item \arm{Fsm}: \texttt{((read-ok 11 (state referred)))}.
+\item \arm{Comm}: \texttt{((read-ok 11 (ledger none none)))}: neither commitment appears in the ledger as of instant 0.
+\item \arm{Hybrid} and \arm{Hybrid-noE}: \texttt{((msg ATTEST 7 5) (read-ok 11 (full referred \#f \#f none none 0)))}: the attestation, and the full record with its watermark, 0.
+\end{itemize}
+\endgroup
+
+\subsection{Claims and classes}
+
+\begin{table}[t]
+\centering
+\caption{The worked example: claims and their classes. Both dependencies are $\Ful$ in this world.}
+\label{tab:example}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}L{17mm}L{29mm}L{29mm}@{}}
+\toprule
+Arm & \texttt{flow} & \texttt{temporal} \\
+\midrule
+\arm{Chor} & $\Vio$ \newline false & $\Ind$ \newline abstained-ok \\
+\arm{Fsm} & $\Vio$ \newline false & $\Vio$ \newline false \\
+\arm{Comm} & $\Vio$ \newline false & $\Ind$ \newline abstained-ok \\
+\arm{Hybrid} & $\Ind$ \newline abstained-miss & $\Ful$ \newline supported \\
+\arm{Hybrid-noE} & $\Vio$ \newline false & $\Ful$ \newline supported \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Cref{tab:example} gives the claims. \arm{Chor}'s acceptance timer fired, since no acceptance arrived by the deadline, and the session records $V$'s failure to respond: a false violation. Care is outside its projection once the acceptance branch has failed, so it abstains on the care dependency, correctly, because its observations are shared with worlds in which $V$ never accepted. \arm{Fsm}'s own timeout fired for the same reason, and it reads $V$'s state as current: \texttt{referred} means no care. Both claims are false. \arm{Comm} holds no discharge of the acceptance commitment by its deadline and judges it violated; the care commitment never detached in what the creditor holds, so it yields no judgment.
+
+\arm{Hybrid} holds an attestation from a party other than $V$ that care was initiated at 5: the care claim is supported. For the acceptance it has no acceptance message and a record whose watermark, 0, does not cover the acceptance deadline, so E2 forbids reading the record's silence as a refusal, and it abstains. \arm{Hybrid-noE} receives the same observations and reads the stale record as authoritative: a false violation.
+
+\subsection{What the example shows}
+
+Every layer of the calculus appears. The truth is the same for every arm, so every difference is epistemic. \arm{Chor}, \arm{Fsm} and \arm{Comm} receive observations shared with worlds of opposite truth (\cref{thm:p1}), and the two that claim anyway are wrong. The hybrid and its ablation receive identical observations, so the ablation's error is purely interpretive (\cref{thm:p3}, clause 1).
+
+The hybrid's abstention on the acceptance is classed abstained-miss: within this profile's support, the acceptance is determined, because $V$ can only accept on time or not at all, and an attestation of care implies that it accepted. The inference is valid in the model and invalid in the world the protocol is designed for, where acceptances can be late. The hybrid declines it, and \cref{prop:support} says why that is correct: under the \texttt{adversarial} profile, whose support contains this world and also admits late acceptances, the acceptance is undetermined at this world, the same abstention is classed abstained-ok, and a judge that drew the inference would be unsound. Determinacy, and therefore the class abstained-miss, is always relative to the modelled environment.

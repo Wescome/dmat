@@ -33,6 +33,7 @@ racket diff.rkt detail FAMILY                # every deliveries list on which th
 | `independent/<family>-arms.rkt` | Arms written by independent authors from `specs/` and the family's `terms.rkt` only |
 | `diff.rkt` | The differential check between reference and independent arms |
 | `tests.rkt` | The models' tests |
+| `paper-tables.rkt`, `paper-heat.rkt` | Write the paper's tables and heat-map figure (`../paper/tables`, `../paper/figures/heat.tex`) from the models |
 | `exact.txt`, `sampled.txt`, `propositions.txt`, `diff.txt`, `results.jsonl` | Outputs of the commands above |
 
 ## The eight families

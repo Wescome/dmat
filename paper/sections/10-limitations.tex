@@ -1,0 +1,18 @@
+\section{Limitations and Threats to Validity}
+\label{sec:limitations}
+
+\paragraph{Models, not implementations} DMBench runs executable models of protocols, not deployed implementations. The models capture each paradigm's judgment over a scenario's observations and the conduct its protocol features decide; they do not capture transport, persistence, retry machinery or performance. The framework's secondary measures (recovery latency, complexity, evidence volume, decision cost) are not reported.
+
+\paragraph{Finite, discrete environments} Every support is finite and every instant discrete; delays, skews and orders are enumerated choices. This is what makes the metrics exact and the determinacy relation decidable by search. It also means that the results are statements about the modelled supports. Concurrency is modelled as interleaving choices where a family has concurrent independent events, not as a general interleaving semantics over all participants.
+
+\paragraph{Determinacy is relative to the support} By \cref{prop:support}, an abstention classed abstained-miss may be (a) a guarantee by construction that the mechanism declines to claim without run evidence, as in \family{reservation}, where fencing makes both dependencies hold in every world and the hybrid's abstained-miss is 0.50 under the adversarial profile; (b) an inference valid only because the support is narrower than the paradigm assumes, as in \cref{sec:example}; or (c) a consequence of a modelled interface, as in \family{composition}, whose case record carries no watermark, so the hybrid cannot read an open case after the delivery instant as a missing delivery. Abstained-miss is therefore an upper bound on avoidable abstention, not a measure of it.
+
+\paragraph{Profiles are per family} Each family's profiles admit the faults its scenario is about. Metrics compare arms within a family and profile. Averages across families would weight families by the number of profiles each happens to have, and none are reported.
+
+\paragraph{Independence of authorship} The independent arms were written by agent instances of the same model family as the reference arms, from specifications the reference author wrote. The protocol met the framework's validity rule in form and found twelve reference errors, but correlated failures between similar authors~\cite{knight1986experimental} are not excluded.
+
+\paragraph{Sensitivity to documented readings} Eight interpretive choices remain open in the specifications. Per-cell figures for single-paradigm arms move under the alternative readings; the cross-family conclusions do not, because they hold for both sets of arms.
+
+\paragraph{Scale and statistics} The framework's initial design was 8 families $\times$ 4 arms $\times$ 5 fault profiles $\times$ 30 seeds, with paired differences and clustered bootstrap intervals. Exact expectation replaces sampling for the primary results, so the variance those procedures control does not arise here; it will when the arms run as implementations with real transports, where pilot variance and power analysis should size the experiment~\cite{kalibera2013rigorous,efron1979bootstrap}.
+
+\paragraph{Faults not modelled} A duplicated command is modelled as a duplicated message, not as a second execution of a non-idempotent effect~\cite{helland2012idempotence}. Forged and malformed actions are not injected, which is why hypotheses H2 and H3 are untested.
