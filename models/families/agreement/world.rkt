@@ -83,3 +83,6 @@
   (family 'agreement
           (list (dependency 'fit 'Fit) (dependency 'mutual 'Flow))
           SLOTS BASE PROFILES canonical execute deliveries world? ds?))
+
+;; for the enactment adapter (enact.rkt) only
+(module+ internals (provide ref run))

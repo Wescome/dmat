@@ -426,3 +426,66 @@
       (check-equal? (arm-interface a) (arm-interface (A n (arm-name a))))
       (define expected (if (and (eq? n 'replacement) (eq? (arm-name a) 'cupid)) 9 0))
       (check-equal? (length (disagreements n (A n (arm-name a)) a)) expected (format "~a ~a" n (arm-name a))))))
+
+;; ------------------------------------------------------------------ enactment (specs/enactment.md)
+
+(require (only-in "enact.rkt" ENACTMENTS check-all classify holm binom-two-sided party-prompt observer-prompt parse-claims faithful-events)
+         (only-in "core/enact.rkt" enactment-family enactment-roles enactment-assemble enactment-truth
+                  role-spec-name role-spec-messages msg-spec-name msg-spec-kind msg-spec-fields
+                  parse-events classify-party ev->jsexpr make-ev))
+
+(test-case "enactment: faithful events reproduce the coded deliveries and truth in every world of every family"
+  (check-equal? (check-all) 0))
+
+(test-case "enactment: scoring a faithful run classifies cupid-e exactly as the judge does"
+  (for* ([en ENACTMENTS] [n (in-value (enactment-family en))] [p '(reliable adversarial)] [w (support (F n) p)])
+    (define-values (ds notes) ((enactment-assemble en) w (faithful-events en w)))
+    (define rows (classify n w ds ((enactment-truth en) w ds) ((arm-judge (A n 'cupid-e)) ds) p))
+    (define ref (hash-ref (classify-run (F n) (A n 'cupid-e) p w) 'deps))
+    (check-equal? (map (λ (d) (hash-ref d 'class)) rows) (map (λ (d) (hash-ref d 'class)) ref) (format "~a ~a ~s" n p w))))
+
+(test-case "enactment: party events are parsed, validated and classified against the faithful events"
+  (for* ([en ENACTMENTS] [n (in-value (enactment-family en))] [w (support (F n) 'adversarial)] [rs (enactment-roles en)])
+    (define faithful (hash-ref (faithful-events en w) (role-spec-name rs)))
+    (define js (hasheq 'events (map ev->jsexpr faithful)))
+    (define-values (evs bad) (parse-events rs js 100))
+    (check-equal? evs faithful)
+    (check-equal? (classify-party rs faithful evs bad) (hasheq 'fabricated-report 0 'fabricated-act 0 'omitted-message 0 'parameter-error 0 'malformed 0))
+    (when (pair? faithful)
+      (check-equal? (hash-ref (classify-party rs faithful (cdr faithful) 0) 'omitted-message) 1)))
+  (define rs (car (enactment-roles (findf (λ (e) (eq? (enactment-family e) 'replacement)) ENACTMENTS))))
+  (define-values (evs bad) (parse-events rs (hasheq 'events (list (hasheq 'message "Start" 'at 9) (hasheq 'message "Fly" 'at 1) (hasheq 'message "Start" 'at -1))) 13))
+  (check-equal? bad 2)
+  (check-equal? (hash-ref (classify-party rs '() evs 0) 'fabricated-report) 1)
+  (define A-rs (caddr (enactment-roles (findf (λ (e) (eq? (enactment-family e) 'replacement)) ENACTMENTS))))
+  (check-equal? (hash-ref (classify-party A-rs (list (make-ev A-rs 'Attest 6 'performer 'V)) (list (make-ev A-rs 'Attest 6 'performer 'V2)) 0) 'parameter-error) 1)
+  (define-values (none bad2) (parse-events rs #f 13))
+  (check-equal? bad2 1))
+
+(test-case "enactment: commitment arms and the hub hybrid are total on deliveries with any one message removed"
+  (for* ([en ENACTMENTS] [n (in-value (enactment-family en))] [p '(reliable adversarial)] [w (support (F n) p)])
+    (define ds (deliveries-of (F n) (A n 'hybrid) w))
+    (for ([i (length ds)])
+      (define ds* (append (take ds i) (drop ds (add1 i))))
+      (for ([an '(cupid cupid-e)])
+        (check-true (claims-term? ((arm-judge (A n an)) ds*)) (format "~a ~a ~s" n an ds*))))))
+
+(test-case "enactment: prompts are built for every role and condition; observer output parsing is defensive"
+  (for ([en ENACTMENTS])
+    (define n (enactment-family en))
+    (define w (car (support (F n) 'adversarial)))
+    (for ([rs (enactment-roles en)])
+      (define-values (sys user) (party-prompt en w rs))
+      (check-true (and (string? sys) (string? user) (> (string-length user) 200))))
+    (define ds (deliveries-of (F n) (A n 'hybrid) w))
+    (for ([c '(role commitments evidential)])
+      (define-values (sys user) (observer-prompt en ds c))
+      (check-true (string? user)))
+    (define-values (cls bad) (parse-claims n "no json here"))
+    (check-true bad)
+    (check-true (andmap (λ (c) (eq? (caddr c) 'Indeterminate)) cls))))
+
+(test-case "enactment report statistics: exact sign test and Holm adjustment"
+  (check-= (binom-two-sided 8 1) 0.0390625 1e-12)
+  (check-= (binom-two-sided 0 0) 1 0)
+  (check-equal? (holm (list 0.01 0.04 0.03)) (list 0.03 0.06 0.06)))

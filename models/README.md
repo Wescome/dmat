@@ -9,7 +9,7 @@ v0.4 adds the commitment arms of instance I-3 (multiagent systems): a commitment
 Requires Racket 8.10 or later with `redex-lib` (the standard distribution includes it).
 
 ```
-raco test tests.rkt                          # 37 test cases over all eight families, the commitment arms and the independent arms
+raco test tests.rkt                          # 43 test cases: families, commitment arms, independent arms, enactment
 racket bench.rkt exact                       # exact expected metrics: every world of each profile, weighted
 racket bench.rkt sampled 100 results.jsonl   # DMBench: 100 seeds per (family, profile), 18,000 runs, one JSON line each
 racket bench.rkt propositions                # P1 witnesses, P2 report, P3 reports
@@ -17,6 +17,8 @@ racket diff.rkt                              # reference arms vs independently a
 racket diff.rkt detail FAMILY                # every deliveries list on which they disagree, with the truths it can carry
 racket commitments.rkt                       # commitment arms: metrics, the evidential-layer ablation, cupid-e against the hybrid
 racket diff.rkt cupid > diff-cupid.txt       # reference commitment arms vs independently authored ones
+racket enact.rkt check                       # enactment adapters: faithful agents reproduce every coded run
+harness/pipeline.sh enactment/requests/test-mock.json OUT   # the enactment pipeline end to end, mock models
 ```
 
 ## Layout
@@ -37,6 +39,9 @@ racket diff.rkt cupid > diff-cupid.txt       # reference commitment arms vs inde
 | `bench.rkt` | DMBench driver |
 | `specs/commitments/`, `specs/bspl/` | The commitment-arm contract and evaluator semantics (`README.md`), one commitment specification and one BSPL information protocol per family |
 | `commitments.rkt` | The commitment-arm report (`commitments.txt`) |
+| `core/enact.rkt`, `families/<family>/enact.rkt`, `enact.rkt` | Enactment by language-model agents (`specs/enactment.md`): role specifications, briefings, faithful events, assembly of deliveries from agents' messages and the world's faults, observer prompts, scoring |
+| `harness/run.py`, `harness/pipeline.sh` | The model calls (Anthropic, OpenAI, OpenAI-compatible endpoints, mocks) and one request end to end |
+| `enactment/` | Run requests, queued requests and committed outputs (`enactment/README.md`) |
 | `specs/` | `paradigms.md` (the arm contract and the five paradigms) and one specification per family: what the independent authors worked from; `adjudication.md`, the record of the differential check |
 | `independent/<family>-arms.rkt`, `independent/<family>-cupid.rkt` | Arms and commitment arms written by independent authors from `specs/` and the family's `terms.rkt` only |
 | `diff.rkt` | The differential check between reference and independent arms |
@@ -129,6 +134,10 @@ Each family's commitments are declared as queries over the observer's informatio
 - **The evidential layer is what makes commitment judgment sound.** `cupid-e` makes no false claim under any profile of any family; `cupid` is unsafe in every family. P3 between them loses no observation anywhere: the whole loss is in judgment.
 - **Evidential commitments recover the hybrid.** `cupid-e` decides exactly what the hub's hybrid decides except on two documented runs: deadline completion, where the commitment's deadline is the evaluation instant and V's record is complete only through the read, so E2 abstains where the hybrid uses the family's schedule; and replacement temporal, where V's own report of a late resumption is an admission under E1 and `cupid-e` decides where the hybrid abstains.
 - **Independent authorship.** The commitment arms were written a second time from the specifications alone. The first comparison disagreed on no deliveries list. The author found one specification error (a ghost START admitted by the replacement responsibility rule under the closed-world reading), now amended in the specification and the reference, leaving a pinned residue of 9 lists; `specs/commitments/adjudication.md` records it.
+
+## Enactment (phase 3, step 3.4)
+
+The information protocols can be enacted by language-model agents (`specs/enactment.md`). The world still draws conduct and faults per seed; party agents are briefed with their own conduct and choose the protocol messages they send; their messages pass through the world's channel and system faults into the observer's deliveries; an observer agent judges under three instruction conditions (role only; with commitments; with commitments and E1–E3); the coded `cupid-e` and `cupid` judge the same deliveries. Agents never see the truth. Assembly is checked against the coded models: in every world of every family, agents that send the faithful events produce exactly the coded deliveries and truth. The analysis plan, with hypotheses fixed before any model run, is `../docs/enactment-analysis-plan.md`; runs are requested and their outputs committed through `enactment/`.
 
 ## Independent authorship
 

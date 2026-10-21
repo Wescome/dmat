@@ -48,3 +48,6 @@
   (family 'deadline
           (list (dependency 'temporal 'Temporal) (dependency 'completion 'Flow))
           SLOTS BASE PROFILES canonical execute deliveries world? ds?))
+
+;; for the enactment adapter (enact.rkt) only
+(module+ internals (provide ref true-done v-stamp))

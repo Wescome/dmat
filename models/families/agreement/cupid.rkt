@@ -67,9 +67,9 @@
   (define b-cites (append acks (if reconciled (list ri) '())))
   (define accept (findf (is 'ACCEPT) facts))
   (define confirm (filter (is 'CONFIRM) facts))
-  (define fit-cites (append (list (fact-index accept)) (map fact-index confirm)
+  (define fit-cites (append (if accept (list (fact-index accept)) '()) (map fact-index confirm)
                             (map fact-index (filter (is 'REJECT) facts))))
-  (claims (dep-claim 'fit (if (and (pair? confirm) (eq? (car (fact-attrs accept)) 'altered)) 'Violated 'Fulfilled) fit-cites)
+  (claims (dep-claim 'fit (if (and (pair? confirm) accept (eq? (car (fact-attrs accept)) 'altered)) 'Violated 'Fulfilled) fit-cites)
           (if s
               (dep-claim 'mutual (if (eq? b-bound (car s)) 'Fulfilled 'Violated) (filter values (append b-cites (cdr s))))
               (dep-claim 'mutual 'Indeterminate '()))))

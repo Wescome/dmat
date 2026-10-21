@@ -1,0 +1,2 @@
+{"id": "full-openweights", "families": "all", "profiles": "reliable,adversarial", "seeds": 50, "reps": 3,
+ "models": ["openrouter:auto:deepseek/deepseek-v4-pro|deepseek/deepseek-v4|qwen/qwen3.8"], "concurrency": 16}

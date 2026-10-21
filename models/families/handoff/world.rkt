@@ -124,3 +124,6 @@
   (family 'handoff
           (list (dependency 'flow 'Flow) (dependency 'temporal 'Temporal))
           SLOTS BASE PROFILES canonical execute deliveries world? ds?))
+
+;; for the enactment adapter (enact.rkt) only
+(module+ internals (provide ref accepted? accept-at started? reported-start? record-view))

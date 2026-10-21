@@ -1,0 +1,76 @@
+name: enactment
+# Phase 3, step 3.4 (models/specs/enactment.md). Runs an enactment request
+# end to end and commits its outputs under models/enactment/runs/<id>/.
+# Triggered by pushing a request file to models/enactment/requests/, or by hand.
+# Model access: repository secrets ANTHROPIC_API_KEY, OPENAI_API_KEY,
+# OPENROUTER_API_KEY (and COMPAT_BASE_URL / COMPAT_API_KEY for another
+# OpenAI-compatible endpoint), used only by the models a request names.
+on:
+  push:
+    branches: [main]
+    paths: ['models/enactment/requests/*.json']
+  workflow_dispatch:
+    inputs:
+      request:
+        description: 'Request file, e.g. models/enactment/requests/pilot.json'
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: enactment
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: Bogdanp/setup-racket@v1.11
+        with:
+          version: '8.10'
+          distribution: full
+          variant: CS
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile the models
+        working-directory: models
+        run: raco make enact.rkt
+      - name: Select requests
+        id: sel
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "files=${{ github.event.inputs.request }}" >> "$GITHUB_OUTPUT"
+          else
+            files=$(git diff --name-only --diff-filter=AM "${{ github.event.before }}" "${{ github.sha }}" -- 'models/enactment/requests/*.json' | tr '\n' ' ')
+            echo "files=$files" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          COMPAT_BASE_URL: ${{ secrets.COMPAT_BASE_URL }}
+          COMPAT_API_KEY: ${{ secrets.COMPAT_API_KEY }}
+        run: |
+          mkdir -p models/enactment/runs
+          for REQ in ${{ steps.sel.outputs.files }}; do
+            ID=$(python3 -c "import json; print(json.load(open('$REQ'))['id'])")
+            OUT="models/enactment/runs/$ID"
+            rm -rf "$OUT"
+            models/harness/pipeline.sh "$REQ" "$OUT" 2> "$OUT.log" || true
+            mkdir -p "$OUT"; mv "$OUT.log" "$OUT/pipeline.log"
+            # call logs compressed; the report, results and status stay plain
+            for f in "$OUT"/plan.jsonl "$OUT"/parties-*.jsonl "$OUT"/observe*.jsonl "$OUT"/claims*.jsonl; do
+              if [ -f "$f" ]; then gzip -9 "$f"; fi
+            done
+          done
+      - name: Commit outputs
+        run: |
+          git config user.name "dmat-enactment"
+          git config user.email "dmat-enactment@users.noreply.github.com"
+          git add models/enactment/runs
+          git commit -m "Enactment outputs: ${{ steps.sel.outputs.files }}" || exit 0
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done

@@ -1,0 +1,2 @@
+{"id": "full-anthropic", "families": "all", "profiles": "reliable,adversarial", "seeds": 50, "reps": 3,
+ "models": ["anthropic:claude-opus-5-5"], "concurrency": 16}
