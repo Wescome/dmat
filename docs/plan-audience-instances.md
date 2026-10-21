@@ -122,16 +122,16 @@ Every instance and every piece of new work sits in exactly one phase. A phase en
 | Phase | Work | Model version | Depends on |
 | --- | --- | --- | --- |
 | 1 (done) | Core framework; executable models v0.3; hub paper WP-2026-DM-01 | v0.3 | — |
-| 2 | Post the hub on arXiv; tag `models-v0.3` and `paper-v1`; confirm submission windows for phases 3–5 venues | v0.3 | 1 |
-| 3 | I-1 formal methods (mechanized proofs, infinite and timed environments); I-2 runtime verification (synthesis of j*) | v0.4: symbolic determinacy | 2 |
-| 4 | I-3 multiagent systems (BSPL and commitment-specification arms, agent enactment); I-4 session types (toolchain-generated CHOR arms, refinement and timed types) | v0.5: new arm sources | 2 |
+| 2 | Post the hub on arXiv; tag `models-v0.3` and `paper-v1`; confirm submission windows (done for I-3, see `brief-mas-instance.md` §2) | v0.3 | 1 |
+| 3 | I-3 multiagent systems (BSPL and commitment-specification arms, evidential layer, agent enactment) — brief: `brief-mas-instance.md` | v0.4: commitment evaluator, new arms, enactment harness | 2 |
+| 4 | I-1 formal methods (mechanized proofs, infinite and timed environments); I-2 runtime verification (synthesis of j*); I-4 session types (toolchain-generated CHOR arms, refinement and timed types) | v0.5: symbolic determinacy, new CHOR arm sources | 2 |
 | 5 | I-5 software engineering (implementations over real transports; human independent teams; preregistration) | v1.0: implementation harness | 3, 4 |
 | 6 | I-6 distributed systems (ceilings of real protocols); I-11 practitioner article | v1.0 | 5 |
 | 7 | I-8 ontology release (OWL/SHACL, competency questions over run records) | v1.0 + RDF export | 5 |
 | 8 | I-7 information systems and organization science (selection method, field cases) | v1.1: selection method | 5, 7 |
 | 9 | I-9 law and governance; I-10 health informatics | v1.1 | 6, 8 |
 
-Phases 3 and 4 run in parallel; so do 6 and 7. The model version column is binding: an instance's numbers come from the tagged version of its phase.
+Phases 3 and 4 can overlap once phase 2 is done; so can 6 and 7. The model version column is binding: an instance's numbers come from the tagged version of its phase.
 
 ## 4. Shared assets each phase maintains
 
@@ -144,7 +144,7 @@ Phases 3 and 4 run in parallel; so do 6 and 7. The model version column is bindi
 
 | # | Decision | Options | Recommendation |
 | --- | --- | --- | --- |
-| D1 | Which instance to submit first after the arXiv posting | (a) I-3 multiagent systems; (b) I-1 formal methods; (c) I-5 software engineering | (a). The commitment and accountability community owns the problem DMAT addresses, three of the four tested hypotheses speak to it directly, and its new work (BSPL and commitment-specification arms) is the smallest of the three. I-1 follows in the same phase window; I-5 needs implementations and cannot go first |
+| D1 | Which instance to submit first after the arXiv posting | (a) I-3 multiagent systems; (b) I-1 formal methods; (c) I-5 software engineering | **Taken 2026-10-21: (a).** Brief: `brief-mas-instance.md` |
 | D2 | How the research guideline applies to non-IEEE venues | (a) guideline content and production standards with the venue's template; (b) IEEE format everywhere and preprint only | (a). Venues reject submissions outside their template; the guideline's standards (defended contributions, proofs, figures, citation layers, limitations, agenda, build pipeline) are template-independent |
 | D3 | Independent authorship for I-5 | (a) separate human teams via an open call or collaborators; (b) agent authors from other model families; (c) both | (c). Human teams answer the Knight–Leveson objection; agents from other model families are cheap and reduce same-family correlation; reporting both separates the two effects |
 | D4 | Authorship and affiliation of the DMAT line | (a) WeOps Research, as in the hub; (b) independent; (c) with academic co-authors per instance | (c) for I-1, I-3, I-4 and I-7, where co-authors from those communities strengthen review and access; (a) for the hub and practitioner pieces |
