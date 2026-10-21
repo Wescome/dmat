@@ -1,0 +1,67 @@
+Reference arms vs independent arms: distinct deliveries lists judged differently; exact SFR and false rate per profile (reference → independent)
+handoff      chor        disagree on   0 of 74
+handoff      fsm         disagree on   0 of 36
+handoff      comm        disagree on   0 of 76
+handoff      hybrid      disagree on   0 of 164
+handoff      hybrid-noe  disagree on   0 of 164
+reservation  chor        disagree on   0 of 6
+reservation  fsm         disagree on   0 of 6
+reservation  comm        disagree on   0 of 6
+reservation  hybrid      disagree on   0 of 10
+reservation  hybrid-noe  disagree on   0 of 10
+agreement    chor        disagree on   9 of 18
+    reliable               SFR 0.250 → 0.000  false 0.125 → 0.000  coverage 1.000 → 1.000
+    lossy                  SFR 0.250 → 0.000  false 0.125 → 0.000  coverage 1.000 → 1.000
+    concurrent-revoke      SFR 0.250 → 0.000  false 0.125 → 0.000  coverage 1.000 → 1.000
+    stale-read             SFR 0.375 → 0.167  false 0.208 → 0.083  coverage 0.917 → 0.917
+    adversarial            SFR 0.297 → 0.063  false 0.156 → 0.031  coverage 0.927 → 0.927
+agreement    fsm         disagree on   0 of 14
+agreement    comm        disagree on   0 of 14
+agreement    hybrid      disagree on   0 of 16
+agreement    hybrid-noe  disagree on   0 of 16
+delegation   chor        disagree on   2 of 14
+    stale-read             SFR 0.219 → 0.219  false 0.109 → 0.109  coverage 0.667 → 0.750
+    adversarial            SFR 0.266 → 0.326  false 0.133 → 0.174  coverage 0.690 → 0.815
+delegation   fsm         disagree on   6 of 13
+    reliable               SFR 0.000 → 0.000  false 0.000 → 0.000  coverage 1.000 → 0.813
+    lossy                  SFR 0.000 → 0.000  false 0.000 → 0.000  coverage 1.000 → 0.813
+    stale-read             SFR 0.250 → 0.250  false 0.125 → 0.125  coverage 0.833 → 0.604
+    adversarial            SFR 0.250 → 0.250  false 0.125 → 0.125  coverage 0.833 → 0.604
+delegation   comm        disagree on   0 of 26
+delegation   hybrid      disagree on   0 of 57
+delegation   hybrid-noe  disagree on   0 of 57
+deadline     chor        disagree on   1 of 26
+    adversarial            SFR 0.300 → 0.300  false 0.150 → 0.150  coverage 1.000 → 0.967
+deadline     fsm         disagree on   0 of 26
+deadline     comm        disagree on   0 of 26
+deadline     hybrid      disagree on   0 of 50
+deadline     hybrid-noe  disagree on   0 of 50
+external     chor        disagree on   3 of 5
+    reliable               SFR 0.000 → 0.000  false 0.000 → 0.000  coverage 0.875 → 0.500
+    external-failure       SFR 0.375 → 0.000  false 0.188 → 0.000  coverage 0.875 → 0.500
+    premature              SFR 0.500 → 0.125  false 0.281 → 0.063  coverage 0.938 → 0.500
+    adversarial            SFR 0.500 → 0.125  false 0.281 → 0.063  coverage 0.938 → 0.500
+external     fsm         disagree on   0 of 5
+external     comm        disagree on   3 of 5
+    reliable               SFR 0.250 → 1.000  false 0.125 → 0.500  coverage 1.000 → 1.000
+external     hybrid      disagree on   0 of 30
+external     hybrid-noe  disagree on   1 of 30
+    adversarial            SFR 0.219 → 0.184  false 0.114 → 0.094  coverage 1.000 → 1.000
+composition  chor        disagree on   0 of 5
+composition  fsm         disagree on   3 of 5
+    reliable               SFR 0.133 → 0.000  false 0.067 → 0.000  coverage 0.767 → 0.500
+    lossy                  SFR 0.200 → 0.089  false 0.100 → 0.044  coverage 0.722 → 0.500
+    self-report            SFR 0.133 → 0.000  false 0.067 → 0.000  coverage 0.767 → 0.500
+    adversarial            SFR 0.200 → 0.089  false 0.100 → 0.044  coverage 0.722 → 0.500
+composition  comm        disagree on   5 of 5
+    reliable               SFR 0.500 → 0.000  false 0.250 → 0.000  coverage 1.000 → 0.500
+    lossy                  SFR 0.522 → 0.089  false 0.294 → 0.044  coverage 1.000 → 0.500
+    self-report            SFR 0.500 → 0.000  false 0.250 → 0.000  coverage 1.000 → 0.500
+    adversarial            SFR 0.522 → 0.089  false 0.294 → 0.044  coverage 1.000 → 0.500
+composition  hybrid      disagree on   0 of 23
+composition  hybrid-noe  disagree on   0 of 23
+replacement  chor        disagree on   0 of 20
+replacement  fsm         disagree on   0 of 28
+replacement  comm        disagree on   0 of 28
+replacement  hybrid      disagree on   0 of 61
+replacement  hybrid-noe  disagree on   0 of 61

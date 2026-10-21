@@ -1,0 +1,197 @@
+P1 — identical deliveries, different truth: ambiguous observation classes per dependency
+  handoff      reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  handoff      lossy                  chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  handoff      timing                 chor 0/0 fsm 0/4 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  handoff      stale-read             chor 2/4 fsm 2/4 comm 2/4 hybrid 2/0 hybrid-noe 2/0
+  handoff      record-lag             chor 0/1 fsm 0/1 comm 0/1 hybrid 0/0 hybrid-noe 0/0
+  handoff      evidence-contradiction chor 0/1 fsm 0/1 comm 0/1 hybrid 0/1 hybrid-noe 0/1
+  handoff      adversarial            chor 6/74 fsm 4/36 comm 4/76 hybrid 8/76 hybrid-noe 8/76
+  reservation  reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  reservation  lossy-release          chor 0/0 fsm 1/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  reservation  stale-read             chor 0/1 fsm 2/0 comm 0/1 hybrid 0/0 hybrid-noe 1/0
+  reservation  adversarial            chor 0/1 fsm 3/0 comm 0/1 hybrid 0/0 hybrid-noe 1/0
+  agreement    reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  agreement    lossy                  chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  agreement    concurrent-revoke      chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  agreement    stale-read             chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  agreement    adversarial            chor 0/4 fsm 0/2 comm 0/2 hybrid 0/2 hybrid-noe 0/2
+  delegation   reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  delegation   lossy                  chor 2/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  delegation   stale-read             chor 0/4 fsm 0/4 comm 0/4 hybrid 0/0 hybrid-noe 0/0
+  delegation   adversarial            chor 4/5 fsm 0/5 comm 0/4 hybrid 0/5 hybrid-noe 0/5
+  deadline     reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  deadline     transit                chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  deadline     clock-skew             chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  deadline     adversarial            chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  external     reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  external     external-failure       chor 0/2 fsm 0/2 comm 0/2 hybrid 0/0 hybrid-noe 0/0
+  external     premature              chor 0/3 fsm 0/3 comm 0/3 hybrid 0/0 hybrid-noe 0/0
+  external     adversarial            chor 1/5 fsm 1/5 comm 1/5 hybrid 3/5 hybrid-noe 3/5
+  composition  reliable               chor 2/0 fsm 2/0 comm 2/0 hybrid 0/0 hybrid-noe 0/0
+  composition  lossy                  chor 5/1 fsm 5/1 comm 5/1 hybrid 0/2 hybrid-noe 0/2
+  composition  self-report            chor 2/0 fsm 2/0 comm 2/0 hybrid 0/0 hybrid-noe 0/0
+  composition  adversarial            chor 5/1 fsm 5/1 comm 5/1 hybrid 5/3 hybrid-noe 5/3
+  replacement  reliable               chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  replacement  ghost                  chor 0/0 fsm 0/0 comm 0/0 hybrid 0/0 hybrid-noe 0/0
+  replacement  stale-read             chor 0/4 fsm 0/4 comm 0/4 hybrid 0/0 hybrid-noe 0/0
+  replacement  adversarial            chor 0/6 fsm 0/6 comm 0/6 hybrid 0/6 hybrid-noe 0/6
+  dependency order per family: handoff (flow temporal); reservation (sharing temporal); agreement (fit mutual); delegation (continuity temporal); deadline (temporal completion); external (internal external); composition (temporal delivery); replacement (continuity temporal)
+  example (handoff, chor, stale-read): (flow ((read-failed 11)) (world on-time #f #f honest dropped fast delivered dropped unavailable complete) (world no #f #f honest dropped fast delivered dropped unavailable complete))
+P2 — composition H ← V ← S under H's observation models of V (hybrid's protocol); determined mass per dependency
+  reliable     coarse         ambiguous classes 2   temporal 0.000  delivery 1.000
+  reliable     staged         ambiguous classes 0   temporal 1.000  delivery 1.000
+  reliable     staged+attest  ambiguous classes 0   temporal 1.000  delivery 1.000
+  lossy        coarse         ambiguous classes 6   temporal 0.000  delivery 0.756
+  lossy        staged         ambiguous classes 3   temporal 0.667  delivery 0.756
+  lossy        staged+attest  ambiguous classes 2   temporal 1.000  delivery 0.867
+  self-report  coarse         ambiguous classes 2   temporal 0.000  delivery 1.000
+  self-report  staged         ambiguous classes 2   temporal 0.250  delivery 1.000
+  self-report  staged+attest  ambiguous classes 0   temporal 1.000  delivery 1.000
+  adversarial  coarse         ambiguous classes 6   temporal 0.000  delivery 0.756
+  adversarial  staged         ambiguous classes 6   temporal 0.167  delivery 0.756
+  adversarial  staged+attest  ambiguous classes 8   temporal 0.625  delivery 0.756
+P3 — variant against mechanism: (dependency, world) pairs where safety or observation is lost
+  handoff      hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  handoff      hybrid → hybrid-noe  lossy                  safety-lost 0   observation-lost 0
+  handoff      hybrid → hybrid-noe  timing                 safety-lost 0   observation-lost 0
+  handoff      hybrid → hybrid-noe  stale-read             safety-lost 8   observation-lost 0
+  handoff      hybrid → hybrid-noe  record-lag             safety-lost 0   observation-lost 0
+  handoff      hybrid → hybrid-noe  evidence-contradiction safety-lost 1   observation-lost 0
+  handoff      hybrid → hybrid-noe  adversarial            safety-lost 156 observation-lost 0
+  handoff      hybrid → fsm         reliable               safety-lost 0   observation-lost 0
+  handoff      hybrid → fsm         lossy                  safety-lost 4   observation-lost 0
+  handoff      hybrid → fsm         timing                 safety-lost 4   observation-lost 8
+  handoff      hybrid → fsm         stale-read             safety-lost 16  observation-lost 28
+  handoff      hybrid → fsm         record-lag             safety-lost 2   observation-lost 6
+  handoff      hybrid → fsm         evidence-contradiction safety-lost 1   observation-lost 1
+  handoff      hybrid → fsm         adversarial            safety-lost 320 observation-lost 208
+  handoff      hybrid → comm        reliable               safety-lost 0   observation-lost 0
+  handoff      hybrid → comm        lossy                  safety-lost 0   observation-lost 0
+  handoff      hybrid → comm        timing                 safety-lost 0   observation-lost 0
+  handoff      hybrid → comm        stale-read             safety-lost 10  observation-lost 22
+  handoff      hybrid → comm        record-lag             safety-lost 1   observation-lost 5
+  handoff      hybrid → comm        evidence-contradiction safety-lost 1   observation-lost 1
+  handoff      hybrid → comm        adversarial            safety-lost 194 observation-lost 168
+  handoff      hybrid → chor        reliable               safety-lost 0   observation-lost 0
+  handoff      hybrid → chor        lossy                  safety-lost 4   observation-lost 0
+  handoff      hybrid → chor        timing                 safety-lost 4   observation-lost 0
+  handoff      hybrid → chor        stale-read             safety-lost 14  observation-lost 22
+  handoff      hybrid → chor        record-lag             safety-lost 1   observation-lost 5
+  handoff      hybrid → chor        evidence-contradiction safety-lost 1   observation-lost 1
+  handoff      hybrid → chor        adversarial            safety-lost 270 observation-lost 180
+  reservation  hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  reservation  hybrid → hybrid-noe  lossy-release          safety-lost 0   observation-lost 0
+  reservation  hybrid → hybrid-noe  stale-read             safety-lost 3   observation-lost 3
+  reservation  hybrid → hybrid-noe  adversarial            safety-lost 6   observation-lost 5
+  reservation  hybrid → fsm         reliable               safety-lost 1   observation-lost 0
+  reservation  hybrid → fsm         lossy-release          safety-lost 2   observation-lost 3
+  reservation  hybrid → fsm         stale-read             safety-lost 4   observation-lost 5
+  reservation  hybrid → fsm         adversarial            safety-lost 8   observation-lost 12
+  reservation  hybrid → comm        reliable               safety-lost 0   observation-lost 0
+  reservation  hybrid → comm        lossy-release          safety-lost 0   observation-lost 0
+  reservation  hybrid → comm        stale-read             safety-lost 0   observation-lost 3
+  reservation  hybrid → comm        adversarial            safety-lost 0   observation-lost 5
+  reservation  hybrid → chor        reliable               safety-lost 0   observation-lost 0
+  reservation  hybrid → chor        lossy-release          safety-lost 0   observation-lost 0
+  reservation  hybrid → chor        stale-read             safety-lost 0   observation-lost 3
+  reservation  hybrid → chor        adversarial            safety-lost 0   observation-lost 5
+  agreement    hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  agreement    hybrid → hybrid-noe  lossy                  safety-lost 0   observation-lost 0
+  agreement    hybrid → hybrid-noe  concurrent-revoke      safety-lost 0   observation-lost 0
+  agreement    hybrid → hybrid-noe  stale-read             safety-lost 1   observation-lost 0
+  agreement    hybrid → hybrid-noe  adversarial            safety-lost 2   observation-lost 0
+  agreement    hybrid → fsm         reliable               safety-lost 0   observation-lost 0
+  agreement    hybrid → fsm         lossy                  safety-lost 0   observation-lost 0
+  agreement    hybrid → fsm         concurrent-revoke      safety-lost 0   observation-lost 0
+  agreement    hybrid → fsm         stale-read             safety-lost 1   observation-lost 0
+  agreement    hybrid → fsm         adversarial            safety-lost 2   observation-lost 2
+  agreement    hybrid → comm        reliable               safety-lost 0   observation-lost 0
+  agreement    hybrid → comm        lossy                  safety-lost 0   observation-lost 0
+  agreement    hybrid → comm        concurrent-revoke      safety-lost 0   observation-lost 0
+  agreement    hybrid → comm        stale-read             safety-lost 1   observation-lost 0
+  agreement    hybrid → comm        adversarial            safety-lost 2   observation-lost 2
+  agreement    hybrid → chor        reliable               safety-lost 1   observation-lost 0
+  agreement    hybrid → chor        lossy                  safety-lost 4   observation-lost 0
+  agreement    hybrid → chor        concurrent-revoke      safety-lost 3   observation-lost 0
+  agreement    hybrid → chor        stale-read             safety-lost 8   observation-lost 0
+  agreement    hybrid → chor        adversarial            safety-lost 40  observation-lost 12
+  delegation   hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  delegation   hybrid → hybrid-noe  lossy                  safety-lost 0   observation-lost 0
+  delegation   hybrid → hybrid-noe  stale-read             safety-lost 0   observation-lost 0
+  delegation   hybrid → hybrid-noe  adversarial            safety-lost 10  observation-lost 0
+  delegation   hybrid → fsm         reliable               safety-lost 0   observation-lost 0
+  delegation   hybrid → fsm         lossy                  safety-lost 0   observation-lost 0
+  delegation   hybrid → fsm         stale-read             safety-lost 6   observation-lost 26
+  delegation   hybrid → fsm         adversarial            safety-lost 20  observation-lost 34
+  delegation   hybrid → comm        reliable               safety-lost 0   observation-lost 0
+  delegation   hybrid → comm        lossy                  safety-lost 0   observation-lost 0
+  delegation   hybrid → comm        stale-read             safety-lost 6   observation-lost 20
+  delegation   hybrid → comm        adversarial            safety-lost 20  observation-lost 14
+  delegation   hybrid → chor        reliable               safety-lost 0   observation-lost 0
+  delegation   hybrid → chor        lossy                  safety-lost 2   observation-lost 4
+  delegation   hybrid → chor        stale-read             safety-lost 4   observation-lost 28
+  delegation   hybrid → chor        adversarial            safety-lost 16  observation-lost 78
+  deadline     hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  deadline     hybrid → hybrid-noe  transit                safety-lost 0   observation-lost 0
+  deadline     hybrid → hybrid-noe  clock-skew             safety-lost 0   observation-lost 0
+  deadline     hybrid → hybrid-noe  adversarial            safety-lost 8   observation-lost 0
+  deadline     hybrid → fsm         reliable               safety-lost 0   observation-lost 0
+  deadline     hybrid → fsm         transit                safety-lost 0   observation-lost 0
+  deadline     hybrid → fsm         clock-skew             safety-lost 2   observation-lost 0
+  deadline     hybrid → fsm         adversarial            safety-lost 16  observation-lost 0
+  deadline     hybrid → comm        reliable               safety-lost 0   observation-lost 0
+  deadline     hybrid → comm        transit                safety-lost 1   observation-lost 0
+  deadline     hybrid → comm        clock-skew             safety-lost 0   observation-lost 0
+  deadline     hybrid → comm        adversarial            safety-lost 12  observation-lost 0
+  deadline     hybrid → chor        reliable               safety-lost 0   observation-lost 0
+  deadline     hybrid → chor        transit                safety-lost 1   observation-lost 0
+  deadline     hybrid → chor        clock-skew             safety-lost 0   observation-lost 0
+  deadline     hybrid → chor        adversarial            safety-lost 12  observation-lost 0
+  external     hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  external     hybrid → hybrid-noe  external-failure       safety-lost 0   observation-lost 0
+  external     hybrid → hybrid-noe  premature              safety-lost 0   observation-lost 0
+  external     hybrid → hybrid-noe  adversarial            safety-lost 16  observation-lost 0
+  external     hybrid → fsm         reliable               safety-lost 0   observation-lost 0
+  external     hybrid → fsm         external-failure       safety-lost 0   observation-lost 6
+  external     hybrid → fsm         premature              safety-lost 0   observation-lost 9
+  external     hybrid → fsm         adversarial            safety-lost 5   observation-lost 27
+  external     hybrid → comm        reliable               safety-lost 1   observation-lost 0
+  external     hybrid → comm        external-failure       safety-lost 3   observation-lost 6
+  external     hybrid → comm        premature              safety-lost 8   observation-lost 9
+  external     hybrid → comm        adversarial            safety-lost 39  observation-lost 27
+  external     hybrid → chor        reliable               safety-lost 0   observation-lost 0
+  external     hybrid → chor        external-failure       safety-lost 2   observation-lost 6
+  external     hybrid → chor        premature              safety-lost 7   observation-lost 9
+  external     hybrid → chor        adversarial            safety-lost 33  observation-lost 27
+  composition  hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  composition  hybrid → hybrid-noe  lossy                  safety-lost 2   observation-lost 0
+  composition  hybrid → hybrid-noe  self-report            safety-lost 2   observation-lost 0
+  composition  hybrid → hybrid-noe  adversarial            safety-lost 11  observation-lost 0
+  composition  hybrid → fsm         reliable               safety-lost 1   observation-lost 6
+  composition  hybrid → fsm         lossy                  safety-lost 5   observation-lost 18
+  composition  hybrid → fsm         self-report            safety-lost 2   observation-lost 10
+  composition  hybrid → fsm         adversarial            safety-lost 18  observation-lost 23
+  composition  hybrid → comm        reliable               safety-lost 2   observation-lost 6
+  composition  hybrid → comm        lossy                  safety-lost 8   observation-lost 18
+  composition  hybrid → comm        self-report            safety-lost 2   observation-lost 10
+  composition  hybrid → comm        adversarial            safety-lost 18  observation-lost 23
+  composition  hybrid → chor        reliable               safety-lost 0   observation-lost 6
+  composition  hybrid → chor        lossy                  safety-lost 2   observation-lost 18
+  composition  hybrid → chor        self-report            safety-lost 0   observation-lost 10
+  composition  hybrid → chor        adversarial            safety-lost 6   observation-lost 23
+  replacement  hybrid → hybrid-noe  reliable               safety-lost 0   observation-lost 0
+  replacement  hybrid → hybrid-noe  ghost                  safety-lost 2   observation-lost 0
+  replacement  hybrid → hybrid-noe  stale-read             safety-lost 0   observation-lost 0
+  replacement  hybrid → hybrid-noe  adversarial            safety-lost 25  observation-lost 0
+  replacement  hybrid → fsm         reliable               safety-lost 0   observation-lost 0
+  replacement  hybrid → fsm         ghost                  safety-lost 0   observation-lost 0
+  replacement  hybrid → fsm         stale-read             safety-lost 4   observation-lost 22
+  replacement  hybrid → fsm         adversarial            safety-lost 12  observation-lost 22
+  replacement  hybrid → comm        reliable               safety-lost 0   observation-lost 0
+  replacement  hybrid → comm        ghost                  safety-lost 2   observation-lost 0
+  replacement  hybrid → comm        stale-read             safety-lost 6   observation-lost 22
+  replacement  hybrid → comm        adversarial            safety-lost 46  observation-lost 22
+  replacement  hybrid → chor        reliable               safety-lost 0   observation-lost 0
+  replacement  hybrid → chor        ghost                  safety-lost 0   observation-lost 0
+  replacement  hybrid → chor        stale-read             safety-lost 6   observation-lost 26
+  replacement  hybrid → chor        adversarial            safety-lost 18  observation-lost 38

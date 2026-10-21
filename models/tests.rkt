@@ -1,0 +1,329 @@
+#lang racket/base
+;; The models' own tests, over all eight families: well-formedness, totality,
+;; oracle isolation (with a planted leak the check must catch), determinism and
+;; common random numbers, a brute-force check of the judge, the adequacy
+;; properties each family is built to exhibit, and P1–P3.
+;;   raco test tests.rkt
+
+(require rackunit racket/list racket/set racket/file redex/reduction-semantics
+         "core/grammar.rkt" "core/family.rkt" "core/arm.rkt" "core/judge.rkt"
+         "families.rkt" "propositions.rkt" "bench.rkt"
+         (only-in "families/handoff/terms.rkt" HANDOFF)
+         (only-in "families/reservation/terms.rkt" RESERVATION)
+         (only-in "families/agreement/terms.rkt" AGREEMENT)
+         (only-in "families/delegation/terms.rkt" DELEGATION)
+         (only-in "families/deadline/terms.rkt" DEADLINE-SERVICE)
+         (only-in "families/external/terms.rkt" EXTERNAL)
+         (only-in "families/composition/terms.rkt" COMPOSITION)
+         (only-in "families/replacement/terms.rkt" REPLACEMENT))
+
+(define F family-by-name)
+(define A arm-of)
+(define (rows f a p) (for/list ([w (support f p)]) (classify-run f a p w)))
+(define (false-count fname aname p)
+  (define f (F fname))
+  (for*/sum ([r (rows f (A fname aname) p)] [d (hash-ref r 'deps)]) (if (eq? (hash-ref d 'class) 'false) 1 0)))
+(define (metric fname aname p m) (hash-ref (exact-metrics (F fname) (A fname aname) p) m))
+(define (claims-of fname aname w)
+  (define f (F fname)) (define a (A fname aname))
+  (map (λ (c) (list (cadr c) (caddr c))) ((arm-judge a) (deliveries-of f a w))))
+
+;; ------------------------------------------------------------------ registry
+
+(test-case "DMBench's eight families are registered, each with the five arms"
+  (check-equal? family-names '(handoff reservation agreement delegation deadline external composition replacement))
+  (for ([n family-names]) (check-equal? (map arm-name (arms-of n)) ARM-NAMES)))
+
+;; ------------------------------------------------------------------ well-formedness
+
+(test-case "every world, every arm's deliveries and every claim are terms of the family's language"
+  (for* ([fa FAMILIES] [p (profile-names (car fa))] [w (support (car fa) p)])
+    (define f (car fa))
+    (check-true ((family-world-term? f) w) (format "~a ~s" (family-name f) w))
+    (for ([a (cdr fa)])
+      (check-true ((family-ds-term? f) (deliveries-of f a w)))
+      (check-true (claims-term? ((arm-judge a) (deliveries-of f a w)))))))
+
+(test-case "every profile's probabilities sum to 1 and every support world has positive probability"
+  (for* ([fa FAMILIES] [p (profile-names (car fa))])
+    (define f (car fa))
+    (check-equal? (for/sum ([w (support f p)]) (probability f p w)) 1 (format "~a ~a" (family-name f) p))
+    (for ([w (support f p)]) (check-true (positive? (probability f p w))))))
+
+(test-case "the canonical map is idempotent"
+  (for* ([fa FAMILIES] [p (profile-names (car fa))] [w (support (car fa) p)])
+    (check-equal? ((family-canonical (car fa)) w) w)))
+
+;; ------------------------------------------------------------------ totality
+
+(define LANGS
+  (list (cons 'handoff (λ () (generate-term HANDOFF w 4)))
+        (cons 'reservation (λ () (generate-term RESERVATION w 4)))
+        (cons 'agreement (λ () (generate-term AGREEMENT w 4)))
+        (cons 'delegation (λ () (generate-term DELEGATION w 4)))
+        (cons 'deadline (λ () (generate-term DEADLINE-SERVICE w 4)))
+        (cons 'external (λ () (generate-term EXTERNAL w 4)))
+        (cons 'composition (λ () (generate-term COMPOSITION w 4)))
+        (cons 'replacement (λ () (generate-term REPLACEMENT w 4)))))
+
+(define (gen-world gen) (gen))
+
+(test-case "execution, delivery and every arm are total on worlds generated from each family's grammar"
+  (for ([fa FAMILIES])
+    (define f (car fa))
+    (define L (cdr (assq (family-name f) LANGS)))
+    (for ([i 300])
+      (define w ((family-canonical f) (gen-world L)))
+      (for ([a (cdr fa)])
+        (define ex ((family-execute f) (arm-protocol a) (arm-interface a) w))
+        (for ([d (family-deps f)])
+          (check-not-false (memq (hash-ref (hash-ref ex 'truth) (dependency-name d)) '(Fulfilled Violated))))
+        (define ds ((family-deliveries f) (arm-protocol a) (arm-interface a) w))
+        (check-true ((family-ds-term? f) ds) (format "~a/~a on ~s" (family-name f) (arm-name a) w))
+        (check-true (claims-term? ((arm-judge a) ds)) (format "~a/~a on ~s" (family-name f) (arm-name a) w))))))
+
+;; ------------------------------------------------------------------ oracle isolation
+
+(define here (let-values ([(dir _n _d) (split-path (path->complete-path (syntax-source #'here)))]) dir))
+
+;; the transitive closure of a module's relative-path imports
+(define (import-closure file)
+  (define seen (mutable-set))
+  (let loop ([p (simplify-path (path->complete-path file))])
+    (unless (set-member? seen p)
+      (set-add! seen p)
+      (define-values (dir _n _d) (split-path p))
+      (define stx (with-input-from-file p
+                    (λ () (parameterize ([read-accept-reader #t] [read-accept-lang #t]) (read-syntax p)))))
+      (define reqs
+        (let walk ([d (syntax->datum stx)])
+          (cond [(and (pair? d) (eq? (car d) 'require))
+                 (let strings ([x (cdr d)])
+                   (cond [(string? x) (list x)] [(pair? x) (append (strings (car x)) (strings (cdr x)))] [else '()]))]
+                [(pair? d) (append (walk (car d)) (walk (cdr d)))]
+                [else '()])))
+      (for ([r reqs]) (loop (simplify-path (build-path dir r))))))
+  seen)
+
+(define (isolation-violations arms-file)
+  (define-values (dir _n _d) (split-path (simplify-path (path->complete-path arms-file))))
+  (define allowed
+    (set (simplify-path (path->complete-path arms-file))
+         (simplify-path (build-path dir "terms.rkt"))
+         (simplify-path (build-path here "core/arm.rkt"))
+         (simplify-path (build-path here "core/observe.rkt"))
+         (simplify-path (build-path here "core/grammar.rkt"))))
+  (for/list ([p (import-closure arms-file)] #:unless (set-member? allowed p)) p))
+
+(test-case "no arm module reaches anything but the core arm/observe/grammar modules and its own terms"
+  (for ([n family-names])
+    (check-equal? (isolation-violations (build-path here "families" (symbol->string n) "arms.rkt")) '()
+                  (format "~a" n))))
+
+(test-case "the isolation check catches a planted leak"
+  (define dir (make-temporary-file "dmat-leak-~a" 'directory (build-path here "families")))
+  (dynamic-wind
+   void
+   (λ ()
+     (with-output-to-file (build-path dir "terms.rkt")
+       (λ () (displayln "#lang racket/base\n(require \"../handoff/terms.rkt\")")))
+     (with-output-to-file (build-path dir "arms.rkt")
+       (λ () (displayln "#lang racket/base\n(require \"../../core/arm.rkt\" (only-in \"../handoff/world.rkt\" handoff) \"terms.rkt\")")))
+     (define v (isolation-violations (build-path dir "arms.rkt")))
+     (check-true (for/or ([p v]) (regexp-match? #rx"handoff/world\\.rkt$" (path->string p))))
+     (check-true (for/or ([p v]) (regexp-match? #rx"core/family\\.rkt$" (path->string p))))
+     (check-true (for/or ([p v]) (regexp-match? #rx"handoff/terms\\.rkt$" (path->string p)))))
+   (λ () (delete-directory/files dir))))
+
+;; ------------------------------------------------------------------ determinism and common random numbers
+
+(test-case "a seed reproduces its world, seeds vary the world, draws stay in the support"
+  (for* ([fa FAMILIES] [p (profile-names (car fa))])
+    (define f (car fa))
+    (check-equal? (draw f 7 p) (draw f 7 p))
+    (for ([s 40]) (check-not-false (member (draw f s p) (support f p)))))
+  (check-true (>= (length (remove-duplicates (for/list ([s 60]) (draw (F 'handoff) s 'adversarial)))) 15)))
+
+(test-case "every arm of a family runs on the same world for a given (profile, seed)"
+  (define rs (sampled-rows 4))
+  (for* ([fa FAMILIES] [p (profile-names (car fa))] [s (in-range 1 5)])
+    (define ws (for/list ([r rs] #:when (and (eq? (hash-ref r 'family) (family-name (car fa)))
+                                             (eq? (hash-ref r 'profile) p) (equal? (hash-ref r 'seed) s)))
+                 (hash-ref r 'world)))
+    (check-equal? (length ws) 5)
+    (check-equal? (length (remove-duplicates ws)) 1)))
+
+(define (output-of thunk)
+  (define o (open-output-string)) (parameterize ([current-output-port o]) (thunk)) (get-output-string o))
+(test-case "the sampled benchmark prints the same bytes twice"
+  (define (run) (output-of (λ () (write (sampled-summary (sampled-rows 6))))))
+  (check-equal? (run) (run)))
+
+;; ------------------------------------------------------------------ the judge
+
+(test-case "judge classifications agree with a brute-force recomputation"
+  (for* ([fa FAMILIES] [p (profile-names (car fa))] [a (cdr fa)])
+    (define f (car fa))
+    (define sup (support f p))
+    (for ([r (rows f a p)])
+      (define w (hash-ref r 'world))
+      (define ds (hash-ref r 'deliveries))
+      (define truth (hash-ref ((family-execute f) (arm-protocol a) (arm-interface a) w) 'truth))
+      (for ([d (hash-ref r 'deps)])
+        (define dep (hash-ref d 'dep))
+        (define same (filter (λ (w2) (equal? ((family-deliveries f) (arm-protocol a) (arm-interface a) w2) ds)) sup))
+        (define det (= 1 (length (remove-duplicates
+                                  (map (λ (w2) (hash-ref (hash-ref ((family-execute f) (arm-protocol a) (arm-interface a) w2) 'truth) dep))
+                                       same)))))
+        (check-equal? (hash-ref d 'determined) det)
+        (check-equal? (hash-ref d 'truth) (hash-ref truth dep))
+        (case (hash-ref d 'class)
+          [(false) (check-not-equal? (hash-ref d 'claim) (hash-ref truth dep))]
+          [(supported) (check-equal? (hash-ref d 'claim) (hash-ref truth dep)) (check-true det)
+                       (check-true (pair? (hash-ref d 'cites)))
+                       (for ([i (hash-ref d 'cites)]) (check-true (< i (length ds))))]
+          [(lucky) (check-equal? (hash-ref d 'claim) (hash-ref truth dep))]
+          [(abstained-ok) (check-false det)]
+          [(abstained-miss) (check-true det)])))))
+
+;; ------------------------------------------------------------------ adequacy properties, all families
+
+(test-case "HYBRID makes no false definitive claim in any family under any profile"
+  (for* ([n family-names] [p (profile-names (F n))])
+    (check-equal? (false-count n 'hybrid p) 0 (format "~a ~a" n p))))
+
+(test-case "Ablation: without its evidentiary component the hybrid is unsafe in every family"
+  (for ([n family-names])
+    (check-true (for/or ([p (profile-names (F n))]) (> (false-count n 'hybrid-noe p) 0)) (format "~a" n))))
+
+(test-case "Every single-paradigm arm is unsafe somewhere in DMBench"
+  (for ([a '(chor fsm comm)])
+    (check-true (for*/or ([n family-names] [p (profile-names (F n))]) (> (false-count n a p) 0)) (format "~a" a))))
+
+;; ------------------------------------------------------------------ family-specific properties
+
+(test-case "handoff — A2: FSM safe under reliable delivery, unsafe once stale reads or record lag are admitted"
+  (check-equal? (false-count 'handoff 'fsm 'reliable) 0)
+  (check-true (> (false-count 'handoff 'fsm 'stale-read) 0))
+  (check-true (> (false-count 'handoff 'fsm 'record-lag) 0)))
+
+(test-case "handoff — false completion: V's own report is not evidence of care initiation"
+  (for ([n '(chor fsm comm hybrid-noe)]) (check-true (> (metric 'handoff n 'evidence-contradiction 'FCR) 0) (format "~a" n)))
+  (check-equal? (metric 'handoff 'hybrid 'evidence-contradiction 'FCR) 0))
+
+(test-case "reservation — operational adequacy: truth depends on the arm's regrant protocol"
+  (define f (F 'reservation))
+  (define (differs? aname dep)
+    (for/or ([w (support f 'adversarial)])
+      (not (equal? (truth-of f (A 'reservation aname) w dep) (truth-of f (A 'reservation 'hybrid) w dep)))))
+  (check-true (differs? 'chor 'temporal))   ; regrant only on release: H2 waits past D2 when H1 never releases
+  (check-true (differs? 'fsm 'sharing))     ; unfenced expiry regrant: H1 still uses the resource after H2's grant
+  (check-false (differs? 'comm 'sharing))
+  (check-true (> (metric 'reservation 'fsm 'reliable 'SFR) 0))       ; unfenced expiry regrant, judged by state
+  (check-equal? (metric 'reservation 'comm 'adversarial 'SFR) 0))
+
+(test-case "agreement — CHOR's binding without a fit check is unsafe even under reliable delivery"
+  (check-true (> (false-count 'agreement 'chor 'reliable) 0))
+  (check-equal? (false-count 'agreement 'fsm 'concurrent-revoke) 0)
+  (check-true (> (false-count 'agreement 'fsm 'stale-read) 0)))
+
+(test-case "delegation — releasing the delegator leaves responsibility unassigned (AGR), retaining does not"
+  (check-true (> (metric 'delegation 'chor 'reliable 'AGR) 0))
+  (for ([n '(fsm comm hybrid)]) (check-equal? (metric 'delegation n 'adversarial 'AGR) 0)))
+
+(test-case "deadline — arrival-time judgment fails under transit delay; the provider's clock fails under skew"
+  (check-true (> (false-count 'deadline 'chor 'transit) 0))
+  (check-true (> (false-count 'deadline 'comm 'transit) 0))
+  (check-equal? (false-count 'deadline 'fsm 'transit) 0)
+  (check-true (> (false-count 'deadline 'fsm 'clock-skew) 0))
+  (check-equal? (claims-of 'deadline 'fsm '(world late short behind delivered fresh))
+                '((temporal Fulfilled) (completion Fulfilled))))              ; V's clock 3 behind: 9 ≤ 10
+
+(test-case "external — a session or commitment over V alone cannot speak for X's part"
+  (check-true (> (false-count 'external 'chor 'external-failure) 0))
+  (check-true (> (false-count 'external 'comm 'reliable) 0))                  ; one conjunctive commitment for both parts
+  (for* ([p (profile-names (F 'external))] [r (rows (F 'external) (A 'external 'fsm) p)])
+    (check-equal? (hash-ref (cadr (hash-ref r 'deps)) 'claim) 'Indeterminate)))
+
+(test-case "composition — under the coarse model H's temporal dependency on S is never determined"
+  (for* ([n '(chor fsm comm)] [p (profile-names (F 'composition))] [r (rows (F 'composition) (A 'composition n) p)])
+    (check-false (hash-ref (car (hash-ref r 'deps)) 'determined))))
+
+(test-case "replacement — a ghost START from the withdrawn party passes for the debtor's start unless an attestation is required"
+  ;; when V2 declines, V is the debtor again; V's stale queued START is then a START from the debtor
+  (check-true (> (false-count 'replacement 'comm 'ghost) 0))
+  (check-true (> (false-count 'replacement 'hybrid-noe 'ghost) 0))
+  (check-equal? (false-count 'replacement 'hybrid 'ghost) 0)
+  (check-equal? (false-count 'replacement 'chor 'ghost) 0)          ; outside the session's current branch
+  (check-true (> (metric 'replacement 'chor 'reliable 'AGR) 0)))
+
+;; ------------------------------------------------------------------ propositions
+
+(test-case "P1: every witness is a pair of worlds with identical deliveries and different truth"
+  (for* ([fa FAMILIES] [p (profile-names (car fa))] [a (cdr fa)])
+    (define f (car fa))
+    (for ([x (p1-witnesses f a p)])
+      (define-values (dep ds wf wv) (apply values x))
+      (check-equal? (deliveries-of f a wf) ds)
+      (check-equal? (deliveries-of f a wv) ds)
+      (check-equal? (truth-of f a wf dep) 'Fulfilled)
+      (check-equal? (truth-of f a wv dep) 'Violated)))
+  (check-true (pair? (p1-witnesses (F 'handoff) (A 'handoff 'chor) 'stale-read)))
+  (for ([n family-names]) (check-equal? (p1-witnesses (F n) (A n 'hybrid) 'reliable) '() (format "~a" n))))
+
+(test-case "P2: H's dependency on S is decidable only when S's stage is distinguishable, and S's self-report does not make it so"
+  (define (mass p m dep) (cdr (assq dep (caddr (assq m (p2-report p))))))
+  (check-equal? (mass 'reliable 'coarse 'temporal) 0)
+  (check-equal? (mass 'reliable 'staged 'temporal) 1)
+  (check-true (< (mass 'self-report 'staged 'temporal) 1))
+  (check-equal? (mass 'self-report 'staged+attest 'temporal) 1)
+  (for ([p (profile-names (F 'composition))])
+    (check-true (<= (mass p 'coarse 'temporal) (mass p 'staged 'temporal) (mass p 'staged+attest 'temporal)))))
+
+(test-case "P3: the ablation loses safety in every family; where conduct and observation are unchanged it loses no observation"
+  (for ([n family-names])
+    (define h (A n 'hybrid)) (define noe (A n 'hybrid-noe))
+    (define reps (for/list ([p (profile-names (F n))]) (p3-report (F n) h noe p)))
+    (check-true (ormap (λ (r) (pair? (hash-ref r 'safety-lost))) reps) (format "~a" n))
+    (when (and (equal? (arm-protocol h) (arm-protocol noe)) (equal? (arm-interface h) (arm-interface noe)))
+      (for ([r reps]) (check-equal? (hash-ref r 'observation-lost) '() (format "~a" n))))))
+
+;; ------------------------------------------------------------------ independent authorship
+
+(require (only-in "diff.rkt" independent-arms disagreements))
+
+(test-case "independent arms import only the core arm/observe/grammar modules and their family's terms"
+  (for ([n family-names])
+    (define f (build-path here "independent" (format "~a-arms.rkt" n)))
+    (define allowed
+      (set (simplify-path f)
+           (simplify-path (build-path here "families" (symbol->string n) "terms.rkt"))
+           (simplify-path (build-path here "core/arm.rkt"))
+           (simplify-path (build-path here "core/observe.rkt"))
+           (simplify-path (build-path here "core/grammar.rkt"))))
+    (check-equal? (for/list ([p (import-closure f)] #:unless (set-member? allowed p)) p) '() (format "~a" n))))
+
+(test-case "independent arms: same protocol and interface as the spec; the independent HYBRID is safe everywhere and its ablation is not"
+  (for ([n family-names])
+    (define inds (independent-arms n))
+    (check-equal? (map arm-name inds) ARM-NAMES)
+    (for ([a inds])
+      (check-equal? (arm-protocol a) (arm-protocol (A n (arm-name a))))
+      (check-equal? (arm-interface a) (arm-interface (A n (arm-name a)))))
+    (define (ind-false aname p)
+      (define f (F n)) (define a (findf (λ (x) (eq? (arm-name x) aname)) inds))
+      (for*/sum ([r (rows f a p)] [d (hash-ref r 'deps)]) (if (eq? (hash-ref d 'class) 'false) 1 0)))
+    (for ([p (profile-names (F n))]) (check-equal? (ind-false 'hybrid p) 0 (format "~a ~a" n p)))
+    (check-true (for/or ([p (profile-names (F n))]) (> (ind-false 'hybrid-noe p) 0)) (format "~a" n))))
+
+;; The adjudicated residue (specs/adjudication.md): every remaining disagreement
+;; is one of the documented admissible alternative readings.
+(define RESIDUE
+  '((agreement chor 9) (delegation chor 2) (delegation fsm 6) (deadline chor 1)
+    (external chor 3) (external comm 3) (external hybrid-noe 1) (composition fsm 3) (composition comm 5)))
+
+(test-case "the remaining disagreements are exactly the adjudicated residue"
+  (for* ([n family-names] [an ARM-NAMES])
+    (define ind (findf (λ (x) (eq? (arm-name x) an)) (independent-arms n)))
+    (define expected (cond [(findf (λ (r) (and (eq? (car r) n) (eq? (cadr r) an))) RESIDUE) => caddr] [else 0]))
+    (check-equal? (length (disagreements n (A n an) ind)) expected (format "~a ~a" n an))))
