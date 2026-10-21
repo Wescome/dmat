@@ -1,0 +1,15 @@
+// Family deadline — deadline-bound service. Observer: H.
+// V stamps Done with its own clock; A stamps Attest with a trusted clock.
+Deadline {
+  roles H, V, A
+  parameters out oid key, out done, out rec
+
+  H -> V: Order[out oid key, out spec]
+  V -> H: Done[in oid key, in spec, out done]             // V's report, V's clock
+  A -> H: Attest[in oid key, in spec, out att]            // trusted clock
+  H -> V: Read[in oid key, out q]
+  V -> H: Record[in oid key, in q, out rec]               // V's recorded completion stamp, or none
+
+  // C_t = C(V, H, ⊤, done by DEADLINE)
+  // C_c = C(V, H, ⊤, done by T-EVAL)
+}

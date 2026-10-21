@@ -30,7 +30,7 @@
 
 ;; ------------------------------------------------------------------ registry
 
-(test-case "DMBench's eight families are registered, each with the five arms"
+(test-case "DMBench's eight families are registered, each with the five arms of the hub"
   (check-equal? family-names '(handoff reservation agreement delegation deadline external composition replacement))
   (for ([n family-names]) (check-equal? (map arm-name (arms-of n)) ARM-NAMES)))
 
@@ -287,6 +287,85 @@
     (check-true (ormap (λ (r) (pair? (hash-ref r 'safety-lost))) reps) (format "~a" n))
     (when (and (equal? (arm-protocol h) (arm-protocol noe)) (equal? (arm-interface h) (arm-interface noe)))
       (for ([r reps]) (check-equal? (hash-ref r 'observation-lost) '() (format "~a" n))))))
+
+;; ------------------------------------------------------------------ commitment arms (phase 3)
+
+(define (cupid-rows n an p) (let ([f (F n)]) (rows f (A n an) p)))
+(define (cupid-false n an p)
+  (for*/sum ([r (cupid-rows n an p)] [d (hash-ref r 'deps)]) (if (eq? (hash-ref d 'class) 'false) 1 0)))
+
+(test-case "commitment arms: cupid and cupid-e in every family, with the hybrid's protocol and interface"
+  (for ([n family-names])
+    (check-equal? (map arm-name (cupid-arms-of n)) CUPID-NAMES)
+    (for ([a (cupid-arms-of n)])
+      (check-equal? (arm-protocol a) (arm-protocol (A n 'hybrid)) (format "~a ~a" n (arm-name a)))
+      (check-equal? (arm-interface a) (arm-interface (A n 'hybrid)) (format "~a ~a" n (arm-name a))))))
+
+(test-case "commitment arms: claims are terms on every support world and on generated worlds"
+  (for ([fa FAMILIES])
+    (define f (car fa)) (define n (family-name f))
+    (define L (cdr (assq n LANGS)))
+    (define worlds (append (for*/list ([p (profile-names f)] [w (support f p)]) w)
+                           (for/list ([i 300]) ((family-canonical f) (gen-world L)))))
+    (for* ([w worlds] [a (cupid-arms-of n)])
+      (define ds ((family-deliveries f) (arm-protocol a) (arm-interface a) w))
+      (check-true (claims-term? ((arm-judge a) ds)) (format "~a/~a on ~s" n (arm-name a) w)))))
+
+(test-case "commitment arms import only the core arm/observe/grammar/cupid modules and their family's terms"
+  (for ([n family-names])
+    (define f (build-path here "families" (symbol->string n) "cupid.rkt"))
+    (define allowed
+      (set (simplify-path f)
+           (simplify-path (build-path here "families" (symbol->string n) "terms.rkt"))
+           (simplify-path (build-path here "core/arm.rkt"))
+           (simplify-path (build-path here "core/observe.rkt"))
+           (simplify-path (build-path here "core/grammar.rkt"))
+           (simplify-path (build-path here "core/cupid.rkt"))))
+    (check-equal? (for/list ([p (import-closure f)] #:unless (set-member? allowed p)) p) '() (format "~a" n))))
+
+(test-case "commitment arms: judge classifications agree with a brute-force recomputation"
+  (for* ([n family-names] [p (profile-names (F n))] [an CUPID-NAMES])
+    (define f (F n)) (define a (A n an)) (define sup (support f p))
+    (for ([r (rows f a p)])
+      (define ds (hash-ref r 'deliveries))
+      (define truth (hash-ref ((family-execute f) (arm-protocol a) (arm-interface a) (hash-ref r 'world)) 'truth))
+      (for ([d (hash-ref r 'deps)])
+        (define dep (hash-ref d 'dep))
+        (define same (filter (λ (w2) (equal? ((family-deliveries f) (arm-protocol a) (arm-interface a) w2) ds)) sup))
+        (define det (= 1 (length (remove-duplicates
+                                  (map (λ (w2) (hash-ref (hash-ref ((family-execute f) (arm-protocol a) (arm-interface a) w2) 'truth) dep))
+                                       same)))))
+        (check-equal? (hash-ref d 'determined) det)
+        (check-equal? (hash-ref d 'truth) (hash-ref truth dep))
+        (when (eq? (hash-ref d 'class) 'supported)
+          (check-true (pair? (hash-ref d 'cites)))
+          (for ([i (hash-ref d 'cites)]) (check-true (< i (length ds)))))))))
+
+(test-case "cupid-e makes no false claim in any family under any profile; cupid is unsafe in every family"
+  (for ([n family-names])
+    (for ([p (profile-names (F n))]) (check-equal? (cupid-false n 'cupid-e p) 0 (format "~a ~a" n p)))
+    (check-true (for/or ([p (profile-names (F n))]) (> (cupid-false n 'cupid p) 0)) (format "~a" n))))
+
+(test-case "the evidential layer loses no observation: cupid and cupid-e see the same deliveries, so P3 attributes the loss to judgment"
+  (for ([n family-names])
+    (define c (A n 'cupid)) (define e (A n 'cupid-e))
+    (define reps (for/list ([p (profile-names (F n))]) (p3-report (F n) e c p)))
+    (check-true (ormap (λ (r) (pair? (hash-ref r 'safety-lost))) reps) (format "~a" n))
+    (for ([r reps]) (check-equal? (hash-ref r 'observation-lost) '() (format "~a" n)))))
+
+;; cupid-e against the hub's hybrid (commitments.txt): the only runs where one
+;; decides and the other abstains are the two documented causes
+(test-case "cupid-e and the hybrid differ only on the documented runs"
+  (define found
+    (for*/list ([n family-names] [p (profile-names (F n))] [w (support (F n) p)]
+                [dh (hash-ref (classify-run (F n) (A n 'hybrid) p w) 'deps)]
+                [de (in-value (findf (λ (d) (eq? (hash-ref d 'dep) (hash-ref dh 'dep)))
+                                     (hash-ref (classify-run (F n) (A n 'cupid-e) p w) 'deps)))]
+                #:unless (eq? (hash-ref dh 'class) (hash-ref de 'class)))
+      (list n (hash-ref dh 'dep) (hash-ref dh 'class) (hash-ref de 'class) w)))
+  (check-equal? (sort (remove-duplicates (map (λ (x) (take x 4)) found)) string<? #:key (λ (x) (format "~a" x)))
+                '((deadline completion supported abstained-miss)
+                  (replacement temporal abstained-miss supported))))
 
 ;; ------------------------------------------------------------------ independent authorship
 

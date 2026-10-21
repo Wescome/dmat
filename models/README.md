@@ -1,18 +1,22 @@
-# DMAT executable models (v0.3)
+# DMAT executable models (v0.4)
 
 Executable models for Dependency–Mechanism Adequacy Theory and the DMBench protocol, in Racket with each family's terms as a PLT Redex language. v0.3 extends v0.2 from the one handoff family to DMBench's eight scenario families, each with its own fault profiles; makes the arms' protocols drive conduct where the family is about the mechanism, so truth depends on the arm (operational adequacy); varies timing per run (late conduct, transit delay, reordering, clock skew, stale queued messages, interleaved concurrent events); and adds arms written by independent authors from specifications alone, with a differential check against the reference arms.
 
 The method is unchanged: a closed grammar per family; a world module that alone holds oracle truth; arms that see only deliveries; an independent judge that decides determinacy by search over the environment's support; the propositions as searches that produce witnesses.
 
+v0.4 adds the commitment arms of instance I-3 (multiagent systems): a commitment evaluator over the observer's information base in the style of Cupid (`core/cupid.rkt`), an information protocol in BSPL and commitment declarations per family (`specs/bspl/`, `specs/commitments/`), and two arms per family — `cupid`, which reads the information base under the closed-world assumption, and `cupid-e`, which adds the evidential layer E1–E3. The five arms of the hub and every number in WP-2026-DM-01 are unchanged.
+
 Requires Racket 8.10 or later with `redex-lib` (the standard distribution includes it).
 
 ```
-raco test tests.rkt                          # 29 test cases over all eight families and the independent arms
+raco test tests.rkt                          # 36 test cases over all eight families, the commitment arms and the independent arms
 racket bench.rkt exact                       # exact expected metrics: every world of each profile, weighted
 racket bench.rkt sampled 100 results.jsonl   # DMBench: 100 seeds per (family, profile), 18,000 runs, one JSON line each
 racket bench.rkt propositions                # P1 witnesses, P2 report, P3 reports
 racket diff.rkt                              # reference arms vs independently authored arms
 racket diff.rkt detail FAMILY                # every deliveries list on which they disagree, with the truths it can carry
+racket commitments.rkt                       # commitment arms: metrics, the evidential-layer ablation, cupid-e against the hybrid
+racket diff.rkt cupid                        # reference commitment arms vs independently authored ones
 ```
 
 ## Layout
@@ -26,15 +30,19 @@ racket diff.rkt detail FAMILY                # every deliveries list on which th
 | `families/<family>/terms.rkt` | The family's Redex language (worlds, views, deliveries) and its timing constants |
 | `families/<family>/world.rkt` | Ω and oracle truth for the family: profiles, canonical map, execution of an arm's protocol in a world, deliveries |
 | `families/<family>/arms.rkt` | The five reference arms: CHOR, FSM, COMM, HYBRID, HYBRID-NOE |
-| `families.rkt` | Registry of the eight families and their arms |
+| `core/cupid.rkt` | The commitment evaluator: facts and coverages of an information base, achievement-commitment lifecycle (discharged, violated, expired, unknown), closed-world or evidential (E1–E3) event status |
+| `families/<family>/cupid.rkt` | The two commitment arms, `cupid` and `cupid-e`, with the hybrid's protocol and interface |
+| `families.rkt` | Registry of the eight families, their five arms and their two commitment arms |
 | `propositions.rkt` | P1 witness search, P2 observation-model report, P3 variant reports, generic over families |
 | `bench.rkt` | DMBench driver |
+| `specs/commitments/`, `specs/bspl/` | The commitment-arm contract and evaluator semantics (`README.md`), one commitment specification and one BSPL information protocol per family |
+| `commitments.rkt` | The commitment-arm report (`commitments.txt`) |
 | `specs/` | `paradigms.md` (the arm contract and the five paradigms) and one specification per family: what the independent authors worked from; `adjudication.md`, the record of the differential check |
 | `independent/<family>-arms.rkt` | Arms written by independent authors from `specs/` and the family's `terms.rkt` only |
 | `diff.rkt` | The differential check between reference and independent arms |
 | `tests.rkt` | The models' tests |
 | `paper-tables.rkt`, `paper-heat.rkt` | Write the paper's tables and heat-map figure (`../paper/tables`, `../paper/figures/heat.tex`) from the models |
-| `exact.txt`, `sampled.txt`, `propositions.txt`, `diff.txt`, `results.jsonl` | Outputs of the commands above |
+| `exact.txt`, `sampled.txt`, `propositions.txt`, `diff.txt`, `results.jsonl`, `commitments.txt`, `diff-cupid.txt` | Outputs of the commands above |
 
 ## The eight families
 

@@ -1,0 +1,17 @@
+// Family reservation — resource reservation. Observer: an auditor U.
+// Grants carry fencing tokens; the resource R checks them.
+Reservation {
+  roles V, H1, H2, R, U  // allocator, holders, resource, auditor
+  parameters out lid key, out log
+
+  V -> H1: Grant1[out lid key, out tok1]
+  H2 -> V: Request[in lid key, out req]
+  H1 -> V: Release[in lid key, in tok1, out rel]
+  V -> H2: Grant2[in lid key, in req, out tok2]           // after Release or at LEASE-END (Expire)
+  R -> V: Reject[in lid key, in tok1, in tok2, out rej]   // stale token refused
+  U -> V: Read[in lid key, out q]
+  V -> U: Log[in lid key, in q, out log]                  // V's entries and R's access log, as of an instant
+
+  // C2 = C(V, H2, ⊤, granted(H2) by D2)
+  // M  = maintenance: no instant with two effective users
+}

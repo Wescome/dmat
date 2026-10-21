@@ -1,0 +1,19 @@
+// Family composition — multi-organization composition. Observer: H.
+// H has no protocol with S; S's stage reaches H only through V's case record
+// (staged observation model) and through an attestation of S's start.
+Composition {
+  roles H, V, S, A
+  parameters out oid key, out delivered, out case
+
+  H -> V: Order[out oid key, out spec]
+  V -> S: Subcontract[in oid key, in spec, out sub]
+  S -> V: Commit[in oid key, in sub, out stage]           // committed | declined
+  S -> V: Report[in oid key, in stage, out sstart]        // S's report of its start
+  A -> H: Attest[in oid key, in sub, out att]             // trusted clock
+  V -> H: Delivered[in oid key, in spec, out delivered]
+  H -> V: Read[in oid key, out q]
+  V -> H: Case[in oid key, in q, out case]                // closed?, S's stage, S's reported start
+
+  // C_t = C(S, H, ⊤, start by DEADLINE)   (relayed to H by V's case record)
+  // C_d = C(V, H, ⊤, Delivered by T-EVAL)
+}

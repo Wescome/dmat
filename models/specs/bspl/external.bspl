@@ -1,0 +1,16 @@
+// Family external — partial external execution. Observer: H.
+// X is not a protocol participant; its signed receipt reaches H directly and
+// through V's record. The dispatch to X is outside the protocol.
+External {
+  roles H, V, X
+  parameters out oid key, out done, out rec
+
+  H -> V: Order[out oid key, out spec]
+  V -> H: Done[in oid key, in spec, out done]             // V's report of the whole service
+  X -> H: Receipt[in oid key, out outcome]                // signed: complete | partial
+  H -> V: Read[in oid key, out q]
+  V -> H: Record[in oid key, in q, out rec]               // A's state, relayed outcome, watermark
+
+  // C_A = C(V, H, ⊤, A by T-DISPATCH)
+  // C_B = C(V, H, ⊤, B in full by T-X)
+}

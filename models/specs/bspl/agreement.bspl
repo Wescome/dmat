@@ -1,0 +1,17 @@
+// Family agreement — multi-party agreement. Observer: B.
+// S's Revoke and B's Confirm may cross; S processes them in either order.
+Agreement {
+  roles B, S
+  parameters out pid key, out outcome, out bound
+
+  B -> S: Propose[out pid key, out req]
+  S -> B: Accept[in pid key, in req, out terms]
+  B -> S: Confirm[in pid key, in terms, out outcome]      // outcome = confirmed
+  B -> S: Reject[in pid key, in terms, out outcome]       // outcome = rejected
+  S -> B: Revoke[in pid key, in terms, out withdrawn]
+  S -> B: Ack[in pid key, in outcome, out bound]          // S's act of binding
+  B -> S: Read[in pid key, out q]
+  S -> B: Record[in pid key, in q, out state, out terms2, out asof]
+
+  // C_S = C(S, B, Confirm by T-CONFIRM, bind by T-S-PROCESS)
+}

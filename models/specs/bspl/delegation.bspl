@@ -1,0 +1,20 @@
+// Family delegation — conditional delegation with retained responsibility.
+// Observer: H. S, V's subcontractor, performs as V's delegate.
+Delegation {
+  roles H, V, S, A
+  parameters out rid key, out start, out wm
+
+  H -> V: Refer[out rid key, out patient]
+  V -> H: Accept[in rid key, in patient, out acc]
+  V -> S: Delegate[in rid key, in acc, out del]
+  V -> H: Delegated[in rid key, in del, out note]
+  S -> V: SubAccept[in rid key, in del, out sacc]
+  S -> V: SubDecline[in rid key, in del, out sacc]
+  V -> H: Start[in rid key, in acc, out start]            // the performer's report (V or S on V's behalf)
+  A -> H: Attest[in rid key, in start, out att]
+  H -> V: Read[in rid key, out q]
+  V -> H: Record[in rid key, in q, out vs, out c1, out c2, out stage, out wm]
+
+  // C1 = C(V, H, Accept by T-ACCEPT, Start by DEADLINE)   (retained on delegation)
+  // C2 = C(S, V, Delegate, Start)                          (V's subcontract; not H's)
+}

@@ -1,0 +1,16 @@
+// Family handoff — information handoff. Observer: H.
+// The read-back of V's record is modelled as a query and its answer.
+Handoff {
+  roles H, V, A  // hospital, provider, attester
+  parameters out rid key, out start, out wm
+
+  H -> V: Refer[out rid key, out patient]
+  V -> H: Accept[in rid key, in patient, out acc]
+  V -> H: Start[in rid key, in acc, out start]           // V's report of its own performance
+  A -> H: Attest[in rid key, in start, out att]          // third party's report
+  H -> V: Read[in rid key, out q]
+  V -> H: Record[in rid key, in q, out state, out oat, out ost, out c0, out c1, out wm]
+
+  // C0 = C(V, H, ⊤, Accept by ACCEPT-DEADLINE)
+  // C1 = C(V, H, Accept by DEADLINE, Start by DEADLINE)
+}

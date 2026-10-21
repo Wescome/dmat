@@ -18,8 +18,17 @@
          (only-in "families/composition/world.rkt" composition)
          (rename-in (only-in "families/composition/arms.rkt" arms) [arms composition-arms])
          (only-in "families/replacement/world.rkt" replacement)
-         (rename-in (only-in "families/replacement/arms.rkt" arms) [arms replacement-arms]))
-(provide FAMILIES family-names family-by-name arms-of arm-of ARM-NAMES)
+         (rename-in (only-in "families/replacement/arms.rkt" arms) [arms replacement-arms])
+         (rename-in (only-in "families/handoff/cupid.rkt" cupid-arms) [cupid-arms handoff-cupid-arms])
+         (rename-in (only-in "families/reservation/cupid.rkt" cupid-arms) [cupid-arms reservation-cupid-arms])
+         (rename-in (only-in "families/agreement/cupid.rkt" cupid-arms) [cupid-arms agreement-cupid-arms])
+         (rename-in (only-in "families/delegation/cupid.rkt" cupid-arms) [cupid-arms delegation-cupid-arms])
+         (rename-in (only-in "families/deadline/cupid.rkt" cupid-arms) [cupid-arms deadline-cupid-arms])
+         (rename-in (only-in "families/external/cupid.rkt" cupid-arms) [cupid-arms external-cupid-arms])
+         (rename-in (only-in "families/composition/cupid.rkt" cupid-arms) [cupid-arms composition-cupid-arms])
+         (rename-in (only-in "families/replacement/cupid.rkt" cupid-arms) [cupid-arms replacement-cupid-arms]))
+(provide FAMILIES family-names family-by-name arms-of arm-of ARM-NAMES
+         CUPID-NAMES cupid-arms-of all-arms-of)
 
 ;; DMBench's eight scenario families, in benchmark order
 (define FAMILIES
@@ -34,13 +43,26 @@
 
 (define ARM-NAMES '(chor fsm comm hybrid hybrid-noe))
 
+;; The commitment arms (phase 3, instance I-3): a commitment evaluator over the
+;; observer's information base, without (cupid) and with (cupid-e) the
+;; evidential layer. They are registered apart from the five arms of the hub
+;; paper, whose tables and results they leave unchanged.
+(define CUPID-NAMES '(cupid cupid-e))
+(define CUPID
+  (list (cons 'handoff handoff-cupid-arms) (cons 'reservation reservation-cupid-arms)
+        (cons 'agreement agreement-cupid-arms) (cons 'delegation delegation-cupid-arms)
+        (cons 'deadline deadline-cupid-arms) (cons 'external external-cupid-arms)
+        (cons 'composition composition-cupid-arms) (cons 'replacement replacement-cupid-arms)))
+(define (cupid-arms-of n) (cdr (or (assq n CUPID) (error 'families "no family ~a" n))))
+(define (all-arms-of n) (append (arms-of n) (cupid-arms-of n)))
+
 (define family-names (map (λ (p) (family-name (car p))) FAMILIES))
 (define (entry n) (or (findf (λ (p) (eq? (family-name (car p)) n)) FAMILIES)
                       (error 'families "no family ~a" n)))
 (define (family-by-name n) (car (entry n)))
 (define (arms-of n) (cdr (entry n)))
 (define (arm-of fname aname)
-  (or (findf (λ (a) (eq? (arm-name a) aname)) (arms-of fname))
+  (or (findf (λ (a) (eq? (arm-name a) aname)) (all-arms-of fname))
       (error 'families "~a has no arm ~a" fname aname)))
 
 (for ([p FAMILIES])
@@ -49,3 +71,11 @@
   (for ([a (cdr p)])
     (unless (eq? (arm-family a) (family-name (car p)))
       (error 'families "~a: arm ~a is written for ~a" (family-name (car p)) (arm-name a) (arm-family a)))))
+
+(for ([p FAMILIES])
+  (define n (family-name (car p)))
+  (unless (equal? (map arm-name (cupid-arms-of n)) CUPID-NAMES)
+    (error 'families "~a: commitment arms ~s" n (map arm-name (cupid-arms-of n))))
+  (for ([a (cupid-arms-of n)])
+    (unless (eq? (arm-family a) n)
+      (error 'families "~a: arm ~a is written for ~a" n (arm-name a) (arm-family a)))))

@@ -1,0 +1,18 @@
+// Family replacement — dynamic participant replacement with retention.
+// Observer: H. The role's holder is V, then V2 after an assignment.
+Replacement {
+  roles H, V, V2, A, G  // G: the role registry
+  parameters out rid key, out start, out reg
+
+  H -> V: Refer[out rid key, out patient]
+  V -> H: Accept[in rid key, in patient, out acc]
+  V -> H: Withdraw[in rid key, in acc, out wd]
+  G -> V2: Offer[in rid key, in wd, out offer]
+  V2 -> G: Take[in rid key, in offer, out holder]          // or decline: V keeps the role
+  V -> H: Start[in rid key, in acc, out start]              // the holder's report (V or V2), naming the performer
+  A -> H: Attest[in rid key, in start, out att]             // names the performer
+  H -> G: Read[in rid key, out q]
+  G -> H: Registry[in rid key, in q, out holder, out started, out asof]
+
+  // C = C(role, H, ⊤, Start by DEADLINE), the role held by V, then by V2
+}

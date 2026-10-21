@@ -1,8 +1,10 @@
 #lang racket/base
 ;; Differential check: the reference arms against independently authored arms.
 ;;
-;;   racket diff.rkt                 summary for every family with independent/<family>-arms.rkt
-;;   racket diff.rkt detail FAMILY   every distinct deliveries list on which the two disagree
+;;   racket diff.rkt                       summary for every family with independent/<family>-arms.rkt
+;;   racket diff.rkt detail FAMILY         every distinct deliveries list on which the two disagree
+;;   racket diff.rkt cupid                 the same for the commitment arms (independent/<family>-cupid.rkt)
+;;   racket diff.rkt cupid detail FAMILY
 ;;
 ;; The independent arms were written from specs/paradigms.md, specs/<family>.md
 ;; and the family's terms.rkt alone, by authors who did not see the reference
@@ -14,13 +16,22 @@
 
 (require racket/list racket/format racket/string racket/runtime-path
          "core/family.rkt" "core/arm.rkt" "core/judge.rkt" "families.rkt")
-(provide independent-arms disagreements)
+(provide independent-arms independent-cupid-arms disagreements)
 
 (define-runtime-path INDEP "independent")
 
 (define (independent-arms fname)
   (define p (build-path INDEP (format "~a-arms.rkt" fname)))
   (and (file-exists? p) (dynamic-require p 'arms)))
+
+(define (independent-cupid-arms fname)
+  (define p (build-path INDEP (format "~a-cupid.rkt" fname)))
+  (and (file-exists? p) (dynamic-require p 'cupid-arms)))
+
+;; the two arm sets: (loader names label)
+(define HUB (list independent-arms ARM-NAMES "arms"))
+(define CUPID (list independent-cupid-arms CUPID-NAMES "commitment arms"))
+(define current-set (make-parameter HUB))
 
 (define (judgments a ds) (map (λ (c) (list (cadr c) (caddr c))) ((arm-judge a) ds)))
 
@@ -38,14 +49,16 @@
 (define (fmt x) (~r (exact->inexact x) #:precision '(= 3)))
 
 (define (summary)
-  (printf "Reference arms vs independent arms: distinct deliveries lists judged differently; exact SFR and false rate per profile (reference → independent)\n")
+  (define-values (load names label) (apply values (current-set)))
+  (printf "Reference ~a vs independent ~a:" label label)
+  (printf " distinct deliveries lists judged differently; exact SFR and false rate per profile (reference → independent)\n")
   (for ([fname family-names])
-    (define inds (independent-arms fname))
+    (define inds (load fname))
     (cond
-      [(not inds) (printf "~a: no independent arms\n" fname)]
+      [(not inds) (printf "~a: no independent ~a\n" fname label)]
       [else
        (define f (family-by-name fname))
-       (for ([aname ARM-NAMES])
+       (for ([aname names])
          (define ref (arm-of fname aname))
          (define ind (or (findf (λ (a) (eq? (arm-name a) aname)) inds) (error 'diff "~a: independent arms lack ~a" fname aname)))
          (unless (and (equal? (arm-protocol ref) (arm-protocol ind)) (equal? (arm-interface ref) (arm-interface ind)))
@@ -64,8 +77,9 @@
                      (fmt (hash-ref mr 'coverage)) (fmt (hash-ref mi 'coverage))))))])))
 
 (define (detail fname)
-  (define inds (independent-arms fname))
-  (for ([aname ARM-NAMES])
+  (define-values (load names label) (apply values (current-set)))
+  (define inds (load fname))
+  (for ([aname names])
     (define ref (arm-of fname aname))
     (define ind (findf (λ (a) (eq? (arm-name a) aname)) inds))
     (define f (family-by-name fname))
@@ -80,6 +94,8 @@
 
 (module+ main
   (define args (vector->list (current-command-line-arguments)))
-  (cond [(null? args) (summary)]
-        [(and (= 2 (length args)) (equal? (car args) "detail")) (detail (string->symbol (cadr args)))]
-        [else (eprintf "usage: racket diff.rkt | racket diff.rkt detail FAMILY\n") (exit 2)]))
+  (define-values (set rest) (if (and (pair? args) (equal? (car args) "cupid")) (values CUPID (cdr args)) (values HUB args)))
+  (parameterize ([current-set set])
+    (cond [(null? rest) (summary)]
+          [(and (= 2 (length rest)) (equal? (car rest) "detail")) (detail (string->symbol (cadr rest)))]
+          [else (eprintf "usage: racket diff.rkt [cupid] | racket diff.rkt [cupid] detail FAMILY\n") (exit 2)])))

@@ -1,0 +1,218 @@
+Commitment arms (models v0.4): exact expected metrics, every world of each profile's support
+family       profile                arm                SFR       FCR       AGR  coverage supported     lucky     falseabstained-abstained-determinab
+handoff      reliable               hybrid           0.000     0.000     0.091     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      reliable               hybrid-noe       0.000     0.000     0.091     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      reliable               cupid            0.000     0.000     0.091     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      reliable               cupid-e          0.000     0.000     0.091     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      lossy                  hybrid           0.000     0.000     0.273     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      lossy                  hybrid-noe       0.000     0.000     0.273     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      lossy                  cupid            0.000     0.000     0.273     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      lossy                  cupid-e          0.000     0.000     0.273     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      timing                 hybrid           0.000     0.000     0.235     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+handoff      timing                 hybrid-noe       0.000     0.000     0.235     0.967     0.933     0.033     0.000     0.000     0.033     1.000
+handoff      timing                 cupid            0.000     0.000     0.235     1.000     0.933     0.067     0.000     0.000     0.000     1.000
+handoff      timing                 cupid-e          0.000     0.000     0.235     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+handoff      stale-read             hybrid           0.000     0.000     0.371     0.667     0.667     0.000     0.000     0.100     0.233     0.900
+handoff      stale-read             hybrid-noe       0.267     0.000     0.371     0.950     0.750     0.067     0.133     0.000     0.050     0.900
+handoff      stale-read             cupid            0.267     0.000     0.371     1.000     0.750     0.117     0.133     0.000     0.000     0.900
+handoff      stale-read             cupid-e          0.000     0.000     0.371     0.667     0.667     0.000     0.000     0.100     0.233     0.900
+handoff      record-lag             hybrid           0.000     0.000     0.091     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+handoff      record-lag             hybrid-noe       0.000     0.000     0.091     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      record-lag             cupid            0.000     0.000     0.091     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+handoff      record-lag             cupid-e          0.000     0.000     0.091     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+handoff      evidence-contradiction hybrid           0.000     0.000     0.091     0.875     0.875     0.000     0.000     0.125     0.000     0.875
+handoff      evidence-contradiction hybrid-noe       0.100     0.167     0.091     1.000     0.875     0.075     0.050     0.000     0.000     0.875
+handoff      evidence-contradiction cupid            0.100     0.167     0.091     1.000     0.875     0.075     0.050     0.000     0.000     0.875
+handoff      evidence-contradiction cupid-e          0.000     0.000     0.091     0.875     0.875     0.000     0.000     0.125     0.000     0.875
+handoff      adversarial            hybrid           0.000     0.000     0.425     0.539     0.539     0.000     0.000     0.444     0.017     0.556
+handoff      adversarial            hybrid-noe       0.199     0.113     0.425     0.944     0.556     0.284     0.104     0.056     0.000     0.556
+handoff      adversarial            cupid            0.200     0.113     0.425     1.000     0.556     0.338     0.107     0.000     0.000     0.556
+handoff      adversarial            cupid-e          0.000     0.000     0.425     0.539     0.539     0.000     0.000     0.444     0.017     0.556
+reservation  reliable               hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  reliable               cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  reliable               cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  lossy-release          hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  lossy-release          hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  lossy-release          cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  lossy-release          cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reservation  stale-read             hybrid           0.000     0.000     0.000     0.500     0.500     0.000     0.000     0.000     0.500     1.000
+reservation  stale-read             hybrid-noe       0.133     0.059     0.000     0.667     0.567     0.000     0.100     0.167     0.167     0.833
+reservation  stale-read             cupid            0.467     0.217     0.000     1.000     0.600     0.167     0.233     0.000     0.000     1.000
+reservation  stale-read             cupid-e          0.000     0.000     0.000     0.500     0.500     0.000     0.000     0.000     0.500     1.000
+reservation  adversarial            hybrid           0.000     0.000     0.000     0.500     0.500     0.000     0.000     0.000     0.500     1.000
+reservation  adversarial            hybrid-noe       0.233     0.065     0.000     0.667     0.517     0.000     0.150     0.167     0.167     0.833
+reservation  adversarial            cupid            0.567     0.233     0.000     1.000     0.550     0.167     0.283     0.000     0.000     1.000
+reservation  adversarial            cupid-e          0.000     0.000     0.000     0.500     0.500     0.000     0.000     0.000     0.500     1.000
+agreement    reliable               hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    reliable               cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    reliable               cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    lossy                  hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    lossy                  hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    lossy                  cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    lossy                  cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    concurrent-revoke      hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    concurrent-revoke      hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    concurrent-revoke      cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    concurrent-revoke      cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+agreement    stale-read             hybrid           0.000     0.000     0.000     0.875     0.875     0.000     0.000     0.000     0.125     1.000
+agreement    stale-read             hybrid-noe       0.125     0.067     0.000     0.938     0.875     0.000     0.063     0.000     0.063     1.000
+agreement    stale-read             cupid            0.250     0.125     0.000     1.000     0.875     0.000     0.125     0.000     0.000     1.000
+agreement    stale-read             cupid-e          0.000     0.000     0.000     0.875     0.875     0.000     0.000     0.000     0.125     1.000
+agreement    adversarial            hybrid           0.000     0.000     0.000     0.891     0.891     0.000     0.000     0.109     0.000     0.891
+agreement    adversarial            hybrid-noe       0.047     0.058     0.000     0.945     0.891     0.031     0.023     0.055     0.000     0.891
+agreement    adversarial            cupid            0.094     0.109     0.000     1.000     0.891     0.063     0.047     0.000     0.000     0.891
+agreement    adversarial            cupid-e          0.000     0.000     0.000     0.891     0.891     0.000     0.000     0.109     0.000     0.891
+delegation   reliable               hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   reliable               cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   reliable               cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   lossy                  hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   lossy                  hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   lossy                  cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   lossy                  cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   stale-read             hybrid           0.000     0.000     0.000     0.917     0.917     0.000     0.000     0.000     0.083     1.000
+delegation   stale-read             hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   stale-read             cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+delegation   stale-read             cupid-e          0.000     0.000     0.000     0.917     0.917     0.000     0.000     0.000     0.083     1.000
+delegation   adversarial            hybrid           0.000     0.000     0.000     0.823     0.823     0.000     0.000     0.115     0.063     0.885
+delegation   adversarial            hybrid-noe       0.063     0.000     0.000     1.000     0.885     0.083     0.031     0.000     0.000     0.885
+delegation   adversarial            cupid            0.063     0.000     0.000     1.000     0.885     0.083     0.031     0.000     0.000     0.885
+delegation   adversarial            cupid-e          0.000     0.000     0.000     0.823     0.823     0.000     0.000     0.115     0.063     0.885
+deadline     reliable               hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     reliable               cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     reliable               cupid-e          0.000     0.000     0.000     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+deadline     transit                hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     transit                hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     transit                cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     transit                cupid-e          0.000     0.000     0.000     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+deadline     clock-skew             hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     clock-skew             hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+deadline     clock-skew             cupid            0.067     0.045     0.000     1.000     0.967     0.000     0.033     0.000     0.000     1.000
+deadline     clock-skew             cupid-e          0.000     0.000     0.000     0.900     0.900     0.000     0.000     0.000     0.100     1.000
+deadline     adversarial            hybrid           0.000     0.000     0.000     0.733     0.733     0.000     0.000     0.000     0.267     1.000
+deadline     adversarial            hybrid-noe       0.067     0.012     0.000     1.000     0.900     0.067     0.033     0.000     0.000     1.000
+deadline     adversarial            cupid            0.117     0.047     0.000     1.000     0.875     0.067     0.058     0.000     0.000     1.000
+deadline     adversarial            cupid-e          0.000     0.000     0.000     0.667     0.667     0.000     0.000     0.000     0.333     1.000
+external     reliable               hybrid           0.000     0.000     0.000     0.625     0.625     0.000     0.000     0.000     0.375     1.000
+external     reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+external     reliable               cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+external     reliable               cupid-e          0.000     0.000     0.000     0.625     0.625     0.000     0.000     0.000     0.375     1.000
+external     external-failure       hybrid           0.000     0.000     0.000     0.625     0.625     0.000     0.000     0.000     0.375     1.000
+external     external-failure       hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+external     external-failure       cupid            0.375     0.231     0.000     1.000     0.813     0.000     0.188     0.000     0.000     1.000
+external     external-failure       cupid-e          0.000     0.000     0.000     0.625     0.625     0.000     0.000     0.000     0.375     1.000
+external     premature              hybrid           0.000     0.000     0.000     0.625     0.625     0.000     0.000     0.000     0.375     1.000
+external     premature              hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+external     premature              cupid            0.500     0.310     0.000     1.000     0.719     0.000     0.281     0.000     0.000     1.000
+external     premature              cupid-e          0.000     0.000     0.000     0.625     0.625     0.000     0.000     0.000     0.375     1.000
+external     adversarial            hybrid           0.000     0.000     0.000     0.484     0.484     0.000     0.000     0.219     0.297     0.781
+external     adversarial            hybrid-noe       0.219     0.258     0.000     1.000     0.719     0.167     0.114     0.000     0.000     0.781
+external     adversarial            cupid            0.508     0.446     0.000     1.000     0.568     0.146     0.285     0.000     0.000     0.781
+external     adversarial            cupid-e          0.000     0.000     0.000     0.484     0.484     0.000     0.000     0.219     0.297     0.781
+composition  reliable               hybrid           0.000     0.000     0.000     0.683     0.683     0.000     0.000     0.000     0.317     1.000
+composition  reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+composition  reliable               cupid            0.000     0.000     0.000     1.000     0.683     0.317     0.000     0.000     0.000     1.000
+composition  reliable               cupid-e          0.000     0.000     0.000     0.683     0.683     0.000     0.000     0.000     0.317     1.000
+composition  lossy                  hybrid           0.000     0.000     0.000     0.522     0.522     0.000     0.000     0.067     0.411     0.933
+composition  lossy                  hybrid-noe       0.089     0.000     0.000     0.944     0.822     0.078     0.044     0.000     0.056     0.933
+composition  lossy                  cupid            0.089     0.000     0.000     1.000     0.611     0.344     0.044     0.000     0.000     0.933
+composition  lossy                  cupid-e          0.000     0.000     0.000     0.522     0.522     0.000     0.000     0.067     0.411     0.933
+composition  self-report            hybrid           0.000     0.000     0.000     0.642     0.642     0.000     0.000     0.000     0.358     1.000
+composition  self-report            hybrid-noe       0.167     0.139     0.000     1.000     0.917     0.000     0.083     0.000     0.000     1.000
+composition  self-report            cupid            0.250     0.195     0.000     1.000     0.600     0.275     0.125     0.000     0.000     1.000
+composition  self-report            cupid-e          0.000     0.000     0.000     0.642     0.642     0.000     0.000     0.000     0.358     1.000
+composition  adversarial            hybrid           0.000     0.000     0.000     0.418     0.418     0.000     0.000     0.310     0.272     0.690
+composition  adversarial            hybrid-noe       0.214     0.203     0.000     0.917     0.690     0.119     0.107     0.083     0.000     0.690
+composition  adversarial            cupid            0.281     0.234     0.000     1.000     0.486     0.365     0.149     0.000     0.000     0.690
+composition  adversarial            cupid-e          0.000     0.000     0.000     0.418     0.418     0.000     0.000     0.310     0.272     0.690
+replacement  reliable               hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  reliable               hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  reliable               cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  reliable               cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  ghost                  hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  ghost                  hybrid-noe       0.063     0.036     0.000     1.000     0.969     0.000     0.031     0.000     0.000     1.000
+replacement  ghost                  cupid            0.063     0.036     0.000     1.000     0.969     0.000     0.031     0.000     0.000     1.000
+replacement  ghost                  cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  stale-read             hybrid           0.000     0.000     0.000     0.917     0.917     0.000     0.000     0.000     0.083     1.000
+replacement  stale-read             hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+replacement  stale-read             cupid            0.000     0.000     0.000     1.000     0.958     0.042     0.000     0.000     0.000     1.000
+replacement  stale-read             cupid-e          0.000     0.000     0.000     0.917     0.917     0.000     0.000     0.000     0.083     1.000
+replacement  adversarial            hybrid           0.000     0.000     0.000     0.827     0.827     0.000     0.000     0.115     0.059     0.885
+replacement  adversarial            hybrid-noe       0.106     0.038     0.000     1.000     0.868     0.079     0.053     0.000     0.000     0.885
+replacement  adversarial            cupid            0.133     0.039     0.000     1.000     0.854     0.080     0.067     0.000     0.000     0.885
+replacement  adversarial            cupid-e          0.000     0.000     0.000     0.831     0.831     0.000     0.000     0.115     0.055     0.885
+
+Summary per family: worst-profile SFR, and mean coverage over profiles
+family         SFR hybrid   SFR cupid SFR cupid-e  cov hybrid   cov cupid cov cupid-e
+handoff             0.000       0.267       0.000       0.840       1.000       0.840
+reservation         0.000       0.567       0.000       0.750       1.000       0.750
+agreement           0.000       0.250       0.000       0.953       1.000       0.953
+delegation          0.000       0.063       0.000       0.935       1.000       0.935
+deadline            0.000       0.117       0.000       0.933       1.000       0.842
+external            0.000       0.508       0.000       0.590       1.000       0.590
+composition         0.000       0.281       0.000       0.566       1.000       0.566
+replacement         0.000       0.133       0.000       0.936       1.000       0.937
+
+P3 — evidential layer removed (cupid-e → cupid): (dependency, world) pairs where safety or observation is lost
+handoff      reliable                safety-lost    0 (flow 0, temporal 0)   observation-lost 0
+handoff      lossy                   safety-lost    0 (flow 0, temporal 0)   observation-lost 0
+handoff      timing                  safety-lost    0 (flow 0, temporal 0)   observation-lost 0
+handoff      stale-read              safety-lost    8 (flow 8, temporal 0)   observation-lost 0
+handoff      record-lag              safety-lost    0 (flow 0, temporal 0)   observation-lost 0
+handoff      evidence-contradiction  safety-lost    1 (flow 0, temporal 1)   observation-lost 0
+handoff      adversarial             safety-lost  160 (flow 40, temporal 120)   observation-lost 0
+reservation  reliable                safety-lost    0 (sharing 0, temporal 0)   observation-lost 0
+reservation  lossy-release           safety-lost    0 (sharing 0, temporal 0)   observation-lost 0
+reservation  stale-read              safety-lost    5 (sharing 0, temporal 5)   observation-lost 0
+reservation  adversarial             safety-lost    9 (sharing 0, temporal 9)   observation-lost 0
+agreement    reliable                safety-lost    0 (fit 0, mutual 0)   observation-lost 0
+agreement    lossy                   safety-lost    0 (fit 0, mutual 0)   observation-lost 0
+agreement    concurrent-revoke       safety-lost    0 (fit 0, mutual 0)   observation-lost 0
+agreement    stale-read              safety-lost    2 (fit 0, mutual 2)   observation-lost 0
+agreement    adversarial             safety-lost    4 (fit 0, mutual 4)   observation-lost 0
+delegation   reliable                safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
+delegation   lossy                   safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
+delegation   stale-read              safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
+delegation   adversarial             safety-lost   10 (continuity 0, temporal 10)   observation-lost 0
+deadline     reliable                safety-lost    0 (temporal 0, completion 0)   observation-lost 0
+deadline     transit                 safety-lost    0 (temporal 0, completion 0)   observation-lost 0
+deadline     clock-skew              safety-lost    1 (temporal 1, completion 0)   observation-lost 0
+deadline     adversarial             safety-lost   12 (temporal 12, completion 0)   observation-lost 0
+external     reliable                safety-lost    0 (internal 0, external 0)   observation-lost 0
+external     external-failure        safety-lost    2 (internal 0, external 2)   observation-lost 0
+external     premature               safety-lost    7 (internal 3, external 4)   observation-lost 0
+external     adversarial             safety-lost   35 (internal 15, external 20)   observation-lost 0
+composition  reliable                safety-lost    0 (temporal 0, delivery 0)   observation-lost 0
+composition  lossy                   safety-lost    2 (temporal 0, delivery 2)   observation-lost 0
+composition  self-report             safety-lost    4 (temporal 4, delivery 0)   observation-lost 0
+composition  adversarial             safety-lost   17 (temporal 11, delivery 6)   observation-lost 0
+replacement  reliable                safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
+replacement  ghost                   safety-lost    2 (continuity 0, temporal 2)   observation-lost 0
+replacement  stale-read              safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
+replacement  adversarial             safety-lost   28 (continuity 0, temporal 28)   observation-lost 0
+
+cupid-e against the hub's hybrid: runs where one decides correctly and the other abstains
+(the two arms have the same protocol and interface, so the difference is in judgment alone)
+  handoff: none
+  reservation: none
+  agreement: none
+  delegation: none
+  deadline completion: hybrid supported, cupid-e abstained-miss, world (world never short none dropped fresh)
+  external: none
+  composition: none
+  replacement temporal: hybrid abstained-miss, cupid-e supported, world (world #t #f #t #f delivered dropped stale)
+  replacement temporal: hybrid abstained-miss, cupid-e supported, world (world #t #f #t #f delivered dropped unavailable)
+  replacement temporal: hybrid abstained-miss, cupid-e supported, world (world #t #f #t #t delivered dropped stale)
+  replacement temporal: hybrid abstained-miss, cupid-e supported, world (world #t #f #t #t delivered dropped unavailable)
+
+Causes of the differences above
+  deadline completion — C_c's deadline is the evaluation instant T-EVAL; V's record is complete only through
+    T-READ, so under E2 it cannot establish that the service was never completed. The hybrid decides from the
+    family's schedule (no completion in (T-READ, T-EVAL]), which the commitment does not declare.
+  replacement temporal — V withdrew, V2 declined, V resumed and reported its start at T-RESUME, after the
+    deadline. Under E1 the role holder's report of its own late performance is an admission (the family's clocks
+    are reliable), so cupid-e decides Violated; the hybrid counts only attested performances and abstains when
+    the attestation is dropped and the registry is stale or unavailable.
