@@ -88,7 +88,8 @@ D1 is taken: the multiagent-systems instance goes first. The phase table in `pla
 | 3.1 | Done. `core/cupid.rkt`; BSPL protocols `models/specs/bspl/`; commitment specs `models/specs/commitments/`; `cupid` in all eight families; tests extended (37 pass). |
 | 3.2 | Done. `cupid-e` in all eight families; no false claim under any profile; `cupid` unsafe in every family; P3 loses no observation; report `models/commitments.txt`. Two documented differences from the hub's hybrid (deadline completion, replacement temporal). |
 | 3.3 | Done. Independent commitment arms `models/independent/<family>-cupid.rkt`; first comparison: no disagreement; one specification error found and amended (C1); residue 9 lists, pinned. `models/specs/commitments/adjudication.md`. |
-| 3.4–3.6 | Next: enactment harness (decision M2), paper (M4), workshop version (M1). |
+| 3.4 | Harness built and verified (`models/specs/enactment.md`; analysis plan `docs/enactment-analysis-plan.md`, fixed before any model run). Faithful agents reproduce every coded run in every family; the full pipeline runs with mock models locally and in the repository's workflow. Model runs are queued in `models/enactment/queued/` (pilot, then one full run per model, decision M2 as recommended) and start when the repository holds the model-access secrets. |
+| 3.5–3.6 | After 3.4's runs: paper (M4), workshop version (M1). |
 
 Models version: v0.4 (`VERSIONS.md`).
 
