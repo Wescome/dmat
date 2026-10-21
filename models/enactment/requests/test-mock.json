@@ -1,2 +1,2 @@
 {"id": "test-mock", "families": "all", "profiles": "reliable,adversarial", "seeds": 3, "reps": 2,
- "models": ["mock-faithful", "mock-noisy"]}
+ "models": ["mock-faithful", "mock-noisy"], "note": "pipeline check without model calls"}

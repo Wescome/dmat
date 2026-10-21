@@ -6,9 +6,9 @@
 # Writes into OUTDIR: plan.jsonl; per model: parties-*.jsonl, claims-*.jsonl;
 # observe.jsonl, claims.jsonl, results.jsonl, enactment.txt, status.json.
 set -uo pipefail
-REQ="$1"; OUT="$2"
+mkdir -p "$2"
+REQ="$(realpath "$1")"; OUT="$(realpath "$2")"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-mkdir -p "$OUT"
 field() { python3 -c "import json,sys; r=json.load(open('$REQ')); v=r.get('$1', '$2'); print(' '.join(v) if isinstance(v, list) else v)"; }
 FAMILIES=$(field families all); PROFILES=$(field profiles reliable,adversarial); SEEDS=$(field seeds 50)
 REPS=$(field reps 3); MODELS=$(field models ""); CONDS=$(field conditions role,commitments,evidential); CONC=$(field concurrency 8)
