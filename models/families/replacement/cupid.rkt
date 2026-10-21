@@ -6,8 +6,9 @@
 ;;   C = C(role, H, ⊤, START by DEADLINE)          → temporal
 ;;       The debtor is the role, held by V and, after an assignment, by V2. A
 ;;       START counts only from the party responsible at its instant: V2 from
-;;       T-V2; V without a withdrawal, before T-V2, when the registry shows V
-;;       holding after T-V2 (V2 declined), or at T-RESUME. If V holds the role
+;;       T-V2; V without a withdrawal, before T-V2, or from T-RESUME (V holding
+;;       the role after T-V2 resumes it at T-RESUME, so its START between T-V2
+;;       and T-RESUME is a ghost from its queue). If V holds the role
 ;;       after its withdrawal, the protocol schedules care at T-RESUME, after
 ;;       the deadline: Violated.
 ;;   continuity: Fulfilled (the role is retained or assigned, never released)
@@ -37,7 +38,7 @@
   (define (responsible? who t)
     (case who
       [(V2) (>= t T-V2)]
-      [(V) (or (null? wd) (< t T-V2) (eq? holder-after-v2 'V) (>= t T-RESUME))]
+      [(V) (or (null? wd) (< t T-V2) (>= t T-RESUME))]
       [else #f]))
   (define facts
     (append

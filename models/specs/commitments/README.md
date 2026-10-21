@@ -47,6 +47,8 @@ A commitment arm module is `families/<family>/cupid.rkt`-shaped: it provides `cu
 
 The claims list has one entry per dependency, in the family's order.
 
+Citations. A closed-world absence rests on nothing the observer holds when no coverage applies; `cupid` then makes a definitive claim with no citation. That is the closed-world reading, not an omission: the judge classifies such a claim as lucky when it is true and false when it is not, never as supported. (Clarification after the differential check, 2026-10-21.)
+
 ## 4. What the family specs declare
 
 For each family:

@@ -134,7 +134,7 @@ replacement  reliable               cupid            0.000     0.000     0.000  
 replacement  reliable               cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
 replacement  ghost                  hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
 replacement  ghost                  hybrid-noe       0.063     0.036     0.000     1.000     0.969     0.000     0.031     0.000     0.000     1.000
-replacement  ghost                  cupid            0.063     0.036     0.000     1.000     0.969     0.000     0.031     0.000     0.000     1.000
+replacement  ghost                  cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
 replacement  ghost                  cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
 replacement  stale-read             hybrid           0.000     0.000     0.000     0.917     0.917     0.000     0.000     0.000     0.083     1.000
 replacement  stale-read             hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
@@ -142,7 +142,7 @@ replacement  stale-read             cupid            0.000     0.000     0.000  
 replacement  stale-read             cupid-e          0.000     0.000     0.000     0.917     0.917     0.000     0.000     0.000     0.083     1.000
 replacement  adversarial            hybrid           0.000     0.000     0.000     0.827     0.827     0.000     0.000     0.115     0.059     0.885
 replacement  adversarial            hybrid-noe       0.106     0.038     0.000     1.000     0.868     0.079     0.053     0.000     0.000     0.885
-replacement  adversarial            cupid            0.133     0.039     0.000     1.000     0.854     0.080     0.067     0.000     0.000     0.885
+replacement  adversarial            cupid            0.082     0.000     0.000     1.000     0.870     0.089     0.041     0.000     0.000     0.885
 replacement  adversarial            cupid-e          0.000     0.000     0.000     0.831     0.831     0.000     0.000     0.115     0.055     0.885
 
 Summary per family: worst-profile SFR, and mean coverage over profiles
@@ -154,7 +154,7 @@ delegation          0.000       0.063       0.000       0.935       1.000       
 deadline            0.000       0.117       0.000       0.933       1.000       0.842
 external            0.000       0.508       0.000       0.590       1.000       0.590
 composition         0.000       0.281       0.000       0.566       1.000       0.566
-replacement         0.000       0.133       0.000       0.936       1.000       0.937
+replacement         0.000       0.082       0.000       0.936       1.000       0.937
 
 P3 — evidential layer removed (cupid-e → cupid): (dependency, world) pairs where safety or observation is lost
 handoff      reliable                safety-lost    0 (flow 0, temporal 0)   observation-lost 0
@@ -190,9 +190,9 @@ composition  lossy                   safety-lost    2 (temporal 0, delivery 2)  
 composition  self-report             safety-lost    4 (temporal 4, delivery 0)   observation-lost 0
 composition  adversarial             safety-lost   17 (temporal 11, delivery 6)   observation-lost 0
 replacement  reliable                safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
-replacement  ghost                   safety-lost    2 (continuity 0, temporal 2)   observation-lost 0
+replacement  ghost                   safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
 replacement  stale-read              safety-lost    0 (continuity 0, temporal 0)   observation-lost 0
-replacement  adversarial             safety-lost   28 (continuity 0, temporal 28)   observation-lost 0
+replacement  adversarial             safety-lost    9 (continuity 0, temporal 9)   observation-lost 0
 
 cupid-e against the hub's hybrid: runs where one decides correctly and the other abstains
 (the two arms have the same protocol and interface, so the difference is in judgment alone)

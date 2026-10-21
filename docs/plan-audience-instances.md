@@ -124,7 +124,7 @@ Every instance and every piece of new work sits in exactly one phase. A phase en
 | 1 (done) | Core framework; executable models v0.3; hub paper WP-2026-DM-01 | v0.3 | — |
 | 2 | Post the hub on arXiv; tag `models-v0.3` and `paper-v1`; confirm submission windows (done for I-3, see `brief-mas-instance.md` §2) | v0.3 | 1 |
 | 3 | I-3 multiagent systems (BSPL and commitment-specification arms, evidential layer, agent enactment) — brief: `brief-mas-instance.md` | v0.4: commitment evaluator, new arms, enactment harness | 2 |
-| 4 | I-1 formal methods (mechanized proofs, infinite and timed environments); I-2 runtime verification (synthesis of j*); I-4 session types (toolchain-generated CHOR arms, refinement and timed types) | v0.5: symbolic determinacy, new CHOR arm sources | 2 |
+| 4 | I-1 formal methods (mechanized proofs, infinite and timed environments); I-2 runtime verification (synthesis of j*); I-4 session types (toolchain-generated CHOR arms, refinement and timed types) | v0.5: symbolic determinacy, new CHOR arm sources; re-examine the hub's replacement responsibility rule under adjudication C1 (`models/specs/commitments/adjudication.md`) for `hybrid-noe` | 2 |
 | 5 | I-5 software engineering (implementations over real transports; human independent teams; preregistration) | v1.0: implementation harness | 3, 4 |
 | 6 | I-6 distributed systems (ceilings of real protocols); I-11 practitioner article | v1.0 | 5 |
 | 7 | I-8 ontology release (OWL/SHACL, competency questions over run records) | v1.0 + RDF export | 5 |

@@ -9,14 +9,14 @@ v0.4 adds the commitment arms of instance I-3 (multiagent systems): a commitment
 Requires Racket 8.10 or later with `redex-lib` (the standard distribution includes it).
 
 ```
-raco test tests.rkt                          # 36 test cases over all eight families, the commitment arms and the independent arms
+raco test tests.rkt                          # 37 test cases over all eight families, the commitment arms and the independent arms
 racket bench.rkt exact                       # exact expected metrics: every world of each profile, weighted
 racket bench.rkt sampled 100 results.jsonl   # DMBench: 100 seeds per (family, profile), 18,000 runs, one JSON line each
 racket bench.rkt propositions                # P1 witnesses, P2 report, P3 reports
 racket diff.rkt                              # reference arms vs independently authored arms
 racket diff.rkt detail FAMILY                # every deliveries list on which they disagree, with the truths it can carry
 racket commitments.rkt                       # commitment arms: metrics, the evidential-layer ablation, cupid-e against the hybrid
-racket diff.rkt cupid                        # reference commitment arms vs independently authored ones
+racket diff.rkt cupid > diff-cupid.txt       # reference commitment arms vs independently authored ones
 ```
 
 ## Layout
@@ -38,7 +38,7 @@ racket diff.rkt cupid                        # reference commitment arms vs inde
 | `specs/commitments/`, `specs/bspl/` | The commitment-arm contract and evaluator semantics (`README.md`), one commitment specification and one BSPL information protocol per family |
 | `commitments.rkt` | The commitment-arm report (`commitments.txt`) |
 | `specs/` | `paradigms.md` (the arm contract and the five paradigms) and one specification per family: what the independent authors worked from; `adjudication.md`, the record of the differential check |
-| `independent/<family>-arms.rkt` | Arms written by independent authors from `specs/` and the family's `terms.rkt` only |
+| `independent/<family>-arms.rkt`, `independent/<family>-cupid.rkt` | Arms and commitment arms written by independent authors from `specs/` and the family's `terms.rkt` only |
 | `diff.rkt` | The differential check between reference and independent arms |
 | `tests.rkt` | The models' tests |
 | `paper-tables.rkt`, `paper-heat.rkt` | Write the paper's tables and heat-map figure (`../paper/tables`, `../paper/figures/heat.tex`) from the models |
@@ -110,6 +110,25 @@ Full tables: `exact.txt` (180 family × profile × arm rows); `sampled.txt` (100
 - **Timing faults break arms that judge by arrival or by a party's clock.** In deadline, CHOR and COMM (judging by DONE's arrival) are false under transit delay (SFR 0.30); FSM (judging by V's stamp) is safe under transit delay and false under clock skew (0.27); the hybrid uses the trusted stamp. In handoff, a slow but timely acceptance takes CHOR's and FSM's timeout branch (SFR 0.30 under `timing`).
 - **P1 witnesses exist wherever faults hide state**, in every family but deadline: there every fault leaves a distinct trace, and the difficulty is interpretation, not observation.
 - **P2, sharpened: decidability needs distinguishable *evidence*, not just a finer report.** In composition, under the coarse model H's dependency on S is never determined (mass 0); under the staged model it is determined with honest reporting (mass 1) but only 0.25 when S may report prematurely; with an attestation of S's start, 1.0 again.
+
+## Commitment arms (v0.4)
+
+Each family's commitments are declared as queries over the observer's information base (`specs/commitments/<family>.md`, with the information protocol in `specs/bspl/<family>.bspl`) and evaluated by `core/cupid.rkt`. `cupid` reads the information base under the closed-world assumption, as commitment queries over a database do; `cupid-e` applies E1 (a debtor's report of its own performance is not evidence of it), E2 (absence only from a record complete through the deadline that does not itself report the event) and E3 (otherwise unknown). Both use the hybrid's protocol and interface, so they see the same deliveries in every world. From `commitments.txt`:
+
+| family | worst-profile SFR: hybrid | cupid | cupid-e | mean coverage: hybrid | cupid-e |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| handoff | 0 | 0.267 | 0 | 0.840 | 0.840 |
+| reservation | 0 | 0.567 | 0 | 0.750 | 0.750 |
+| agreement | 0 | 0.250 | 0 | 0.953 | 0.953 |
+| delegation | 0 | 0.063 | 0 | 0.935 | 0.935 |
+| deadline | 0 | 0.117 | 0 | 0.933 | 0.842 |
+| external | 0 | 0.508 | 0 | 0.590 | 0.590 |
+| composition | 0 | 0.281 | 0 | 0.566 | 0.566 |
+| replacement | 0 | 0.082 | 0 | 0.936 | 0.937 |
+
+- **The evidential layer is what makes commitment judgment sound.** `cupid-e` makes no false claim under any profile of any family; `cupid` is unsafe in every family. P3 between them loses no observation anywhere: the whole loss is in judgment.
+- **Evidential commitments recover the hybrid.** `cupid-e` decides exactly what the hub's hybrid decides except on two documented runs: deadline completion, where the commitment's deadline is the evaluation instant and V's record is complete only through the read, so E2 abstains where the hybrid uses the family's schedule; and replacement temporal, where V's own report of a late resumption is an admission under E1 and `cupid-e` decides where the hybrid abstains.
+- **Independent authorship.** The commitment arms were written a second time from the specifications alone. The first comparison disagreed on no deliveries list. The author found one specification error (a ghost START admitted by the replacement responsibility rule under the closed-world reading), now amended in the specification and the reference, leaving a pinned residue of 9 lists; `specs/commitments/adjudication.md` records it.
 
 ## Independent authorship
 

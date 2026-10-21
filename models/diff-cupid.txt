@@ -1,0 +1,19 @@
+Reference commitment arms vs independent commitment arms: distinct deliveries lists judged differently; exact SFR and false rate per profile (reference → independent)
+handoff      cupid       disagree on   0 of 164
+handoff      cupid-e     disagree on   0 of 164
+reservation  cupid       disagree on   0 of 10
+reservation  cupid-e     disagree on   0 of 10
+agreement    cupid       disagree on   0 of 16
+agreement    cupid-e     disagree on   0 of 16
+delegation   cupid       disagree on   0 of 57
+delegation   cupid-e     disagree on   0 of 57
+deadline     cupid       disagree on   0 of 50
+deadline     cupid-e     disagree on   0 of 50
+external     cupid       disagree on   0 of 30
+external     cupid-e     disagree on   0 of 30
+composition  cupid       disagree on   0 of 23
+composition  cupid-e     disagree on   0 of 23
+replacement  cupid       disagree on   9 of 61
+    ghost                  SFR 0.000 → 0.063  false 0.000 → 0.031  coverage 1.000 → 1.000
+    adversarial            SFR 0.082 → 0.133  false 0.041 → 0.067  coverage 1.000 → 1.000
+replacement  cupid-e     disagree on   0 of 61

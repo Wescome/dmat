@@ -81,7 +81,18 @@ D1 is taken: the multiagent-systems instance goes first. The phase table in `pla
 | M3 | Co-authorship from the commitment community | (a) none; (b) invite a co-author once 3.1–3.2 results exist; (c) invite now | (b). Results first gives a concrete reason to collaborate and a basis for the co-author's contribution (for example, review of the BSPL and Cupid encodings) |
 | M4 | Template | follows M1: Springer Nature journal template for JAAMAS; ACM `acmart` (AAMAS format) for the workshop paper | As stated; the guideline's content and production standards apply in either template (plan decision D2) |
 
-## 7. Sources for §2
+## 7. Status (2026-10-21)
+
+| Step | Status |
+| --- | --- |
+| 3.1 | Done. `core/cupid.rkt`; BSPL protocols `models/specs/bspl/`; commitment specs `models/specs/commitments/`; `cupid` in all eight families; tests extended (37 pass). |
+| 3.2 | Done. `cupid-e` in all eight families; no false claim under any profile; `cupid` unsafe in every family; P3 loses no observation; report `models/commitments.txt`. Two documented differences from the hub's hybrid (deadline completion, replacement temporal). |
+| 3.3 | Done. Independent commitment arms `models/independent/<family>-cupid.rkt`; first comparison: no disagreement; one specification error found and amended (C1); residue 9 lists, pinned. `models/specs/commitments/adjudication.md`. |
+| 3.4–3.6 | Next: enactment harness (decision M2), paper (M4), workshop version (M1). |
+
+Models version: v0.4 (`VERSIONS.md`).
+
+## 8. Sources for §2
 
 - AAMAS 2027 call for main-track papers: https://warwick.ac.uk/fac/sci/dcs/aamas2027/calls/call-for-main-track/
 - AAMAS 2026 JAAMAS track call: https://cyprusconferences.org/aamas2026/call-for-papers-jaamas-track/

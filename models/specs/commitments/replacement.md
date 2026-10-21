@@ -29,3 +29,7 @@ A registry showing `started = #t` reports the event and yields no coverage. Its 
 - `temporal`: discharged → Fulfilled, violated → Violated (cite the state's citations); otherwise, if a `WITHDRAW` was delivered and the registry, authoritative after `T-V2`, shows `holder = V`, V resumes the role and the protocol schedules care at `T-RESUME`, after the deadline: Violated (cite the read and the WITHDRAW); otherwise Indeterminate.
 
 Debtor's clock: reliable (default).
+
+## Clarification after the differential check (2026-10-21)
+
+The responsibility rule above admits a START from V when the registry shows `holder = V` after `T-V2`. A V that holds the role after its withdrawal holds it because V2 declined, and it resumes at `T-RESUME`; a START from V between `T-V2` and `T-RESUME` is therefore not the resumption but a ghost from V's outbound queue. The rule is amended: after a delivered `WITHDRAW`, a START or ATTEST naming V counts only if `t < T-V2` or `t ≥ T-RESUME`. The registry's `holder` still decides continuity and the scheduled-resumption Violated rule. (Raised by the independent author.)

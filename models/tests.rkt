@@ -369,7 +369,7 @@
 
 ;; ------------------------------------------------------------------ independent authorship
 
-(require (only-in "diff.rkt" independent-arms disagreements))
+(require (only-in "diff.rkt" independent-arms independent-cupid-arms disagreements))
 
 (test-case "independent arms import only the core arm/observe/grammar modules and their family's terms"
   (for ([n family-names])
@@ -406,3 +406,23 @@
     (define ind (findf (λ (x) (eq? (arm-name x) an)) (independent-arms n)))
     (define expected (cond [(findf (λ (r) (and (eq? (car r) n) (eq? (cadr r) an))) RESIDUE) => caddr] [else 0]))
     (check-equal? (length (disagreements n (A n an) ind)) expected (format "~a ~a" n an))))
+
+;; Commitment arms (specs/commitments/adjudication.md): the independent cupid-e
+;; agrees with the reference everywhere; the only residue is the replacement
+;; ghost rule amended in the reference after the check.
+(test-case "independent commitment arms: same protocol and interface; agreement up to the adjudicated residue"
+  (for ([n family-names])
+    (define f (build-path here "independent" (format "~a-cupid.rkt" n)))
+    (define allowed
+      (set (simplify-path f)
+           (simplify-path (build-path here "families" (symbol->string n) "terms.rkt"))
+           (simplify-path (build-path here "core/arm.rkt")) (simplify-path (build-path here "core/observe.rkt"))
+           (simplify-path (build-path here "core/grammar.rkt")) (simplify-path (build-path here "core/cupid.rkt"))))
+    (check-equal? (for/list ([p (import-closure f)] #:unless (set-member? allowed p)) p) '() (format "~a" n))
+    (define inds (independent-cupid-arms n))
+    (check-equal? (map arm-name inds) CUPID-NAMES)
+    (for ([a inds])
+      (check-equal? (arm-protocol a) (arm-protocol (A n (arm-name a))))
+      (check-equal? (arm-interface a) (arm-interface (A n (arm-name a))))
+      (define expected (if (and (eq? n 'replacement) (eq? (arm-name a) 'cupid)) 9 0))
+      (check-equal? (length (disagreements n (A n (arm-name a)) a)) expected (format "~a ~a" n (arm-name a))))))
