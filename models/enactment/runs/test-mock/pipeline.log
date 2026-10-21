@@ -1,4 +1,16 @@
-models/harness/pipeline.sh: line 19: models/enactment/runs/test-mock/plan.jsonl: No such file or directory
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: 'models/enactment/requests/test-mock.json'
+50/96
+96 lines written to /home/runner/work/dmat/dmat/models/enactment/runs/test-mock/parties-mock-faithful.jsonl
+50/288
+100/288
+150/288
+200/288
+250/288
+288 lines written to /home/runner/work/dmat/dmat/models/enactment/runs/test-mock/claims-mock-faithful.jsonl
+50/96
+96 lines written to /home/runner/work/dmat/dmat/models/enactment/runs/test-mock/parties-mock-noisy.jsonl
+50/288
+100/288
+150/288
+200/288
+250/288
+288 lines written to /home/runner/work/dmat/dmat/models/enactment/runs/test-mock/claims-mock-noisy.jsonl

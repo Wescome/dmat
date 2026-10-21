@@ -8,9 +8,10 @@
     "models": [
       "mock-faithful",
       "mock-noisy"
-    ]
+    ],
+    "note": "pipeline check without model calls"
   },
-  "state": "running",
+  "state": "done",
   "detail": "",
-  "time": "2026-10-21T21:17:52Z"
+  "time": "2026-10-21T21:19:04Z"
 }

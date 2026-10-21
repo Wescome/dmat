@@ -1,0 +1,305 @@
+Runs excluded for a failed party call: 0 of 192; observer calls failed: 0
+Enactment results (models v0.4): per family and profile, mean over repetitions (± sample s.d.)
+Judges: cupid-e and cupid are the coded references on the enacted deliveries; agent-<condition> is the observer agent.
+
+Party agents: share of runs whose deliveries equal the coded run; party failures per run
+model                       family       profile      coded   fab-rep  fab-act  omitted  param   malformed
+mock-faithful               handoff      reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               handoff      adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               reservation  adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               reservation  reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               agreement    adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               agreement    reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               delegation   reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               delegation   adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               deadline     adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               deadline     reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               external     reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               external     adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               composition  reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               composition  adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               replacement  adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-faithful               replacement  reliable     1.000   0.000    0.000    0.000    0.000   0.000    
+mock-noisy                  handoff      adversarial  0.500   0.667    0.000    0.167    0.000   0.000    
+mock-noisy                  handoff      reliable     0.167   0.500    0.000    0.667    0.000   0.000    
+mock-noisy                  reservation  adversarial  0.667   0.000    0.000    1.500    0.000   0.500    
+mock-noisy                  reservation  reliable     0.500   0.000    0.000    0.833    0.000   0.500    
+mock-noisy                  agreement    adversarial  1.000   0.000    0.000    0.000    0.000   0.000    
+mock-noisy                  agreement    reliable     0.667   0.000    0.000    0.333    0.000   0.000    
+mock-noisy                  delegation   reliable     0.167   0.500    0.000    0.833    0.000   0.000    
+mock-noisy                  delegation   adversarial  0.500   0.833    0.000    0.333    0.000   0.000    
+mock-noisy                  deadline     adversarial  0.500   0.167    0.000    0.500    0.000   0.000    
+mock-noisy                  deadline     reliable     0.500   0.167    0.000    0.333    0.000   0.000    
+mock-noisy                  external     reliable     0.667   0.167    0.000    0.167    0.000   0.333    
+mock-noisy                  external     adversarial  0.667   0.000    0.000    0.500    0.000   0.167    
+mock-noisy                  composition  reliable     0.167   0.667    0.000    0.333    0.000   0.000    
+mock-noisy                  composition  adversarial  0.500   0.167    0.000    0.833    0.000   0.000    
+mock-noisy                  replacement  reliable     0.500   0.500    0.000    0.667    0.000   0.167    
+mock-noisy                  replacement  adversarial  0.333   0.167    0.000    0.833    0.000   0.333    
+
+Judges on the enacted deliveries
+model                       judge              family       profile      SFR             FCR             coverage        supported abst-miss undet   
+mock-faithful               cupid-e            handoff      adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.167     0.000   
+mock-faithful               cupid-e            handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            reservation  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.667     0.000   
+mock-faithful               cupid-e            reservation  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            agreement    adversarial  0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.000     0.000   
+mock-faithful               cupid-e            agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            delegation   adversarial  0.000±0.000     0.000±0.000     0.833±0.000     0.833     0.167     0.000   
+mock-faithful               cupid-e            delegation   reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            deadline     adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            external     adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.333     0.000   
+mock-faithful               cupid-e            external     reliable     0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.333     0.000   
+mock-faithful               cupid-e            composition  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.167     0.000   
+mock-faithful               cupid-e            composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            replacement  adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid-e            replacement  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              handoff      adversarial  0.000±0.000     0.000±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-faithful               cupid              handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              reservation  adversarial  0.667±0.000     0.500±0.000     1.000±0.000     0.333     0.000     0.000   
+mock-faithful               cupid              reservation  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              agreement    adversarial  0.000±0.000     0.333±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-faithful               cupid              agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              delegation   adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              delegation   reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              deadline     adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              external     adversarial  0.333±0.000     0.333±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-faithful               cupid              external     reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              composition  adversarial  0.000±0.000     0.000±0.000     1.000±0.000     0.333     0.000     0.000   
+mock-faithful               cupid              composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              replacement  adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               cupid              replacement  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         handoff      adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.167     0.000   
+mock-faithful               agent-role         handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         reservation  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.667     0.000   
+mock-faithful               agent-role         reservation  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         agreement    adversarial  0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.000     0.000   
+mock-faithful               agent-role         agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         delegation   adversarial  0.000±0.000     0.000±0.000     0.833±0.000     0.833     0.167     0.000   
+mock-faithful               agent-role         delegation   reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         deadline     adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         external     adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.333     0.000   
+mock-faithful               agent-role         external     reliable     0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.333     0.000   
+mock-faithful               agent-role         composition  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.167     0.000   
+mock-faithful               agent-role         composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         replacement  adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-role         replacement  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  handoff      adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.167     0.000   
+mock-faithful               agent-commitments  handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  reservation  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.667     0.000   
+mock-faithful               agent-commitments  reservation  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  agreement    adversarial  0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.000     0.000   
+mock-faithful               agent-commitments  agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  delegation   adversarial  0.000±0.000     0.000±0.000     0.833±0.000     0.833     0.167     0.000   
+mock-faithful               agent-commitments  delegation   reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  deadline     adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  external     adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.333     0.000   
+mock-faithful               agent-commitments  external     reliable     0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.333     0.000   
+mock-faithful               agent-commitments  composition  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.167     0.000   
+mock-faithful               agent-commitments  composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  replacement  adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-commitments  replacement  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   handoff      adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.167     0.000   
+mock-faithful               agent-evidential   handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   reservation  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.667     0.000   
+mock-faithful               agent-evidential   reservation  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   agreement    adversarial  0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.000     0.000   
+mock-faithful               agent-evidential   agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   delegation   adversarial  0.000±0.000     0.000±0.000     0.833±0.000     0.833     0.167     0.000   
+mock-faithful               agent-evidential   delegation   reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   deadline     adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   external     adversarial  0.000±0.000     0.000±0.000     0.500±0.000     0.500     0.333     0.000   
+mock-faithful               agent-evidential   external     reliable     0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.333     0.000   
+mock-faithful               agent-evidential   composition  adversarial  0.000±0.000     0.000±0.000     0.333±0.000     0.333     0.167     0.000   
+mock-faithful               agent-evidential   composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   replacement  adversarial  0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-faithful               agent-evidential   replacement  reliable     0.000±0.000     0.000±0.000     1.000±0.000     1.000     0.000     0.000   
+mock-noisy                  cupid-e            handoff      adversarial  0.333±0.471     0.333±0.471     0.583±0.118     0.250     0.083     0.333   
+mock-noisy                  cupid-e            handoff      reliable     0.000±0.000     0.000±0.000     0.917±0.118     0.167     0.000     0.833   
+mock-noisy                  cupid-e            reservation  adversarial  0.000±0.000     0.000±0.000     0.250±0.118     0.000     0.667     0.333   
+mock-noisy                  cupid-e            reservation  reliable     0.000±0.000     0.000±0.000     0.917±0.118     0.500     0.000     0.500   
+mock-noisy                  cupid-e            agreement    adversarial  0.000±0.000     0.000±0.000     0.667±0.000     0.667     0.000     0.000   
+mock-noisy                  cupid-e            agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.667     0.000     0.333   
+mock-noisy                  cupid-e            delegation   adversarial  0.000±0.000     0.000±0.000     0.833±0.000     0.417     0.083     0.500   
+mock-noisy                  cupid-e            delegation   reliable     0.000±0.000     0.000±0.000     0.833±0.000     0.167     0.000     0.833   
+mock-noisy                  cupid-e            deadline     adversarial  0.000±0.000     0.000±0.000     0.667±0.000     0.500     0.000     0.500   
+mock-noisy                  cupid-e            deadline     reliable     0.000±0.000     0.000±0.000     0.833±0.236     0.500     0.000     0.500   
+mock-noisy                  cupid-e            external     adversarial  0.000±0.000     0.000±0.000     0.333±0.236     0.333     0.250     0.333   
+mock-noisy                  cupid-e            external     reliable     0.000±0.000     0.000±0.000     0.667±0.000     0.417     0.250     0.333   
+mock-noisy                  cupid-e            composition  adversarial  0.167±0.236     0.500±0.707     0.250±0.118     0.167     0.083     0.417   
+mock-noisy                  cupid-e            composition  reliable     0.000±0.000     0.000±0.000     0.917±0.118     0.167     0.000     0.833   
+mock-noisy                  cupid-e            replacement  adversarial  0.000±0.000     0.000±0.000     0.917±0.118     0.333     0.000     0.667   
+mock-noisy                  cupid-e            replacement  reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  cupid              handoff      adversarial  0.500±0.707     0.375±0.530     1.000±0.000     0.333     0.000     0.167   
+mock-noisy                  cupid              handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  cupid              reservation  adversarial  0.667±0.000     0.500±0.000     1.000±0.000     0.000     0.000     0.333   
+mock-noisy                  cupid              reservation  reliable     0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  cupid              agreement    adversarial  0.000±0.000     0.333±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-noisy                  cupid              agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.667     0.000     0.333   
+mock-noisy                  cupid              delegation   adversarial  0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  cupid              delegation   reliable     0.333±0.000     0.167±0.000     1.000±0.000     0.167     0.000     0.667   
+mock-noisy                  cupid              deadline     adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  cupid              deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  cupid              external     adversarial  0.333±0.000     0.167±0.236     1.000±0.000     0.500     0.000     0.250   
+mock-noisy                  cupid              external     reliable     0.167±0.236     0.083±0.118     1.000±0.000     0.667     0.000     0.250   
+mock-noisy                  cupid              composition  adversarial  0.333±0.471     0.500±0.707     1.000±0.000     0.167     0.000     0.333   
+mock-noisy                  cupid              composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  cupid              replacement  adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.333     0.000     0.583   
+mock-noisy                  cupid              replacement  reliable     0.333±0.000     0.250±0.000     1.000±0.000     0.500     0.000     0.333   
+mock-noisy                  agent-role         handoff      adversarial  0.500±0.707     0.375±0.530     1.000±0.000     0.333     0.000     0.167   
+mock-noisy                  agent-role         handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  agent-role         reservation  adversarial  0.667±0.000     0.500±0.000     1.000±0.000     0.000     0.000     0.333   
+mock-noisy                  agent-role         reservation  reliable     0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  agent-role         agreement    adversarial  0.000±0.000     0.333±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-noisy                  agent-role         agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.667     0.000     0.333   
+mock-noisy                  agent-role         delegation   adversarial  0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  agent-role         delegation   reliable     0.333±0.000     0.167±0.000     1.000±0.000     0.167     0.000     0.667   
+mock-noisy                  agent-role         deadline     adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  agent-role         deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  agent-role         external     adversarial  0.333±0.000     0.167±0.236     1.000±0.000     0.500     0.000     0.250   
+mock-noisy                  agent-role         external     reliable     0.167±0.236     0.083±0.118     1.000±0.000     0.667     0.000     0.250   
+mock-noisy                  agent-role         composition  adversarial  0.333±0.471     0.500±0.707     1.000±0.000     0.167     0.000     0.333   
+mock-noisy                  agent-role         composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  agent-role         replacement  adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.333     0.000     0.583   
+mock-noisy                  agent-role         replacement  reliable     0.333±0.000     0.250±0.000     1.000±0.000     0.500     0.000     0.333   
+mock-noisy                  agent-commitments  handoff      adversarial  0.500±0.707     0.375±0.530     1.000±0.000     0.333     0.000     0.167   
+mock-noisy                  agent-commitments  handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  agent-commitments  reservation  adversarial  0.667±0.000     0.500±0.000     1.000±0.000     0.000     0.000     0.333   
+mock-noisy                  agent-commitments  reservation  reliable     0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  agent-commitments  agreement    adversarial  0.000±0.000     0.333±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-noisy                  agent-commitments  agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.667     0.000     0.333   
+mock-noisy                  agent-commitments  delegation   adversarial  0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  agent-commitments  delegation   reliable     0.333±0.000     0.167±0.000     1.000±0.000     0.167     0.000     0.667   
+mock-noisy                  agent-commitments  deadline     adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  agent-commitments  deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  agent-commitments  external     adversarial  0.333±0.000     0.167±0.236     1.000±0.000     0.500     0.000     0.250   
+mock-noisy                  agent-commitments  external     reliable     0.167±0.236     0.083±0.118     1.000±0.000     0.667     0.000     0.250   
+mock-noisy                  agent-commitments  composition  adversarial  0.333±0.471     0.500±0.707     1.000±0.000     0.167     0.000     0.333   
+mock-noisy                  agent-commitments  composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  agent-commitments  replacement  adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.333     0.000     0.583   
+mock-noisy                  agent-commitments  replacement  reliable     0.333±0.000     0.250±0.000     1.000±0.000     0.500     0.000     0.333   
+mock-noisy                  agent-evidential   handoff      adversarial  0.500±0.707     0.375±0.530     1.000±0.000     0.333     0.000     0.167   
+mock-noisy                  agent-evidential   handoff      reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  agent-evidential   reservation  adversarial  0.667±0.000     0.500±0.000     1.000±0.000     0.000     0.000     0.333   
+mock-noisy                  agent-evidential   reservation  reliable     0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  agent-evidential   agreement    adversarial  0.000±0.000     0.333±0.000     1.000±0.000     0.667     0.000     0.000   
+mock-noisy                  agent-evidential   agreement    reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.667     0.000     0.333   
+mock-noisy                  agent-evidential   delegation   adversarial  0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  agent-evidential   delegation   reliable     0.333±0.000     0.167±0.000     1.000±0.000     0.167     0.000     0.667   
+mock-noisy                  agent-evidential   deadline     adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.500     0.000     0.417   
+mock-noisy                  agent-evidential   deadline     reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.500     0.000     0.500   
+mock-noisy                  agent-evidential   external     adversarial  0.333±0.000     0.167±0.236     1.000±0.000     0.500     0.000     0.250   
+mock-noisy                  agent-evidential   external     reliable     0.167±0.236     0.083±0.118     1.000±0.000     0.667     0.000     0.250   
+mock-noisy                  agent-evidential   composition  adversarial  0.333±0.471     0.500±0.707     1.000±0.000     0.167     0.000     0.333   
+mock-noisy                  agent-evidential   composition  reliable     0.000±0.000     0.000±0.000     1.000±0.000     0.167     0.000     0.833   
+mock-noisy                  agent-evidential   replacement  adversarial  0.167±0.236     0.000±0.000     1.000±0.000     0.333     0.000     0.583   
+mock-noisy                  agent-evidential   replacement  reliable     0.333±0.000     0.250±0.000     1.000±0.000     0.500     0.000     0.333   
+
+Fabricated reports per run, 95% bootstrap interval over seeds
+  mock-faithful              agreement    adversarial  0.000 [0.000, 0.000]
+  mock-faithful              agreement    reliable     0.000 [0.000, 0.000]
+  mock-faithful              composition  adversarial  0.000 [0.000, 0.000]
+  mock-faithful              composition  reliable     0.000 [0.000, 0.000]
+  mock-faithful              deadline     adversarial  0.000 [0.000, 0.000]
+  mock-faithful              deadline     reliable     0.000 [0.000, 0.000]
+  mock-faithful              delegation   adversarial  0.000 [0.000, 0.000]
+  mock-faithful              delegation   reliable     0.000 [0.000, 0.000]
+  mock-faithful              external     adversarial  0.000 [0.000, 0.000]
+  mock-faithful              external     reliable     0.000 [0.000, 0.000]
+  mock-faithful              handoff      adversarial  0.000 [0.000, 0.000]
+  mock-faithful              handoff      reliable     0.000 [0.000, 0.000]
+  mock-faithful              replacement  adversarial  0.000 [0.000, 0.000]
+  mock-faithful              replacement  reliable     0.000 [0.000, 0.000]
+  mock-faithful              reservation  adversarial  0.000 [0.000, 0.000]
+  mock-faithful              reservation  reliable     0.000 [0.000, 0.000]
+  mock-noisy                 agreement    adversarial  0.000 [0.000, 0.000]
+  mock-noisy                 agreement    reliable     0.000 [0.000, 0.000]
+  mock-noisy                 composition  adversarial  0.167 [0.000, 0.500]
+  mock-noisy                 composition  reliable     0.667 [0.500, 1.000]
+  mock-noisy                 deadline     adversarial  0.167 [0.000, 0.500]
+  mock-noisy                 deadline     reliable     0.167 [0.000, 0.500]
+  mock-noisy                 delegation   adversarial  0.833 [0.000, 2.000]
+  mock-noisy                 delegation   reliable     0.500 [0.000, 1.000]
+  mock-noisy                 external     adversarial  0.000 [0.000, 0.000]
+  mock-noisy                 external     reliable     0.167 [0.000, 0.500]
+  mock-noisy                 handoff      adversarial  0.667 [0.500, 1.000]
+  mock-noisy                 handoff      reliable     0.500 [0.000, 1.000]
+  mock-noisy                 replacement  adversarial  0.167 [0.000, 0.500]
+  mock-noisy                 replacement  reliable     0.500 [0.000, 1.000]
+  mock-noisy                 reservation  adversarial  0.000 [0.000, 0.000]
+  mock-noisy                 reservation  reliable     0.000 [0.000, 0.000]
+
+cupid-e false claims on enacted deliveries, by cause (runs)
+  mock-faithful: none
+  mock-noisy: 3 — an independent party's fabricated or altered message
+
+Paired comparison of judges, run by run (runs unsafe only under the first / only under the second; exact sign test)
+  mock-faithful              agent-role         vs agent-evidential    handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-evidential    replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-role         vs agent-commitments   replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-commitments  vs agent-evidential    replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-faithful              agent-evidential   vs cupid-e             replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-evidential    replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-role         vs agent-commitments   replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    handoff     : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    reservation : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    delegation  : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    deadline    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    external    : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    composition : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-commitments  vs agent-evidential    replacement : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             handoff     : 1 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             reservation : 5 / 0  p = 0.0625  Holm p = 0.5000
+  mock-noisy                 agent-evidential   vs cupid-e             agreement   : 0 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             delegation  : 2 / 0  p = 0.5000  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             deadline    : 1 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             external    : 3 / 0  p = 0.2500  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             composition : 1 / 0  p = 1.0000  Holm p = 1.0000
+  mock-noisy                 agent-evidential   vs cupid-e             replacement : 3 / 0  p = 0.2500  Holm p = 1.0000
