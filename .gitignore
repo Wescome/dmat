@@ -7,3 +7,4 @@ paper/*.out
 paper/*.pdf
 paper/release/
 paper/arxiv/
+models/families/purchase/external/*.part-*.rktd
