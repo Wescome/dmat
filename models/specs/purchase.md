@@ -111,7 +111,7 @@ Base weights are 1 per value unless a profile says otherwise. The canonical map 
 
 ## 8. Deliveries
 
-An arm's deliveries are its **transcript**: for each call, in order, `(msg REPLY n n (op arg ...) reply)` — arrival and assertion instant are both the call's sequence number. A claim cites deliveries by index, as in every family (index = `n − 1`).
+An arm's deliveries are its **transcript**: for each call, in order, `(msg REPLY n n (op arg ...) reply)` — arrival and assertion instant are both the call's sequence number. A claim cites deliveries by index, as in every family (index = `n − 1`). An external arm cites by call sequence number `n` and the runner converts (`external-arms.md` §1; clarified 2026-10-22, `purchase-adjudication.md`, A1).
 
 ## 9. Arms
 

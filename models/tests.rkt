@@ -495,7 +495,7 @@
 (require (only-in "families.rkt" COMPOSITE composite-arms composite-arm PURCHASE-ARM-NAMES)
          (only-in "families/purchase/terms.rkt" PURCHASE CALL-LIMIT)
          (only-in "families/purchase/world.rkt" run-transcript)
-         (only-in "families/purchase/external.rkt" json->call call->json reply->json json->claims)
+         (only-in "families/purchase/external.rkt" json->call call->json reply->json json->claims run-one)
          (only-in "families/purchase/external-cache.rkt" arm-cache EXTERNAL-ARMS))
 
 (define PF (car (car COMPOSITE)))
@@ -572,3 +572,19 @@
     (define-values (tr truth) (run-transcript (hasheq 'mechanism 'external 'arm name) (hasheq 'watermark #t) w))
     (check-equal? (map car tr) (hash-ref run 'calls))
     (check-equal? (map cadr tr) (hash-ref run 'replies))))
+
+;; With the product present (DMBENCH_ARM_PRODUCT_R, DMBENCH_ARM_PRODUCT_O name its command),
+;; a fixed sample of its stored runs (every 27th world, in sorted order) must be reproduced:
+;; the same calls, replies and claims.
+(test-case "purchase: a present product reproduces its stored runs"
+  (for ([name EXTERNAL-ARMS] #:when (stored? name))
+    (define var (list->string (for/list ([c (string-upcase (format "DMBENCH_ARM_~a" name))]) (if (char=? c #\-) #\_ c))))
+    (define cmd (getenv var))
+    (when cmd
+      (define keys (sort (hash-keys (hash-ref (arm-cache name) 'runs)) string<?))
+      (for ([ws keys] [i (in-naturals)] #:when (zero? (modulo i 27)))
+        (define stored (hash-ref (hash-ref (arm-cache name) 'runs) ws))
+        (define run (run-one cmd (read (open-input-string ws)) (format "~a-check-~a" name i)))
+        (check-equal? (hash-ref run 'calls) (hash-ref stored 'calls) ws)
+        (check-equal? (hash-ref run 'replies) (hash-ref stored 'replies) ws)
+        (check-equal? (hash-ref run 'claims) (hash-ref stored 'claims) ws)))))

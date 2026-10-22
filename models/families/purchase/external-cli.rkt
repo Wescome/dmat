@@ -61,10 +61,15 @@
      (define parts (for/list ([i k]) (load-arm-cache (string->symbol (format "~a.part-~a" arm i)))))
      (define revs (remove-duplicates (map (λ (c) (hash-ref c 'revision)) parts)))
      (unless (= 1 (length revs)) (error 'external "parts carry different revisions ~s" revs))
-     (define runs (for*/hash ([c parts] [(w r) (hash-ref c 'runs)]) (values w (hash-remove r 'stderr))))
+     (define runs (for*/hash ([c parts] [(w r) (hash-ref c 'runs)]) (values w (strip-run r))))
      (define missing (for/list ([w (all-worlds)] #:unless (hash-ref runs (format "~s" w) #f)) w))
      (unless (null? missing) (error 'external "~a worlds missing, e.g. ~s" (length missing) (car missing)))
      (save-arm-cache! arm (hasheq 'arm arm 'revision (car revs) 'runs runs))
      (for ([i k]) (delete-file (build-path cache-dir (format "~a.part-~a.rktd" arm i))))
      (printf "~a: ~a worlds stored, revision ~a\n" arm (hash-count runs) (car revs))]
+    [(and (pair? args) (equal? (car args) "strip") (= 2 (length args)))
+     (define arm (string->symbol (cadr args)))
+     (define c (load-arm-cache arm))
+     (save-arm-cache! arm (hash-set c 'runs (for/hash ([(w r) (hash-ref c 'runs)]) (values w (strip-run r)))))
+     (printf "~a: stored runs stripped\n" arm)]
     [else (eprintf "usage: external-cli.rkt try COMMAND [SLOT=VALUE ...] | run ARM COMMAND [REVISION]\n") (exit 2)]))

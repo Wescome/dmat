@@ -1,0 +1,398 @@
+Family purchase (models v0.4.2): exact expected metrics, every world of each profile's support
+Arms with stored runs: (hybrid hybrid-noe cupid cupid-e product-r product-o); external arms without stored runs are left out.
+  product-r: 2592 stored runs, revision dc9ce83
+  product-o: 2592 stored runs, revision b0452cf
+
+profile          arm                SFR       FCR       AGR  coverage supported     lucky     falseabstained-abstained-determinab
+reliable         hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reliable         hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reliable         cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reliable         cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reliable         product-r        0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+reliable         product-o        0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stockout         hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stockout         hybrid-noe       0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stockout         cupid            0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stockout         cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stockout         product-r        0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stockout         product-o        0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+unknown-outcome  hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+unknown-outcome  hybrid-noe       0.333     0.000     0.000     1.000     0.917     0.000     0.083     0.000     0.000     1.000
+unknown-outcome  cupid            0.333     0.000     0.000     1.000     0.917     0.000     0.083     0.000     0.000     1.000
+unknown-outcome  cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+unknown-outcome  product-r        0.000     0.000     0.000     0.708     0.708     0.000     0.000     0.000     0.292     1.000
+unknown-outcome  product-o        0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stale-release    hybrid           0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stale-release    hybrid-noe       0.222     0.000     0.000     1.000     0.944     0.000     0.056     0.000     0.000     1.000
+stale-release    cupid            0.333     0.000     0.000     1.000     0.917     0.000     0.083     0.000     0.000     1.000
+stale-release    cupid-e          0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+stale-release    product-r        0.000     0.000     0.000     0.722     0.722     0.000     0.000     0.056     0.222     0.944
+stale-release    product-o        0.000     0.000     0.000     1.000     1.000     0.000     0.000     0.000     0.000     1.000
+carrier          hybrid           0.000     0.000     0.000     0.750     0.750     0.000     0.000     0.167     0.083     0.833
+carrier          hybrid-noe       0.167     0.195     0.000     1.000     0.833     0.104     0.063     0.000     0.000     0.833
+carrier          cupid            0.333     0.233     0.000     1.000     0.771     0.125     0.104     0.000     0.000     0.833
+carrier          cupid-e          0.000     0.000     0.000     0.771     0.771     0.000     0.000     0.167     0.063     0.833
+carrier          product-r        0.333     0.200     0.000     0.875     0.708     0.083     0.083     0.000     0.125     0.875
+carrier          product-o        0.000     0.000     0.000     0.854     0.854     0.000     0.000     0.063     0.083     0.938
+adversarial      hybrid           0.000     0.000     0.000     0.833     0.833     0.000     0.000     0.111     0.056     0.889
+adversarial      hybrid-noe       0.397     0.167     0.000     1.000     0.805     0.069     0.126     0.000     0.000     0.889
+adversarial      cupid            0.463     0.180     0.000     1.000     0.773     0.083     0.144     0.000     0.000     0.889
+adversarial      cupid-e          0.000     0.000     0.000     0.847     0.847     0.000     0.000     0.111     0.042     0.889
+adversarial      product-r        0.074     0.065     0.000     0.757     0.720     0.019     0.019     0.035     0.208     0.937
+adversarial      product-o        0.000     0.000     0.000     0.903     0.903     0.000     0.000     0.042     0.056     0.958
+
+Operational adequacy: probability that each dependency in fact failed (the arm's conduct makes the truth)
+profile          arm              funds       fit      flow  temporal
+reliable         hybrid           0.000     0.000     0.000     0.000
+reliable         hybrid-noe       0.000     0.000     0.000     0.000
+reliable         cupid            0.000     0.000     0.000     0.000
+reliable         cupid-e          0.000     0.000     0.000     0.000
+reliable         product-r        0.000     0.000     0.000     0.000
+reliable         product-o        0.000     0.000     0.000     0.000
+stockout         hybrid           0.000     0.000     0.000     0.500
+stockout         hybrid-noe       0.000     0.000     0.000     0.500
+stockout         cupid            0.000     0.000     0.000     0.500
+stockout         cupid-e          0.000     0.000     0.000     0.500
+stockout         product-r        0.000     0.000     0.000     0.500
+stockout         product-o        0.000     0.000     0.000     0.500
+unknown-outcome  hybrid           0.000     0.000     0.000     0.000
+unknown-outcome  hybrid-noe       0.000     0.000     0.000     0.000
+unknown-outcome  cupid            0.000     0.000     0.000     0.000
+unknown-outcome  cupid-e          0.000     0.000     0.000     0.000
+unknown-outcome  product-r        0.333     0.000     0.167     0.500
+unknown-outcome  product-o        0.000     0.000     0.000     0.000
+stale-release    hybrid           0.000     0.000     0.000     0.000
+stale-release    hybrid-noe       0.111     0.000     0.000     0.000
+stale-release    cupid            0.000     0.000     0.000     0.000
+stale-release    cupid-e          0.000     0.000     0.000     0.000
+stale-release    product-r        0.222     0.000     0.000     0.444
+stale-release    product-o        0.000     0.000     0.000     0.000
+carrier          hybrid           0.000     0.000     0.167     0.667
+carrier          hybrid-noe       0.000     0.000     0.167     0.667
+carrier          cupid            0.000     0.000     0.167     0.667
+carrier          cupid-e          0.000     0.000     0.167     0.667
+carrier          product-r        0.000     0.000     0.167     0.667
+carrier          product-o        0.000     0.000     0.167     0.667
+adversarial      hybrid           0.000     0.000     0.111     0.778
+adversarial      hybrid-noe       0.056     0.000     0.111     0.778
+adversarial      cupid            0.000     0.000     0.111     0.778
+adversarial      cupid-e          0.000     0.000     0.111     0.778
+adversarial      product-r        0.389     0.000     0.145     0.895
+adversarial      product-o        0.000     0.000     0.111     0.778
+
+P1 — identical transcripts, different truth (adversarial): ambiguous transcript classes per dependency
+  hybrid      : funds 0, fit 0, flow 44, temporal 44
+  hybrid-noe  : funds 0, fit 0, flow 44, temporal 44
+  cupid       : funds 0, fit 0, flow 44, temporal 44
+  cupid-e     : funds 0, fit 0, flow 44, temporal 44
+  product-r   : funds 3, fit 0, flow 2, temporal 20
+  product-o   : funds 0, fit 0, flow 0, temporal 40
+
+P3 — hybrid → hybrid-noe: (dependency, world) pairs where safety or observation is lost
+  reliable          safety-lost    0   observation-lost 0
+  stockout          safety-lost    0   observation-lost 0
+  unknown-outcome   safety-lost    4   observation-lost 0
+  stale-release     safety-lost    2   observation-lost 0
+  carrier           safety-lost    3   observation-lost 0
+  adversarial       safety-lost 1304   observation-lost 0
+
+The completeness point removed: hybrid with interface (watermark #f)
+  reliable          SFR 0.000  coverage 1.000 (with the point: 1.000)  determinable 1.000 (with: 1.000)
+  stockout          SFR 0.000  coverage 1.000 (with the point: 1.000)  determinable 1.000 (with: 1.000)
+  unknown-outcome   SFR 0.000  coverage 1.000 (with the point: 1.000)  determinable 1.000 (with: 1.000)
+  stale-release     SFR 0.000  coverage 1.000 (with the point: 1.000)  determinable 1.000 (with: 1.000)
+  carrier           SFR 0.000  coverage 0.750 (with the point: 0.750)  determinable 0.833 (with: 0.833)
+  adversarial       SFR 0.000  coverage 0.833 (with the point: 0.833)  determinable 0.889 (with: 0.889)
+
+False claims, adversarial profile: every distinct (arm, dependency, transcript), with one world that produces it
+  hybrid: 0 distinct
+  hybrid-noe: 232 distinct
+    funds claimed Violated, truth Fulfilled, world (world lost over lost lost stale lost late honest recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 5 ((A AUTHORIZED 150))))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 200)))
+      (payment-record) -> (ok (record 5 ((A AUTHORIZED 150))))
+      (carrier-scan) -> (ok (at none))
+    flow claimed Fulfilled, truth Violated, world (world kept none replied lost fresh replied never premature dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok available)
+      (accept A "accept-A") -> (ok ACCEPTED)
+      (capture A "capture-A") -> (ok CAPTURED)
+      (ship A "ship-A") -> (ok IN-TRANSIT)
+      (deliver A "deliver-A") -> (ok (at 10))
+      (payment-record) -> (ok (record 7 ((A CAPTURED 150))))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+    flow claimed Violated, truth Fulfilled, world (world kept none lost lost stale replied never honest recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok available)
+      (accept A "accept-A") -> (ok ACCEPTED)
+      (capture A "capture-A") -> (ok CAPTURED)
+      (ship A "ship-A") -> (ok IN-TRANSIT)
+      (deliver A "deliver-A") -> (failed DEADLINE-BREACH not-delivered)
+      (refund A "refund-A") -> (ok REFUNDED)
+      (payment-record) -> (ok (record 9 ((A CAPTURED 150))))
+      (carrier-scan) -> (ok (at none))
+    funds claimed Violated, truth Fulfilled, world (world lost within replied replied stale lost late honest recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 9 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 14))
+      (payment-record) -> (ok (record 9 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (carrier-scan) -> (ok (at 14))
+    funds claimed Violated, truth Fulfilled, world (world lost within lost lost stale lost late honest dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 5 ((A AUTHORIZED 150))))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 13 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 14))
+      (payment-record) -> (ok (record 13 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+    funds claimed Violated, truth Fulfilled, world (world lost within lost lost stale lost late honest recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 5 ((A AUTHORIZED 150))))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 13 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 14))
+      (payment-record) -> (ok (record 13 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (carrier-scan) -> (ok (at 14))
+  cupid: 296 distinct
+    temporal claimed Fulfilled, truth Violated, world (world lost within replied timeout fresh replied late premature dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 4 ((A AUTHORIZED 150))))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 10))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+      (payment-record) -> (ok (record 15 ((A VOIDED 150) (B CAPTURED 170))))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+    temporal claimed Fulfilled, truth Violated, world (world lost within replied lost unavailable replied late premature recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (failed DEPENDENCY-FAILURE record-unavailable)
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 10))
+      (carrier-scan) -> (ok (at 14))
+      (payment-record) -> (failed DEPENDENCY-FAILURE record-unavailable)
+      (carrier-scan) -> (ok (at 14))
+    temporal claimed Fulfilled, truth Violated, world (world lost within lost timeout stale replied late premature dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 10))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+      (payment-record) -> (ok (record 13 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+    temporal claimed Fulfilled, truth Violated, world (world kept none replied lost stale replied never premature recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok available)
+      (accept A "accept-A") -> (ok ACCEPTED)
+      (capture A "capture-A") -> (ok CAPTURED)
+      (ship A "ship-A") -> (ok IN-TRANSIT)
+      (deliver A "deliver-A") -> (ok (at 10))
+      (carrier-scan) -> (ok (at none))
+      (refund A "refund-A") -> (ok REFUNDED)
+      (payment-record) -> (ok (record 8 ((A CAPTURED 150))))
+      (carrier-scan) -> (ok (at none))
+    funds claimed Violated, truth Fulfilled, world (world lost within replied timeout stale lost never honest dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 1 ()))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 11 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (failed DEADLINE-BREACH not-delivered)
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+      (payment-record) -> (ok (record 11 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (carrier-scan) -> (failed DEPENDENCY-FAILURE scan-unavailable)
+    funds claimed Violated, truth Fulfilled, world (world lost within replied lost stale replied late honest recorded)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "auth-A") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (void A "void-A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 3 ((A AUTHORIZED 150))))
+      (void A "void-A") -> (ok VOIDED)
+      (alternatives) -> (ok (offers (B 170)))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "auth-B") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "accept-B") -> (ok ACCEPTED)
+      (capture B "capture-B") -> (ok CAPTURED)
+      (ship B "ship-B") -> (ok IN-TRANSIT)
+      (deliver B "deliver-B") -> (ok (at 14))
+      (carrier-scan) -> (ok (at 14))
+      (payment-record) -> (ok (record 11 ((A VOIDED 150) (B AUTHORIZED 170))))
+      (carrier-scan) -> (ok (at 14))
+  cupid-e: 0 distinct
+  product-r: 32 distinct
+    temporal claimed Fulfilled, truth Violated, world (world lost within lost timeout fresh replied late premature dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "dmbench-purchase:authorize:A:150.0:operation:1") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 2 ((A AUTHORIZED 150))))
+      (confirm A) -> (ok lost)
+      (alternatives) -> (ok (offers (B 170)))
+      (void A "dmbench-purchase:void:A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 6 ((A AUTHORIZED 150))))
+      (void A "dmbench-purchase:void:A") -> (ok VOIDED)
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "dmbench-purchase:authorize:B:170.0:operation:2") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "dmbench-purchase:commerce:accept_order:operation:1") -> (ok ACCEPTED)
+      (capture B "dmbench-purchase:capture:B:operation:3") -> (ok CAPTURED)
+      (ship B "dmbench-purchase:commerce:ship:operation:2") -> (ok IN-TRANSIT)
+      (deliver B "dmbench-purchase:commerce:deliver:operation:3") -> (ok (at 10))
+      (reconcile) -> (ok (report (record 15 ((A VOIDED 150) (B CAPTURED 170))) (orders (A NONE) (B ACCEPTED)) DELIVERED 1))
+    temporal claimed Fulfilled, truth Violated, world (world lost within lost replied fresh replied late honest dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "dmbench-purchase:authorize:A:150.0:operation:1") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 2 ((A AUTHORIZED 150))))
+      (confirm A) -> (ok lost)
+      (alternatives) -> (ok (offers (B 170)))
+      (void A "dmbench-purchase:void:A") -> (ok VOIDED)
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "dmbench-purchase:authorize:B:170.0:operation:2") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "dmbench-purchase:commerce:accept_order:operation:1") -> (ok ACCEPTED)
+      (capture B "dmbench-purchase:capture:B:operation:3") -> (ok CAPTURED)
+      (ship B "dmbench-purchase:commerce:ship:operation:2") -> (ok IN-TRANSIT)
+      (deliver B "dmbench-purchase:commerce:deliver:operation:3") -> (ok (at 14))
+      (reconcile) -> (ok (report (record 13 ((A VOIDED 150) (B CAPTURED 170))) (orders (A NONE) (B ACCEPTED)) DELIVERED 1))
+    temporal claimed Fulfilled, truth Violated, world (world lost within lost lost fresh lost late honest dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "dmbench-purchase:authorize:A:150.0:operation:1") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 2 ((A AUTHORIZED 150))))
+      (confirm A) -> (ok lost)
+      (alternatives) -> (ok (offers (B 170)))
+      (void A "dmbench-purchase:void:A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 6 ((A VOIDED 150))))
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "dmbench-purchase:authorize:B:170.0:operation:2") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "dmbench-purchase:commerce:accept_order:operation:1") -> (ok ACCEPTED)
+      (capture B "dmbench-purchase:capture:B:operation:3") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 12 ((A VOIDED 150) (B CAPTURED 170))))
+      (ship B "dmbench-purchase:commerce:ship:operation:2") -> (ok IN-TRANSIT)
+      (deliver B "dmbench-purchase:commerce:deliver:operation:3") -> (ok (at 14))
+      (reconcile) -> (ok (report (record 15 ((A VOIDED 150) (B CAPTURED 170))) (orders (A NONE) (B ACCEPTED)) DELIVERED 1))
+    temporal claimed Fulfilled, truth Violated, world (world kept none lost lost fresh replied late premature dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "dmbench-purchase:authorize:A:150.0:operation:1") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 2 ((A AUTHORIZED 150))))
+      (confirm A) -> (ok available)
+      (accept A "dmbench-purchase:commerce:accept_order:operation:1") -> (ok ACCEPTED)
+      (capture A "dmbench-purchase:capture:A:operation:2") -> (ok CAPTURED)
+      (ship A "dmbench-purchase:commerce:ship:operation:2") -> (ok IN-TRANSIT)
+      (deliver A "dmbench-purchase:commerce:deliver:operation:3") -> (ok (at 10))
+      (reconcile) -> (ok (report (record 8 ((A CAPTURED 150))) (orders (A ACCEPTED) (B NONE)) DELIVERED 1))
+    temporal claimed Fulfilled, truth Violated, world (world lost within replied timeout fresh replied late premature dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "dmbench-purchase:authorize:A:150.0:operation:1") -> (ok AUTHORIZED)
+      (confirm A) -> (ok lost)
+      (alternatives) -> (ok (offers (B 170)))
+      (void A "dmbench-purchase:void:A") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 5 ((A AUTHORIZED 150))))
+      (void A "dmbench-purchase:void:A") -> (ok VOIDED)
+      (reserve B) -> (ok reserved)
+      (authorize B 170 "dmbench-purchase:authorize:B:170.0:operation:2") -> (ok AUTHORIZED)
+      (confirm B) -> (ok available)
+      (accept B "dmbench-purchase:commerce:accept_order:operation:1") -> (ok ACCEPTED)
+      (capture B "dmbench-purchase:capture:B:operation:3") -> (ok CAPTURED)
+      (ship B "dmbench-purchase:commerce:ship:operation:2") -> (ok IN-TRANSIT)
+      (deliver B "dmbench-purchase:commerce:deliver:operation:3") -> (ok (at 10))
+      (reconcile) -> (ok (report (record 14 ((A VOIDED 150) (B CAPTURED 170))) (orders (A NONE) (B ACCEPTED)) DELIVERED 1))
+    temporal claimed Fulfilled, truth Violated, world (world kept none replied lost fresh lost late honest dropped)
+      (reserve A) -> (ok reserved)
+      (authorize A 150 "dmbench-purchase:authorize:A:150.0:operation:1") -> (ok AUTHORIZED)
+      (confirm A) -> (ok available)
+      (accept A "dmbench-purchase:commerce:accept_order:operation:1") -> (ok ACCEPTED)
+      (capture A "dmbench-purchase:capture:A:operation:2") -> (failed STATE-UNCERTAIN no-reply)
+      (payment-record) -> (ok (record 5 ((A CAPTURED 150))))
+      (ship A "dmbench-purchase:commerce:ship:operation:2") -> (ok IN-TRANSIT)
+      (deliver A "dmbench-purchase:commerce:deliver:operation:3") -> (ok (at 14))
+      (reconcile) -> (ok (report (record 8 ((A CAPTURED 150))) (orders (A ACCEPTED) (B NONE)) DELIVERED 1))
+  product-o: 0 distinct

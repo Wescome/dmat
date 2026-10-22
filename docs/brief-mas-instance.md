@@ -67,7 +67,8 @@ D1 is taken: the multiagent-systems instance goes first. The phase table in `pla
 - *3.7.2 Model.* The family's world, the reference arms `hybrid` and `hybrid-noe`, the commitment arms `cupid` and `cupid-e`, the external-arm runner, tests (isolation, totality, determinacy by search, the faithful checks of §8 of the family specification).
 - *3.7.3 Product arms.* Two mechanisms in production development enter as arms through the external-arm protocol, each written by an author who does not see the world, the judge or the reference arms: product arm R, a transaction-recovery control plane, running its own purchase use case through a bridge to the family's provider interface; product arm O, an obligation engine, running a purchase program written in its language for the family's provider interface. The product arms' sources and bridge specifications live with the products (decision M5).
 - *3.7.4 Results.* Exact metrics for every arm under every profile; P1 witnesses; P3 between `hybrid` and `hybrid-noe`; the product arms against the reference arms, every false claim traced to its cause; adjudication of specification questions the product authors raise.
-- *3.7.5 Enactment.* The family enters the enactment harness of 3.4 like families 1–8.
+- *3.7.5 Enactment.* In this family the observer is also the actor, so the enactment study's agent is a purchasing agent (`models/harness/agent_arm.py`) that runs as an external arm under the three instruction conditions of 3.4; hypothesis H-E5 (`docs/enactment-analysis-plan.md`), queued with 3.4's runs.
+- *3.7.6 Capture timing (after M6).* If M6 is decided as recommended: sellers may ship against an authorised hold; the world, the reference mechanisms and both product arms' runs are redone, and the adjudication record is extended.
 
 **3.5 Paper.** Produced per the research guideline in the chosen venue's template (decision M4), with every table generated from models v0.4.
 
@@ -88,9 +89,10 @@ D1 is taken: the multiagent-systems instance goes first. The phase table in `pla
 | M2 | Models for the enactment study | (a) one frontier model; (b) two models from different providers; (c) two closed models plus one open-weights model | (c). Enactment failures may be model-specific; an open-weights model makes the runs reproducible by reviewers |
 | M3 | Co-authorship from the commitment community | (a) none; (b) invite a co-author once 3.1–3.2 results exist; (c) invite now | (b). Results first gives a concrete reason to collaborate and a basis for the co-author's contribution (for example, review of the BSPL and Cupid encodings) |
 | M5 | How the product arms appear in public artifacts | (a) named, with their sources in the public models repository; (b) described by kind ("a transaction-recovery control plane", "an obligation engine") in the public repository, sources and bridge specifications in the products' own private repositories, results public; (c) results kept private until the products are announced | (b) until the products are announced, then (a). The research results stand on the published world, judge and transcripts; the products' code is not needed to check them, and publishing it is the products' decision, not the paper's |
+| M6 | Capture timing in the family `purchase` | (a) as written: a seller ships only against captured funds; (b) a seller may ship against an authorised hold, so each mechanism chooses when to capture | (b). Under (a) the family cannot credit a mechanism that captures only after delivery — product arm O's own production program does, and under it a standing charge without delivered goods cannot occur. The choice becomes part of what is compared (`models/specs/purchase-adjudication.md`, A3) |
 | M4 | Template | follows M1: Springer Nature journal template for JAAMAS; ACM `acmart` (AAMAS format) for the workshop paper | As stated; the guideline's content and production standards apply in either template (plan decision D2) |
 
-## 7. Status (2026-10-21)
+## 7. Status (2026-10-22)
 
 | Step | Status |
 | --- | --- |
@@ -98,10 +100,11 @@ D1 is taken: the multiagent-systems instance goes first. The phase table in `pla
 | 3.2 | Done. `cupid-e` in all eight families; no false claim under any profile; `cupid` unsafe in every family; P3 loses no observation; report `models/commitments.txt`. Two documented differences from the hub's hybrid (deadline completion, replacement temporal). |
 | 3.3 | Done. Independent commitment arms `models/independent/<family>-cupid.rkt`; first comparison: no disagreement; one specification error found and amended (C1); residue 9 lists, pinned. `models/specs/commitments/adjudication.md`. |
 | 3.4 | Harness built and verified (`models/specs/enactment.md`; analysis plan `docs/enactment-analysis-plan.md`, fixed before any model run). Faithful agents reproduce every coded run in every family; the full pipeline runs with mock models locally and in the repository's workflow. Model runs are queued in `models/enactment/queued/` (pilot, then one full run per model, decision M2 as recommended) and start when the repository holds the model-access secrets. |
-| 3.7 | In progress (2026-10-22): specification, model, product arms, results (§4, 3.7). |
+| 3.7.1–3.7.5 | Done (2026-10-22). Family `purchase`, its model and the external-arm protocol; product arms R and O run in all 2,592 worlds and stored; report `models/purchase.txt`; adjudication `models/specs/purchase-adjudication.md` (A1 cites, A2 deadline in the start message, A3 capture timing → M6). Arm O: no false claim, coverage above the reference hybrid; arm R: false `temporal` claims on late delivery (no delivery instant at its port; no E1 on the seller's report) and a live hold left after stale records (operational). The purchasing agent is queued with 3.4's runs (H-E5). |
+| 3.7.6 | After M6. |
 | 3.5–3.6 | After 3.4's runs and 3.7: paper (M4), workshop version (M1). |
 
-Models version: v0.4 (`VERSIONS.md`).
+Models version: v0.4.2 (`VERSIONS.md`).
 
 ## 8. Sources for §2
 

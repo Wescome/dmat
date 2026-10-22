@@ -1,4 +1,4 @@
-# DMAT executable models (v0.4)
+# DMAT executable models (v0.4.2)
 
 Executable models for Dependency–Mechanism Adequacy Theory and the DMBench protocol, in Racket with each family's terms as a PLT Redex language. v0.3 extends v0.2 from the one handoff family to DMBench's eight scenario families, each with its own fault profiles; makes the arms' protocols drive conduct where the family is about the mechanism, so truth depends on the arm (operational adequacy); varies timing per run (late conduct, transit delay, reordering, clock skew, stale queued messages, interleaved concurrent events); and adds arms written by independent authors from specifications alone, with a differential check against the reference arms.
 
@@ -9,7 +9,7 @@ v0.4 adds the commitment arms of instance I-3 (multiagent systems): a commitment
 Requires Racket 8.10 or later with `redex-lib` (the standard distribution includes it).
 
 ```
-raco test tests.rkt                          # 43 test cases: families, commitment arms, independent arms, enactment
+raco test tests.rkt                          # 52 test cases: families, commitment arms, independent arms, enactment, family purchase
 racket bench.rkt exact                       # exact expected metrics: every world of each profile, weighted
 racket bench.rkt sampled 100 results.jsonl   # DMBench: 100 seeds per (family, profile), 18,000 runs, one JSON line each
 racket bench.rkt propositions                # P1 witnesses, P2 report, P3 reports
@@ -19,6 +19,9 @@ racket commitments.rkt                       # commitment arms: metrics, the evi
 racket diff.rkt cupid > diff-cupid.txt       # reference commitment arms vs independently authored ones
 racket enact.rkt check                       # enactment adapters: faithful agents reproduce every coded run
 harness/pipeline.sh enactment/requests/test-mock.json OUT   # the enactment pipeline end to end, mock models
+racket purchase.rkt > purchase.txt           # family purchase: every arm with stored runs, operational adequacy, false claims traced
+racket families/purchase/external-cli.rkt try COMMAND [SLOT=VALUE ...]   # run an external arm once, in one world
+racket families/purchase/external-cli.rkt run ARM COMMAND REVISION        # run it in every world and store the runs
 ```
 
 ## Layout
@@ -45,6 +48,8 @@ harness/pipeline.sh enactment/requests/test-mock.json OUT   # the enactment pipe
 | `specs/` | `paradigms.md` (the arm contract and the five paradigms) and one specification per family: what the independent authors worked from; `adjudication.md`, the record of the differential check |
 | `independent/<family>-arms.rkt`, `independent/<family>-cupid.rkt` | Arms and commitment arms written by independent authors from `specs/` and the family's `terms.rkt` only |
 | `diff.rkt` | The differential check between reference and independent arms |
+| `families/purchase/` | The composite family `purchase` (`specs/purchase.md`): providers, reference mechanisms, arms, commitment arms, world; the external-arm runner and its stored runs (`external/<arm>.rktd`: calls, replies, claims; no truth) |
+| `purchase.rkt`, `purchase-agent.rkt`, `harness/agent_arm.py` | The family's report (`purchase.txt`); the purchasing agent of the enactment study and its report |
 | `tests.rkt` | The models' tests |
 | `paper-tables.rkt`, `paper-heat.rkt` | Write the paper's tables and heat-map figure (`../paper/tables`, `../paper/figures/heat.tex`) from the models |
 | `exact.txt`, `sampled.txt`, `propositions.txt`, `diff.txt`, `results.jsonl`, `commitments.txt`, `diff-cupid.txt` | Outputs of the commands above |
@@ -138,6 +143,27 @@ Each family's commitments are declared as queries over the observer's informatio
 ## Enactment (phase 3, step 3.4)
 
 The information protocols can be enacted by language-model agents (`specs/enactment.md`). The world still draws conduct and faults per seed; party agents are briefed with their own conduct and choose the protocol messages they send; their messages pass through the world's channel and system faults into the observer's deliveries; an observer agent judges under three instruction conditions (role only; with commitments; with commitments and E1–E3); the coded `cupid-e` and `cupid` judge the same deliveries. Agents never see the truth. Assembly is checked against the coded models: in every world of every family, agents that send the faithful events produce exactly the coded deliveries and truth. The analysis plan, with hypotheses fixed before any model run, is `../docs/enactment-analysis-plan.md`; runs are requested and their outputs committed through `enactment/`.
+
+## The composite family `purchase` (phase 3, step 3.7)
+
+A ninth family, kept apart from the eight: a control plane buys for a principal from seller A, or from seller B when A cannot supply, against a payment processor and a carrier (`specs/purchase.md`). It combines the patterns the eight families isolate — a hold on the principal's funds (sharing), the principal's limit (fit), a charge matched by delivered goods (flow), delivery by the deadline (temporal) — and its world is interactive: the arm's calls drive the providers, and the world's slots shape the replies (unknown outcomes, lost stock, stale or unavailable payment records, late or missing delivery, a seller's premature report, a dropped carrier scan). The payment record carries a completeness point. Truth depends on what the arm did, so every profile reports operational adequacy beside the claim metrics.
+
+Mechanisms that are not written in the models enter through the external-arm protocol (`specs/external-arms.md`): JSON lines over a pipe, the transcript as the arm's deliveries, stored runs that replay against the world and must be reproduced when the product is present. Two products in development entered this way, each by an author who saw neither the world, the judge nor the reference arms: **product-r**, a transaction-recovery control plane, and **product-o**, an obligation engine. Their sources and bridges are kept with the products. From `purchase.txt` (adversarial profile):
+
+| arm | SFR | coverage | determinable | funds failed | flow failed | temporal failed |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| hybrid | 0 | 0.833 | 0.889 | 0 | 0.111 | 0.778 |
+| hybrid-noe | 0.397 | 1.000 | 0.889 | 0.056 | 0.111 | 0.778 |
+| cupid | 0.463 | 1.000 | 0.889 | 0 | 0.111 | 0.778 |
+| cupid-e | 0 | 0.847 | 0.889 | 0 | 0.111 | 0.778 |
+| product-r | 0.074 | 0.757 | 0.937 | 0.389 | 0.145 | 0.895 |
+| product-o | 0 | 0.903 | 0.958 | 0 | 0.111 | 0.778 |
+
+- **The evidential rules separate the products as they separate the paradigms.** product-o reads the payment record only up to its completeness point and discharges delivery only on the carrier's record: no false claim in any world. product-r's false claims are all `temporal` Fulfilled on late delivery — its delivery port has no place for the delivery instant, and it takes the seller's report as delivery.
+- **Operational and epistemic adequacy separate.** After an unknown outcome and a stale record, product-r claims nothing it cannot support but escalates with the principal's hold still live; `hybrid-noe`, at the same faults, acts on the stale record and claims falsely.
+- **An external arm decided more than the reference, soundly.** product-o reads the shipment record when the carrier's scan is unavailable, which the reference hybrid does not.
+
+`specs/purchase-adjudication.md` traces every false claim and operational failure and decides the specification questions the authors raised; one, capture timing, is open as decision M6 (`../docs/brief-mas-instance.md`).
 
 ## Independent authorship
 

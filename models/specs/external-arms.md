@@ -4,13 +4,16 @@ An external arm is a mechanism that is not written in the models: a product, or 
 
 ## 1. Process protocol
 
-The runner starts the arm's command once per world and exchanges JSON lines over the arm's standard input and output (one JSON object per line, UTF-8). Standard error is the arm's own log and is kept with the run.
+The runner starts the arm's command once per world and exchanges JSON lines over the arm's standard input and output (one JSON object per line, UTF-8). Standard error is the arm's own log; the sandbox shows it, and it is not stored (§3).
 
 1. Runner → arm, once:
 
        {"type": "start", "family": "purchase", "run": RUN-ID,
-        "principal": {"cap": CAP}, "primary": {"seller": "A", "price": PRICE-A},
+        "principal": {"cap": CAP, "deadline": DEADLINE},
+        "primary": {"seller": "A", "price": PRICE-A},
         "interface": {"watermark": true}}
+
+   `deadline` is the instant by which the principal requires delivery (`purchase.md` §6); instants are the world's (`delivered_at` in replies). Added 2026-10-22 (`purchase-adjudication.md`, A2); arms written before it read DEADLINE from `purchase.md` §6.
 
 2. Arm → runner, any number of times, one at a time:
 
@@ -31,7 +34,7 @@ The runner starts the arm's command once per world and exchanges JSON lines over
         "claims": [{"dependency": D, "judgment": J, "cites": [N, ...]}, ...],
         "result": ANY}
 
-   One claim per dependency of the family, `J` ∈ {`Fulfilled`, `Violated`, `Indeterminate`}, cites as call sequence numbers. `result` is the mechanism's own account of its ending (free form); it is stored with the run and not judged.
+   One claim per dependency of the family, `J` ∈ {`Fulfilled`, `Violated`, `Indeterminate`}, cites as call sequence numbers. `result` is the mechanism's own account of its ending (free form); it is shown by the sandbox and not judged, and it is not stored, since it describes the product's internals.
 
 The runner stops an arm that exceeds `CALL-LIMIT` calls, sends malformed JSON, names an unknown operation, or does not answer within 60 seconds per message; such a run ends with every claim `Indeterminate` and is reported with its cause.
 
@@ -43,7 +46,7 @@ An external arm's claims are what the mechanism itself establishes at its end, s
 
 The transcript is the arm's deliveries (`purchase.md` §8). A mechanism is deterministic given its replies, so its claims are a function of its transcript. The runner checks this: two worlds that give the same transcript must give the same claims, or the arm is reported nondeterministic.
 
-Runs are cached in `families/purchase/external/<arm>.rktd`: for every world of every profile, the transcript, the claims and the `result`, with the arm's source revision. The judge reads the cache, so the benchmark can be scored without the product present. When the product is present (`DMBENCH_ARM_<NAME>` names its command), the runner reruns it and the tests require the cache to be reproduced exactly.
+Runs are cached in `families/purchase/external/<arm>.rktd`: for every world of every profile, the transcript, the claims and the run's status, with the arm's source revision. Nothing else the arm produced (its `result`, its diagnostics) and nothing from the world's truth is stored. The judge reads the cache, so the benchmark can be scored without the product present. When the product is present (`DMBENCH_ARM_<NAME>` names its command, for example `DMBENCH_ARM_PRODUCT_R`), the tests rerun it on a fixed sample of the stored worlds (every 27th, in sorted order) and require the same calls, replies and claims; `external-cli.rkt run` reruns every world.
 
 ## 4. Independence
 

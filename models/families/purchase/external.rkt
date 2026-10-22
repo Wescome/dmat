@@ -9,7 +9,7 @@
 ;; the stored one, so a stale cache cannot pass for a run.
 
 (require racket/list racket/string racket/port json "terms.rkt" "providers.rkt" "external-cache.rkt")
-(provide run-external-arm! run-one replay-external call->json reply->json json->call json->claims START-JSON)
+(provide run-external-arm! run-one strip-run replay-external call->json reply->json json->call json->claims START-JSON)
 
 ;; ------------------------------------------------------------------ JSON forms
 
@@ -83,7 +83,7 @@
 
 (define START-JSON
   (hasheq 'type "start" 'family "purchase"
-          'principal (hasheq 'cap CAP) 'primary (hasheq 'seller "A" 'price PRICE-A)
+          'principal (hasheq 'cap CAP 'deadline DEADLINE) 'primary (hasheq 'seller "A" 'price PRICE-A)
           'interface (hasheq 'watermark #t)))
 
 ;; ------------------------------------------------------------------ running an arm
@@ -132,13 +132,17 @@
           (loop (add1 n))])]
       [else (finish 'malformed (all-indeterminate) "")])))
 
+;; what a stored run keeps: calls, replies, claims, status
+(define (strip-run r) (for/fold ([r r]) ([k '(truth stderr result)]) (hash-remove r k)))
+
 ;; run `command` in every world; store the runs in the arm's cache
 (define (run-external-arm! arm command worlds #:revision [revision #f] #:progress [progress void] #:save? [save? #t])
   (define runs
     (for/hash ([w worlds] [i (in-naturals)])
       (progress i w)
-      ;; the cache keeps what the arm did and claimed: no truth, and not the arm's own diagnostics
-      (values (format "~s" w) (hash-remove (hash-remove (run-one command w (format "~a-~a" arm i)) 'truth) 'stderr))))
+      ;; the cache keeps what the arm did and claimed: no truth, and not the arm's own
+      ;; diagnostics or result, which describe the product's internals (external-arms.md §3)
+      (values (format "~s" w) (strip-run (run-one command w (format "~a-~a" arm i))))))
   (when save? (save-arm-cache! arm (hasheq 'arm arm 'revision revision 'runs runs)))
   runs)
 
