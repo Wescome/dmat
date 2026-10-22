@@ -9,8 +9,9 @@
 
 (define-runtime-path DIR "external")
 
-;; the external arms of the family, in reporting order
-(define EXTERNAL-ARMS '(product-r product-o))
+;; the external arms of the family, in reporting order: each product as first measured,
+;; then its revision after adjudication (purchase-adjudication.md §7)
+(define EXTERNAL-ARMS '(product-r product-o product-r2 product-o2))
 
 (define (path-of arm) (build-path DIR (format "~a.rktd" arm)))
 

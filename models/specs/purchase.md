@@ -55,7 +55,7 @@ An arm makes **calls**. Calls are numbered 1, 2, … in the order the arm makes 
 | `capture` | seller, key | If the seller's hold is `AUTHORIZED` it becomes `CAPTURED`; reply `(ok CAPTURED)`. If already `CAPTURED`, no effect, `(ok CAPTURED)`. Otherwise `(failed BUSINESS_REJECTION not-authorized)` |
 | `refund` | seller, key | If the seller's hold is `CAPTURED` it becomes `REFUNDED`. Reply `(ok S)` with the state after the call |
 | `cancel` | seller, key | If the seller's order is `ACCEPTED` and nothing has shipped, the order becomes `CANCELLED`; reply `(ok CANCELLED)`. Otherwise `(failed BUSINESS_REJECTION not-cancellable)` |
-| `ship` | seller, key | If the seller's order is `ACCEPTED`, the seller's hold is `CAPTURED` and nothing has shipped: the shipment, from this seller, becomes `IN_TRANSIT`; reply `(ok IN_TRANSIT)`. Otherwise `(failed BUSINESS_REJECTION not-shippable)` |
+| `ship` | seller, key | If the seller's order is `ACCEPTED`, the seller's hold is `AUTHORIZED` or `CAPTURED` and nothing has shipped: the shipment, from this seller, becomes `IN_TRANSIT`; reply `(ok IN_TRANSIT)`. Otherwise `(failed BUSINESS_REJECTION not-shippable)` |
 | `deliver` | seller, key | If the shipment is `IN_TRANSIT` from this seller, the carrier delivers (§4, `deliver` slot): reply `(ok delivered-at)`, the seller's report of the delivery instant. Otherwise `(failed BUSINESS_REJECTION nothing-in-transit)` |
 | `payment-record` | — | The processor's record of every hold, `((seller state amount) …)`, as of its **completeness point** (§5) |
 | `order-state` | seller | `(ok S)`, the seller's order state: `NONE`, `ACCEPTED`, `CANCELLED`. A read |
@@ -122,6 +122,8 @@ An arm's deliveries are its **transcript**: for each call, in order, `(msg REPLY
 | cupid | `(hasheq 'mechanism 'hybrid)` | `(hasheq 'watermark #t)` |
 | cupid-e | `(hasheq 'mechanism 'hybrid)` | `(hasheq 'watermark #t)` |
 | external arms | `(hasheq 'mechanism 'external 'arm NAME)` | `(hasheq 'watermark #t)` |
+
+Capture timing is each mechanism's choice since M6 (2026-10-22): a seller ships against an authorised or a captured hold. `hybrid` and `hybrid-noe` capture before shipment, as before M6; their runs are unchanged by it.
 
 `hybrid` acts on established state only: after an unknown outcome it reads the payment record and accepts what the record shows only when the record's completeness point covers the call; it resends with the same key otherwise; it releases a hold before it reroutes, and reroutes only once the release is established; it captures only within `CAP`; it refunds a charge whose goods were not delivered by the deadline. Its claims follow E1–E3: a seller's report of delivery is not evidence of delivery (the carrier's scan is); a record shows an absence only up to its completeness point. `hybrid-noe` is the same mechanism without the evidential layer: it reads any record as current and any report as fact. `cupid` and `cupid-e` judge `hybrid`'s transcript with the commitments of `commitments/purchase.md`. The family module (`families/purchase/arms.rkt`) states each mechanism's rules in full.
 

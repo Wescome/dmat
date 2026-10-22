@@ -140,7 +140,8 @@
            [else '(failed BUSINESS-REJECTION not-cancellable)])]
     [(ship)
      (define s (cadr c))
-     (cond [(and (eq? (hash-ref (providers-orders p) s 'NONE) 'ACCEPTED) (eq? (hold-state p s) 'CAPTURED)
+     ;; M6 (2026-10-22): an authorised hold suffices, so when to capture is the mechanism's choice
+     (cond [(and (eq? (hash-ref (providers-orders p) s 'NONE) 'ACCEPTED) (memq (hold-state p s) '(AUTHORIZED CAPTURED))
                  (eq? (providers-ship-state p) 'NONE))
             (set-providers-ship-state! p 'IN-TRANSIT) (set-providers-ship-from! p s) '(ok IN-TRANSIT)]
            [else '(failed BUSINESS-REJECTION not-shippable)])]

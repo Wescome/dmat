@@ -89,7 +89,7 @@
 ;; its own arm set — the reference mechanisms, the commitment arms judging the
 ;; hybrid's transcript, and the external (product) arms. Kept apart from the eight
 ;; families so that every result of the hub is unchanged.
-(define PURCHASE-ARM-NAMES '(hybrid hybrid-noe cupid cupid-e product-r product-o))
+(define PURCHASE-ARM-NAMES '(hybrid hybrid-noe cupid cupid-e product-r product-o product-r2 product-o2))
 (define COMPOSITE (list (cons purchase (append purchase-arms purchase-cupid-arms purchase-external-arms))))
 (define (composite-arms) (cdr (car COMPOSITE)))
 (define (composite-arm name)
