@@ -101,10 +101,10 @@ D1 is taken: the multiagent-systems instance goes first. The phase table in `pla
 | 3.3 | Done. Independent commitment arms `models/independent/<family>-cupid.rkt`; first comparison: no disagreement; one specification error found and amended (C1); residue 9 lists, pinned. `models/specs/commitments/adjudication.md`. |
 | 3.4 | Harness built and verified (`models/specs/enactment.md`; analysis plan `docs/enactment-analysis-plan.md`, fixed before any model run). Faithful agents reproduce every coded run in every family; the full pipeline runs with mock models locally and in the repository's workflow. Model runs are queued in `models/enactment/queued/` (pilot, then one full run per model, decision M2 as recommended) and start when the repository holds the model-access secrets. |
 | 3.7.1–3.7.5 | Done (2026-10-22). Family `purchase`, its model and the external-arm protocol; product arms R and O run in all 2,592 worlds and stored; report `models/purchase.txt`; adjudication `models/specs/purchase-adjudication.md` (A1 cites, A2 deadline in the start message, A3 capture timing → M6). Arm O: no false claim, coverage above the reference hybrid; arm R: false `temporal` claims on late delivery (no delivery instant at its port; no E1 on the seller's report) and a live hold left after stale records (operational). The purchasing agent is queued with 3.4's runs (H-E5). |
-| 3.7.6 | In progress (2026-10-22): M6 applied to the family; product revisions being made on the products' branches. |
+| 3.7.6 | Done (2026-10-22). M6 applied; run horizon added (A4). `product-r2` (revision after adjudication): no false claim, no live hold, failure rates equal to the reference hybrid's. `product-o2` (capture after delivery): no false claim, no standing charge without delivery, coverage 0.958. Adjudication record §7. |
 | 3.5–3.6 | After 3.4's runs and 3.7: paper (M4), workshop version (M1). |
 
-Models version: v0.4.2 (`VERSIONS.md`).
+Models version: v0.4.3 (`VERSIONS.md`).
 
 ## 8. Sources for §2
 

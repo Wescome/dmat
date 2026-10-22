@@ -23,7 +23,7 @@
       (positive? (hash-count (hash-ref (arm-cache (hash-ref (arm-protocol a) 'arm)) 'runs)))))
 (define ARMS (filter present? (composite-arms)))
 
-(printf "Family purchase (models v0.4.2): exact expected metrics, every world of each profile's support\n")
+(printf "Family purchase (models v0.4.3): exact expected metrics, every world of each profile's support\n")
 (printf "Arms with stored runs: ~a; external arms without stored runs are left out.\n"
         (map arm-name ARMS))
 (for ([a (composite-arms)] #:when (eq? (hash-ref (arm-protocol a) 'mechanism) 'external))

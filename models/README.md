@@ -1,4 +1,4 @@
-# DMAT executable models (v0.4.2)
+# DMAT executable models (v0.4.3)
 
 Executable models for Dependency–Mechanism Adequacy Theory and the DMBench protocol, in Racket with each family's terms as a PLT Redex language. v0.3 extends v0.2 from the one handoff family to DMBench's eight scenario families, each with its own fault profiles; makes the arms' protocols drive conduct where the family is about the mechanism, so truth depends on the arm (operational adequacy); varies timing per run (late conduct, transit delay, reordering, clock skew, stale queued messages, interleaved concurrent events); and adds arms written by independent authors from specifications alone, with a differential check against the reference arms.
 
@@ -158,12 +158,15 @@ Mechanisms that are not written in the models enter through the external-arm pro
 | cupid-e | 0 | 0.847 | 0.889 | 0 | 0.111 | 0.778 |
 | product-r | 0.074 | 0.757 | 0.937 | 0.389 | 0.145 | 0.895 |
 | product-o | 0 | 0.903 | 0.958 | 0 | 0.111 | 0.778 |
+| product-r2 | 0 | 0.796 | 0.958 | 0 | 0.111 | 0.778 |
+| product-o2 | 0 | 0.958 | 0.958 | 0 | 0 | 0.778 |
 
 - **The evidential rules separate the products as they separate the paradigms.** product-o reads the payment record only up to its completeness point and discharges delivery only on the carrier's record: no false claim in any world. product-r's false claims are all `temporal` Fulfilled on late delivery — its delivery port has no place for the delivery instant, and it takes the seller's report as delivery.
 - **Operational and epistemic adequacy separate.** After an unknown outcome and a stale record, product-r claims nothing it cannot support but escalates with the principal's hold still live; `hybrid-noe`, at the same faults, acts on the stale record and claims falsely.
 - **An external arm decided more than the reference, soundly.** product-o reads the shipment record when the carrier's scan is unavailable, which the reference hybrid does not.
+- **The traced causes were the fixes.** Each product was revised after adjudication for exactly the causes traced to it and entered as a second arm (`product-r2`, `product-o2`; step 3.7.6). product-r2 — the delivery instant and deadline, delivery established by the carrier's record, a resend under the same idempotency key after an unknown outcome — makes no false claim and leaves no hold live. product-o2 captures only after delivery, which decision M6 now allows: no charge ever stands without delivered goods.
 
-`specs/purchase-adjudication.md` traces every false claim and operational failure and decides the specification questions the authors raised; one, capture timing, is open as decision M6 (`../docs/brief-mas-instance.md`).
+`specs/purchase-adjudication.md` traces every false claim and operational failure and decides the specification questions the authors raised; capture timing was decided as decision M6 (sellers ship against an authorised hold), and the run's horizon was added to the start message.
 
 ## Independent authorship
 
