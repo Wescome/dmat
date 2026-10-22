@@ -5,7 +5,7 @@
 ;; received, its claims and its own result. No truth.
 
 (require racket/runtime-path racket/file racket/list)
-(provide arm-cache load-arm-cache save-arm-cache! cached-run transcript->claims-table EXTERNAL-ARMS)
+(provide (rename-out [DIR cache-dir]) arm-cache load-arm-cache save-arm-cache! cached-run transcript->claims-table EXTERNAL-ARMS)
 
 (define-runtime-path DIR "external")
 

@@ -137,7 +137,8 @@
   (define runs
     (for/hash ([w worlds] [i (in-naturals)])
       (progress i w)
-      (values (format "~s" w) (hash-remove (run-one command w (format "~a-~a" arm i)) 'truth))))
+      ;; the cache keeps what the arm did and claimed: no truth, and not the arm's own diagnostics
+      (values (format "~s" w) (hash-remove (hash-remove (run-one command w (format "~a-~a" arm i)) 'truth) 'stderr))))
   (when save? (save-arm-cache! arm (hasheq 'arm arm 'revision revision 'runs runs)))
   runs)
 
