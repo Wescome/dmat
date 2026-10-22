@@ -26,9 +26,14 @@
          (rename-in (only-in "families/deadline/cupid.rkt" cupid-arms) [cupid-arms deadline-cupid-arms])
          (rename-in (only-in "families/external/cupid.rkt" cupid-arms) [cupid-arms external-cupid-arms])
          (rename-in (only-in "families/composition/cupid.rkt" cupid-arms) [cupid-arms composition-cupid-arms])
-         (rename-in (only-in "families/replacement/cupid.rkt" cupid-arms) [cupid-arms replacement-cupid-arms]))
+         (rename-in (only-in "families/replacement/cupid.rkt" cupid-arms) [cupid-arms replacement-cupid-arms])
+         (only-in "families/purchase/world.rkt" purchase)
+         (rename-in (only-in "families/purchase/arms.rkt" arms external-arms)
+                    [arms purchase-arms] [external-arms purchase-external-arms])
+         (rename-in (only-in "families/purchase/cupid.rkt" cupid-arms) [cupid-arms purchase-cupid-arms]))
 (provide FAMILIES family-names family-by-name arms-of arm-of ARM-NAMES
-         CUPID-NAMES cupid-arms-of all-arms-of)
+         CUPID-NAMES cupid-arms-of all-arms-of
+         COMPOSITE composite-arms composite-arm PURCHASE-ARM-NAMES)
 
 ;; DMBench's eight scenario families, in benchmark order
 (define FAMILIES
@@ -79,3 +84,15 @@
   (for ([a (cupid-arms-of n)])
     (unless (eq? (arm-family a) n)
       (error 'families "~a: arm ~a is written for ~a" n (arm-name a) (arm-family a)))))
+
+;; The composite family (phase 3, step 3.7; specs/purchase.md): interactive, with
+;; its own arm set — the reference mechanisms, the commitment arms judging the
+;; hybrid's transcript, and the external (product) arms. Kept apart from the eight
+;; families so that every result of the hub is unchanged.
+(define PURCHASE-ARM-NAMES '(hybrid hybrid-noe cupid cupid-e product-r product-o))
+(define COMPOSITE (list (cons purchase (append purchase-arms purchase-cupid-arms purchase-external-arms))))
+(define (composite-arms) (cdr (car COMPOSITE)))
+(define (composite-arm name)
+  (or (findf (λ (a) (eq? (arm-name a) name)) (composite-arms)) (error 'families "purchase has no arm ~a" name)))
+(unless (equal? (map arm-name (composite-arms)) PURCHASE-ARM-NAMES)
+  (error 'families "purchase: arms ~s" (map arm-name (composite-arms))))

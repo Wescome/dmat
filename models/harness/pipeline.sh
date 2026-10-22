@@ -28,4 +28,21 @@ for M in $MODELS; do
   cat "$OUT/observe-$TAG.jsonl" >> "$OUT/observe.jsonl"; cat "$OUT/claims-$TAG.jsonl" >> "$OUT/claims.jsonl"
 done
 racket enact.rkt score "$OUT/observe.jsonl" "$OUT/claims.jsonl" "$OUT/results.jsonl" > "$OUT/enactment.txt" || { status failed "score"; exit 1; }
+
+# The purchasing agent in the family `purchase` (specs/enactment.md §11), when the request asks for it
+PA_PROFILES=$(python3 -c "import json; r=json.load(open('$REQ')).get('purchase_agent'); print(r.get('profiles','reliable,adversarial') if r else '')")
+if [ -n "$PA_PROFILES" ]; then
+  PA_SEEDS=$(python3 -c "import json; print(json.load(open('$REQ'))['purchase_agent'].get('seeds', 50))")
+  PA_CONDS=$(python3 -c "import json; print(' '.join(json.load(open('$REQ'))['purchase_agent'].get('conditions', 'role,commitments,evidential').split(',')))")
+  : > "$OUT/purchase-agent.jsonl"
+  for M in $MODELS; do
+    for C in $PA_CONDS; do
+      for R in $(seq 0 $((REPS - 1))); do
+        racket purchase-agent.rkt sample "python3 harness/agent_arm.py --model '$M' --condition $C --log '$OUT/purchase-agent-log.jsonl'" \
+          "$M/$C" "$PA_PROFILES" "$PA_SEEDS" "$R" "$OUT/purchase-agent.jsonl" || { status failed "purchase agent $M $C"; exit 1; }
+      done
+    done
+  done
+  racket purchase-agent.rkt report "$OUT/purchase-agent.jsonl" > "$OUT/purchase-agent.txt" || { status failed "purchase agent report"; exit 1; }
+fi
 status done ""

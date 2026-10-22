@@ -1,2 +1,15 @@
-{"id": "pilot", "families": "handoff", "profiles": "reliable,adversarial", "seeds": 5, "reps": 1,
- "models": ["anthropic:claude-opus-5-5"]}
+{
+ "id": "pilot",
+ "families": "handoff",
+ "profiles": "reliable,adversarial",
+ "seeds": 5,
+ "reps": 1,
+ "models": [
+  "anthropic:claude-opus-5-5"
+ ],
+ "purchase_agent": {
+  "profiles": "stale-release",
+  "seeds": 3,
+  "conditions": "role,evidential"
+ }
+}

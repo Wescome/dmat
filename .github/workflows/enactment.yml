@@ -63,7 +63,7 @@ jobs:
             models/harness/pipeline.sh "$REQ" "$OUT" 2> "$OUT.log" || true
             mkdir -p "$OUT"; mv "$OUT.log" "$OUT/pipeline.log"
             # call logs compressed; the report, results and status stay plain
-            for f in "$OUT"/plan.jsonl "$OUT"/parties-*.jsonl "$OUT"/observe*.jsonl "$OUT"/claims*.jsonl; do
+            for f in "$OUT"/plan.jsonl "$OUT"/parties-*.jsonl "$OUT"/observe*.jsonl "$OUT"/claims*.jsonl "$OUT"/purchase-agent*.jsonl; do
               if [ -f "$f" ]; then gzip -9 "$f"; fi
             done
           done

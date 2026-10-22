@@ -489,3 +489,86 @@
   (check-= (binom-two-sided 8 1) 0.0390625 1e-12)
   (check-= (binom-two-sided 0 0) 1 0)
   (check-equal? (holm (list 0.01 0.04 0.03)) (list 0.03 0.06 0.06)))
+
+;; ------------------------------------------------------------------ the composite family (phase 3, step 3.7)
+
+(require (only-in "families.rkt" COMPOSITE composite-arms composite-arm PURCHASE-ARM-NAMES)
+         (only-in "families/purchase/terms.rkt" PURCHASE CALL-LIMIT)
+         (only-in "families/purchase/world.rkt" run-transcript)
+         (only-in "families/purchase/external.rkt" json->call call->json reply->json json->claims)
+         (only-in "families/purchase/external-cache.rkt" arm-cache EXTERNAL-ARMS))
+
+(define PF (car (car COMPOSITE)))
+(define (purchase-ref-arms) (filter (λ (a) (not (eq? (hash-ref (arm-protocol a) 'mechanism) 'external))) (composite-arms)))
+(define (stored? name) (positive? (hash-count (hash-ref (arm-cache name) 'runs))))
+(define (purchase-arms-present)
+  (filter (λ (a) (or (not (eq? (hash-ref (arm-protocol a) 'mechanism) 'external)) (stored? (arm-name a)))) (composite-arms)))
+
+(test-case "purchase: the family's arms are registered apart from the eight families"
+  (check-equal? (map arm-name (composite-arms)) PURCHASE-ARM-NAMES)
+  (check-false (memq 'purchase family-names)))
+
+(test-case "purchase: every arm present ends within the call limit in every world, with well-formed deliveries and claims"
+  (for* ([p (profile-names PF)] [w (support PF p)] [a (purchase-arms-present)])
+    (define ds (deliveries-of PF a w))
+    (check-true (<= (length ds) CALL-LIMIT))
+    (check-true ((family-ds-term? PF) ds) (format "~a ~s" (arm-name a) w))
+    (check-true (claims-term? ((arm-judge a) ds)) (format "~a ~s" (arm-name a) w))))
+
+(test-case "purchase: the reference mechanisms see no world and the judges see no providers"
+  (define fam (build-path here "families" "purchase"))
+  (define (closure f) (for/list ([p (import-closure (build-path fam f))]) p))
+  (define (allowed . fs) (list->set (map (λ (f) (simplify-path f)) fs)))
+  (define core (list (build-path here "core/arm.rkt") (build-path here "core/observe.rkt")
+                     (build-path here "core/grammar.rkt") (build-path here "core/cupid.rkt")))
+  (define base (append core (list (build-path fam "terms.rkt") (build-path fam "external-cache.rkt"))))
+  (for ([f '("mechanisms.rkt" "arms.rkt" "cupid.rkt" "external-cache.rkt")])
+    (define ok (apply allowed (build-path fam f) base))
+    (check-equal? (filter (λ (p) (not (set-member? ok p))) (closure f)) '() f)))
+
+(test-case "purchase: judge classifications agree with a brute-force recomputation"
+  (for* ([p '(stockout unknown-outcome stale-release carrier)] [a (purchase-arms-present)])
+    (define sup (support PF p))
+    (for ([w sup])
+      (define r (classify-run PF a p w))
+      (define ds (hash-ref r 'deliveries))
+      (for ([d (hash-ref r 'deps)])
+        (define dep (hash-ref d 'dep))
+        (define same (filter (λ (w2) (equal? (deliveries-of PF a w2) ds)) sup))
+        (define det (= 1 (length (remove-duplicates (map (λ (w2) (truth-of PF a w2 dep)) same)))))
+        (check-equal? (hash-ref d 'determined) det)
+        (check-equal? (hash-ref d 'truth) (truth-of PF a w dep))))))
+
+(test-case "purchase: hybrid and cupid-e make no false claim under any profile; their ablations are unsafe"
+  (define (false-in a p) (for*/sum ([w (support PF p)] [d (hash-ref (classify-run PF a p w) 'deps)]) (if (eq? (hash-ref d 'class) 'false) 1 0)))
+  (for ([p (profile-names PF)])
+    (check-equal? (false-in (composite-arm 'hybrid) p) 0 (format "hybrid ~a" p))
+    (check-equal? (false-in (composite-arm 'cupid-e) p) 0 (format "cupid-e ~a" p)))
+  (for ([n '(hybrid-noe cupid)])
+    (check-true (for/or ([p (profile-names PF)]) (> (false-in (composite-arm n) p) 0)) (format "~a" n))))
+
+(test-case "purchase: a stale record read as current leaves two holds on the principal's funds (the ablation), not the hybrid"
+  (define w '(world lost within replied timeout stale replied on-time honest recorded))
+  (check-equal? (truth-of PF (composite-arm 'hybrid-noe) w 'funds) 'Violated)
+  (check-equal? (truth-of PF (composite-arm 'hybrid) w 'funds) 'Fulfilled))
+
+(test-case "purchase: the external-arm protocol's JSON forms"
+  (check-equal? (json->call (hasheq 'op "authorize" 'args (hasheq 'seller "B" 'amount 170 'key "k"))) '(authorize B 170 "k"))
+  (check-equal? (json->call (hasheq 'op "authorize" 'args (hasheq 'seller "C" 'amount 170 'key "k"))) '(invalid))
+  (check-equal? (json->call (hasheq 'op "authorize" 'args (hasheq 'seller "A" 'amount 1.5 'key "k"))) '(invalid))
+  (check-equal? (json->call (hasheq 'op "fly" 'args (hasheq))) '(invalid))
+  (for ([c '((reserve A) (alternatives) (void B "v") (payment-record) (order-state A) (reconcile))])
+    (check-equal? (json->call (call->json c)) c))
+  (check-equal? (hash-ref (reply->json 3 '(failed STATE-UNCERTAIN no-reply)) 'failure) "STATE_UNCERTAIN")
+  (check-equal? (hash-ref (reply->json 3 '(ok IN-TRANSIT)) 'value) "IN_TRANSIT")
+  (check-equal? (json->claims (list (hasheq 'dependency "funds" 'judgment "Fulfilled" 'cites '(2))) 3) #f)
+  (check-equal? (json->claims (for/list ([d '("funds" "fit" "flow" "temporal")]) (hasheq 'dependency d 'judgment "Violated" 'cites '(3))) 3)
+                (for/list ([d '(funds fit flow temporal)]) (list 'claim d 'Violated '(2))))
+  (check-false (json->claims (for/list ([d '("funds" "fit" "flow" "temporal")]) (hasheq 'dependency d 'judgment "Violated" 'cites '(4))) 3)))
+
+(test-case "purchase: every stored external run replays against the world exactly"
+  (for* ([name EXTERNAL-ARMS] #:when (stored? name) [(ws run) (hash-ref (arm-cache name) 'runs)])
+    (define w (read (open-input-string ws)))
+    (define-values (tr truth) (run-transcript (hasheq 'mechanism 'external 'arm name) (hasheq 'watermark #t) w))
+    (check-equal? (map car tr) (hash-ref run 'calls))
+    (check-equal? (map cadr tr) (hash-ref run 'replies))))

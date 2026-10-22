@@ -106,3 +106,9 @@ Each run request is a JSON file (`models/enactment/requests/<id>.json`: families
 
 
 Profiles: each family's `reliable` and `adversarial` profiles. Seeds: 50 per profile. Repetitions: 3 per seed and model. Models per decision M2. In each run one model plays every role. Every model call is logged with the prompt, the response, the resolved model identifier, the provider, the sampling settings and the time. The mock models `mock-faithful` (faithful events; observer echoes `cupid-e`) and `mock-noisy` (seeded omissions and fabrications; observer echoes `cupid`) exercise the pipeline without model calls.
+
+## 11. The purchasing agent (family `purchase`)
+
+In the interactive family `purchase` (`purchase.md`) the observer is also the actor: the control plane buys for the principal by calling the providers. There the agent's role is that one: a **purchasing agent** (`harness/agent_arm.py`) runs as an external arm (`external-arms.md`), makes one provider call per model step, and ends by stating its claims about the four dependencies. The providers are the family's world, unchanged; their replies, faults and truth are the world's. The three instruction conditions of §7 apply to the agent's instructions (role; with the purchase's commitments; with commitments and E1–E3).
+
+Runs are sampled: for each requested profile and seed the world is the keyed draw of `core/family.rkt`, and each (model, condition, seed) is repeated. Determinacy is not defined for an agent arm, so its claims are classified correct, false or abstained against the truth (`purchase-agent.rkt`), and the report gives, per (model and condition, profile), SFR, coverage, the false-claim share and the share of runs in which some dependency in fact failed (the agent's conduct makes the truth), with the spread across repetitions. A request asks for these runs with `"purchase_agent": {"profiles", "seeds", "conditions"}`.
