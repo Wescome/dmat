@@ -96,6 +96,8 @@ When the interface feature `'watermark` is `#t`, the reply carries `c`: `(ok (re
 
 `CAP` 180, `PRICE-A` 150, `PRICE-B-WITHIN` 170, `PRICE-B-OVER` 200, `T-ON-TIME` 10, `DEADLINE` 12, `T-LATE` 14, `CALL-LIMIT` 60.
 
+**The run's horizon** is `T-LATE`: the run spans the instants up to `T-LATE`, and the dependencies are evaluated when the arm ends, at the horizon. Calls carry no instant of their own; an arm whose rules are triggered by time (an obligation falling due at `DEADLINE`) may treat the deadline as passed once it has nothing further to do before the horizon, and act on it before it ends. The start message carries the horizon (`external-arms.md` §1). Added 2026-10-22 (`purchase-adjudication.md`, A4).
+
 ## 7. Profiles
 
 | Profile | Slots varied (others at their first value) |

@@ -82,7 +82,7 @@
 (define (all-indeterminate) (for/list ([d DEPS]) (list 'claim d 'Indeterminate '())))
 
 (define START-JSON
-  (hasheq 'type "start" 'family "purchase"
+  (hasheq 'type "start" 'family "purchase" 'horizon T-LATE
           'principal (hasheq 'cap CAP 'deadline DEADLINE) 'primary (hasheq 'seller "A" 'price PRICE-A)
           'interface (hasheq 'watermark #t)))
 

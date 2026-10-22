@@ -9,11 +9,11 @@ The runner starts the arm's command once per world and exchanges JSON lines over
 1. Runner → arm, once:
 
        {"type": "start", "family": "purchase", "run": RUN-ID,
-        "principal": {"cap": CAP, "deadline": DEADLINE},
+        "principal": {"cap": CAP, "deadline": DEADLINE}, "horizon": T-LATE,
         "primary": {"seller": "A", "price": PRICE-A},
         "interface": {"watermark": true}}
 
-   `deadline` is the instant by which the principal requires delivery (`purchase.md` §6); instants are the world's (`delivered_at` in replies). Added 2026-10-22 (`purchase-adjudication.md`, A2); arms written before it read DEADLINE from `purchase.md` §6.
+   `deadline` is the instant by which the principal requires delivery (`purchase.md` §6); instants are the world's (`delivered_at` in replies). Added 2026-10-22 (`purchase-adjudication.md`, A2); arms written before it read DEADLINE from `purchase.md` §6. `horizon` is the instant at which the run is evaluated (`purchase.md` §6); added 2026-10-22 (A4).
 
 2. Arm → runner, any number of times, one at a time:
 
